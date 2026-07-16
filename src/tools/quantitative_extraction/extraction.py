@@ -21,6 +21,6 @@ def extract_quantitative_records(df_kb, *, llm:Any, human_message_factory:Callab
             parsed.setdefault("notes",""); status="ok"; error=""
         except Exception as exc:
             parsed={"source_filename":source,"paper_title":safe_str(row.get("title","")),"techniques":[],"datasets":[],"quantitative_results":[],"notes":"extraction_error"}
-            status="error"; error=str(exc); errors.append({"source_filename":source,"error_type":type(exc).__name__,"error_message":str(exc),"created_at":datetime.now(timezone.utc).isoformat()})
+            status="error"; error=str(exc); errors.append({"source_filename":source,"error_type":"LLM_EXTRACTION_ERROR","error_code":"INVALID_LLM_OUTPUT","error_message":str(exc),"raw_path":"","raw_value":response_text,"discarded":True,"created_at":datetime.now(timezone.utc).isoformat()})
         results.append(parsed); raw.append({"status":status,"source_filename":source,"raw_response":response_text,"parsed":parsed,"error_message":error})
     return results, raw, errors, calls

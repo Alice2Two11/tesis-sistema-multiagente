@@ -1,0 +1,59 @@
+{
+  "status": "OK",
+  "controlled_doubles": true,
+  "execution_status": "COMPLETED",
+  "quality_status": "APPROVED",
+  "transition": {
+    "action": "ADVANCE",
+    "target_stage": null,
+    "reason_code": "QUANTITATIVE_EXTRACTION_COMPLETED",
+    "requires_human_confirmation": false
+  },
+  "artifact_count": 9,
+  "artifact_names": [
+    "dataset_technique_summary.csv",
+    "quantitative_comparative_table.csv",
+    "quantitative_datasets_table.csv",
+    "quantitative_extraction_errors.csv",
+    "quantitative_extraction_manifest.json",
+    "quantitative_extraction_report.md",
+    "quantitative_techniques_table.csv",
+    "structured_quantitative_extraction.json",
+    "structured_quantitative_extraction_raw.jsonl"
+  ],
+  "metrics": {
+    "technical": {
+      "llm_calls": 1
+    },
+    "scientific": {
+      "paper_quantitative_coverage": 1.0,
+      "source_chunk_confirmation_rate": 1.0,
+      "unconfirmed_value_rate": 0.0,
+      "successful_extraction_rate": 1.0,
+      "dataset_coverage": 1.0,
+      "technique_coverage": 1.0,
+      "values_found_only_in_kb_rate": 0.0,
+      "counts": {
+        "papers_processed": 1,
+        "quantitative_rows": 1,
+        "dataset_rows": 1,
+        "technique_rows": 1,
+        "extraction_errors": 0,
+        "confirmed_in_source_chunks": 1,
+        "found_only_in_kb_text": 0,
+        "not_confirmed": 0
+      },
+      "papers_with_raw_quantitative_payload": 1,
+      "raw_quantitative_candidate_count": 1,
+      "papers_with_raw_techniques": 1,
+      "raw_technique_candidate_count": 1,
+      "papers_with_raw_datasets": 1,
+      "raw_dataset_candidate_count": 1,
+      "flattened_quantitative_rows": 1,
+      "flattened_technique_rows": 1,
+      "flattened_dataset_rows": 1,
+      "discarded_record_count": 0,
+      "normalization_warning_count": 0
+    }
+  }
+}

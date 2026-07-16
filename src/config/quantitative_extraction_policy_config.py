@@ -6,7 +6,7 @@ from typing import Any, Mapping
 STAGE_NAME = "03B_extraccion_cuantitativa_kb"
 QUANT_PROMPT_VERSION = "v3_domain_agnostic_canonical_kb"
 QUANT_SCHEMA_VERSION = "v3_scope_resolution_evidence"
-QUANT_FLATTENING_VERSION = "v3_kb_and_source_chunk_verification"
+QUANT_FLATTENING_VERSION = "v2_tolerant_nested_shapes_v3_kb_and_source_chunk_verification"
 QUANT_STAGE_VERSION = "03B_CAPABILITY_V16_CANDIDATE_1"
 ARTIFACT_FILENAMES = (
     "structured_quantitative_extraction.json",
@@ -37,6 +37,7 @@ DEFAULT_QUANTITATIVE_EXTRACTION_POLICY = {
     "verify_values_against_source_chunks": True,
     "allow_all_clean_chunks_fallback": True,
     "max_attempts": 1,
+    "deterministic_flattening_repair": False,
     "diagnostic_thresholds": deepcopy(PROVISIONAL_DIAGNOSTIC_THRESHOLDS),
 }
 
@@ -49,7 +50,7 @@ def validate_quantitative_policy(value: Mapping[str, Any]) -> dict[str, Any]:
     temperature=float(merged["temperature"])
     if not 0.0 <= temperature <= 2.0: raise ValueError("temperature debe estar entre 0 y 2.")
     merged["temperature"]=temperature
-    for key in ("auto_rebuild","force_rebuild","only_include_state_of_art_papers","verify_values_against_source_chunks","allow_all_clean_chunks_fallback"):
+    for key in ("auto_rebuild","force_rebuild","only_include_state_of_art_papers","verify_values_against_source_chunks","allow_all_clean_chunks_fallback","deterministic_flattening_repair"):
         if not isinstance(merged[key], bool): raise TypeError(f"{key} debe ser bool.")
     if merged["max_attempts"] != 1: raise ValueError("La primera candidata 03B admite únicamente max_attempts=1.")
     thresholds=merged.get("diagnostic_thresholds",{})
