@@ -6,8 +6,8 @@ from typing import Any, Mapping
 STAGE_NAME = "03B_extraccion_cuantitativa_kb"
 QUANT_PROMPT_VERSION = "v3_domain_agnostic_canonical_kb"
 QUANT_SCHEMA_VERSION = "v3_scope_resolution_evidence"
-QUANT_FLATTENING_VERSION = "v2_tolerant_nested_shapes_v3_kb_and_source_chunk_verification"
-QUANT_STAGE_VERSION = "03B_CAPABILITY_V16_CANDIDATE_1"
+QUANT_FLATTENING_VERSION = "v3_dataset_descriptive_metadata_preservation"
+QUANT_STAGE_VERSION = "03B_CAPABILITY_V16_DATASET_NORMALIZATION_REPAIR_CANDIDATE"
 ARTIFACT_FILENAMES = (
     "structured_quantitative_extraction.json",
     "structured_quantitative_extraction_raw.jsonl",

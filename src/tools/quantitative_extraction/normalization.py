@@ -141,6 +141,28 @@ def _normalize_techniques(payload: Any, *, source: str, title: str, path: str, i
     return rows, candidates
 
 
+def _stringify_dataset_field(value: Any) -> str:
+    """Preserve structured dataset metadata without inventing semantics."""
+    if value is None:
+        return ""
+    if isinstance(value, str):
+        return value.strip()
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        return safe_str(value)
+    return _serialize_raw(value)
+
+
+def _first_descriptive_dataset_text(value: dict[str, Any]) -> str:
+    for key in (
+        "dataset_name", "name", "case_study", "description", "title",
+        "location", "site", "region", "source", "data_source",
+    ):
+        text = _stringify_dataset_field(value.get(key)).strip()
+        if text:
+            return text
+    return ""
+
+
 def _normalize_datasets(payload: Any, *, source: str, title: str, path: str, inherited_evidence: str, issues: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], int]:
     rows: list[dict[str, Any]] = []
     candidates = 0
@@ -149,18 +171,81 @@ def _normalize_datasets(payload: Any, *, source: str, title: str, path: str, inh
         raw_path = f"{path}[{index}]" if isinstance(payload, list) else path
         if isinstance(value, str):
             candidates += 1
-            rows.append({**_base_row(source, title), "dataset_name": value, "case_study": "", "data_type": "", "temporal_resolution": "", "spatial_resolution": "", "analysis_scope": "", "source_text_evidence": inherited_evidence, "raw_path": raw_path, "raw_value": value})
+            rows.append({
+                **_base_row(source, title),
+                "dataset_name": value,
+                "description": value,
+                "case_study": "",
+                "data_type": "",
+                "temporal_resolution": "",
+                "spatial_resolution": "",
+                "analysis_scope": "",
+                "coordinates": "",
+                "altitude_masl": "",
+                "data_split": "",
+                "source_text_evidence": inherited_evidence,
+                "raw_path": raw_path,
+                "raw_value": value,
+            })
         elif isinstance(value, dict):
             candidates += 1
             evidence = _evidence_from_mapping(value, inherited_evidence)
-            name = safe_str(value.get("dataset_name") or value.get("name") or value.get("case_study")).strip()
+            description = _stringify_dataset_field(value.get("description"))
+            name = _first_descriptive_dataset_text(value)
             if not name:
-                issues.append(_issue(source=source, category="NORMALIZATION_ERROR", code="INVALID_DATASET_SCHEMA", raw_path=raw_path, raw_value=value, message="El dataset no contiene dataset_name/name/case_study.", discarded=True))
-                continue
-            rows.append({**_base_row(source, title), "dataset_name": name, "case_study": safe_str(value.get("case_study")), "data_type": safe_str(value.get("data_type")), "temporal_resolution": safe_str(value.get("temporal_resolution")), "spatial_resolution": safe_str(value.get("spatial_resolution")), "analysis_scope": safe_str(value.get("analysis_scope")), "source_text_evidence": evidence, "raw_path": raw_path, "raw_value": _serialize_raw(value)})
+                name = "Dataset no nombrado"
+                issues.append(_issue(
+                    source=source,
+                    category="NORMALIZATION_ERROR",
+                    code="INVALID_DATASET_SCHEMA",
+                    raw_path=raw_path,
+                    raw_value=value,
+                    message=(
+                        "El dataset no contiene texto descriptivo; se conserva como "
+                        "'Dataset no nombrado' sin descartar sus metadatos."
+                    ),
+                    discarded=False,
+                ))
+            elif not safe_str(value.get("dataset_name") or value.get("name") or value.get("case_study")).strip():
+                issues.append(_issue(
+                    source=source,
+                    category="NORMALIZATION_ERROR",
+                    code="INVALID_DATASET_SCHEMA",
+                    raw_path=raw_path,
+                    raw_value=value,
+                    message=(
+                        "El dataset no contiene dataset_name/name/case_study; "
+                        "se normalizó usando texto descriptivo disponible."
+                    ),
+                    discarded=False,
+                ))
+            rows.append({
+                **_base_row(source, title),
+                "dataset_name": name,
+                "description": description,
+                "case_study": _stringify_dataset_field(value.get("case_study")),
+                "data_type": _stringify_dataset_field(value.get("data_type")),
+                "temporal_resolution": _stringify_dataset_field(value.get("temporal_resolution")),
+                "spatial_resolution": _stringify_dataset_field(value.get("spatial_resolution")),
+                "analysis_scope": _stringify_dataset_field(value.get("analysis_scope")),
+                "coordinates": _stringify_dataset_field(value.get("coordinates")),
+                "altitude_masl": _stringify_dataset_field(value.get("altitude_masl")),
+                "data_split": _stringify_dataset_field(value.get("data_split")),
+                "source_text_evidence": evidence,
+                "raw_path": raw_path,
+                "raw_value": _serialize_raw(value),
+            })
         else:
             candidates += 1
-            issues.append(_issue(source=source, category="UNSUPPORTED_SCHEMA", code="INVALID_DATASET_SCHEMA", raw_path=raw_path, raw_value=value, message=f"Tipo de dataset no soportado: {type(value).__name__}.", discarded=True))
+            issues.append(_issue(
+                source=source,
+                category="UNSUPPORTED_SCHEMA",
+                code="INVALID_DATASET_SCHEMA",
+                raw_path=raw_path,
+                raw_value=value,
+                message=f"Tipo de dataset no soportado: {type(value).__name__}.",
+                discarded=True,
+            ))
     return rows, candidates
 
 

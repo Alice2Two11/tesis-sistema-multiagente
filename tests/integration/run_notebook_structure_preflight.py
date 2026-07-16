@@ -3,10 +3,9 @@ from __future__ import annotations
 import ast
 import json
 from pathlib import Path
-import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-NOTEBOOK = ROOT / "03_agente_extraccion_kb_migrado_v16.ipynb"
+NOTEBOOK = ROOT / "03B_extraccion_cuantitativa_kb_migrado_v16.ipynb"
 
 
 def main() -> int:
@@ -18,21 +17,21 @@ def main() -> int:
     )
     ast.parse(source)
     required = [
-        "RUN_REAL_EXTRACTION",
-        "PRECHECK MODE",
-        "REAL MODE",
-        "execute_extraction_runtime_transaction",
-        "load_runtime_credential",
+        "RUN_REAL_03B",
+        "RUN_DETERMINISTIC_FLATTENING_REPAIR",
+        "DETERMINISTIC_REPAIR",
+        "execute_quantitative_runtime_transaction",
         "transaction_executed",
     ]
     forbidden = [
-        "def retrieve_chunks_for_paper",
-        "def is_bad_card",
-        "def run_title_repair",
-        "def build_knowledge_base_rows",
+        "def build_quant_prompt",
+        "def normalize_metric_name",
+        "def value_found_in_text",
+        "OPENAI_KEY_FILE",
+        "getpass",
         "Fernet(",
-        "03B",
-        "quantitative_extraction",
+        "ExtractionAgent",
+        "04_analisis",
     ]
     missing = [item for item in required if item not in source]
     duplicated = [item for item in forbidden if item in source]
@@ -45,6 +44,7 @@ def main() -> int:
         "ast_valid": True,
         "thin_shell": True,
         "explicit_modes": True,
+        "dataset_normalization_repair_visible": True,
     }, indent=2))
     return 0
 

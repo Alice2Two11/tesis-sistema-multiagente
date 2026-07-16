@@ -9,7 +9,7 @@ import nbformat
 from nbclient import NotebookClient
 
 ROOT = Path(__file__).resolve().parents[2]
-NOTEBOOK = ROOT / "03_agente_extraccion_kb_migrado_v16.ipynb"
+NOTEBOOK = ROOT / "03B_extraccion_cuantitativa_kb_migrado_v16.ipynb"
 
 
 def create_project(root: Path) -> Path:
@@ -20,7 +20,17 @@ def create_project(root: Path) -> Path:
         json.dumps({
             "active_experiment_id": "precheck_exp",
             "run_id": "precheck_run",
-            "experiment_dir": str(experiment),
+            "openai_model": "not-used-in-precheck",
+            "quantitative_extraction_policy": {
+                "temperature": 0.1,
+                "auto_rebuild": True,
+                "force_rebuild": False,
+                "only_include_state_of_art_papers": True,
+                "verify_values_against_source_chunks": True,
+                "allow_all_clean_chunks_fallback": True,
+                "max_attempts": 1,
+                "deterministic_flattening_repair": False,
+            },
         }, indent=2) + "\n",
         encoding="utf-8",
     )
@@ -32,15 +42,15 @@ def main() -> int:
         project = create_project(Path(tmp))
         notebook = nbformat.read(NOTEBOOK, as_version=4)
         old = {key: os.environ.get(key) for key in (
-            "THESIS_CODE_ROOT", "THESIS_PROJECT_DIR", "RUN_REAL_EXTRACTION",
-            "NOTEBOOK_BOOTSTRAP_TEST_MODE", "AGENT03_ATTEMPT_NUMBER",
+            "THESIS_CODE_ROOT", "THESIS_PROJECT_DIR", "RUN_REAL_03B",
+            "RUN_DETERMINISTIC_FLATTENING_REPAIR", "NOTEBOOK_BOOTSTRAP_TEST_MODE",
         )}
         os.environ.update({
             "THESIS_CODE_ROOT": str(ROOT),
             "THESIS_PROJECT_DIR": str(project),
-            "RUN_REAL_EXTRACTION": "0",
+            "RUN_REAL_03B": "0",
+            "RUN_DETERMINISTIC_FLATTENING_REPAIR": "0",
             "NOTEBOOK_BOOTSTRAP_TEST_MODE": "1",
-            "AGENT03_ATTEMPT_NUMBER": "1",
         })
         try:
             executed = NotebookClient(
@@ -62,11 +72,12 @@ def main() -> int:
             for output in cell.get("outputs", [])
             if output.get("output_type") == "stream"
         )
-        if "PRECHECK MODE" not in outputs or '"transaction_executed": false' not in outputs:
-            raise RuntimeError("El notebook no reportó PRECHECK MODE correctamente.")
+        if "MODE: PRECHECK" not in outputs or "transaction_executed: False" not in outputs:
+            raise RuntimeError("El notebook 03B no reportó PRECHECK correctamente.")
         report = {
             "status": "OK",
-            "mode": "PRECHECK MODE",
+            "notebook": NOTEBOOK.name,
+            "mode": "PRECHECK",
             "clean_kernel": True,
             "executed_code_cells": sum(
                 1 for cell in executed.cells

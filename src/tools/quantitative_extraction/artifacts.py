@@ -54,8 +54,9 @@ def write_quantitative_artifacts(*, output_dir, results, raw_records, errors, qu
     )
     written[ARTIFACT_FILENAMES[3]] = atomic_write_csv(paths[ARTIFACT_FILENAMES[3]], quantitative_rows, fieldnames=quant_fields)
     dataset_fields = (
-        "source_filename", "paper_title", "dataset_name", "case_study", "data_type",
-        "temporal_resolution", "spatial_resolution", "analysis_scope",
+        "source_filename", "paper_title", "dataset_name", "description",
+        "case_study", "data_type", "temporal_resolution", "spatial_resolution",
+        "analysis_scope", "coordinates", "altitude_masl", "data_split",
         "source_text_evidence", "raw_path", "raw_value",
     )
     written[ARTIFACT_FILENAMES[4]] = atomic_write_csv(paths[ARTIFACT_FILENAMES[4]], dataset_rows, fieldnames=dataset_fields)

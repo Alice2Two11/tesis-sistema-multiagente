@@ -1,12 +1,77 @@
-CANDIDATA 03B V1.6 — REPARACIÓN DETERMINISTA DE FLATTENING
+test_03b_is_not_integrated (v16.test_alignment_v16.AlignmentV16Tests.test_03b_is_not_integrated) ... ok
+test_agent_result_failure_codes_roundtrip (v16.test_alignment_v16.AlignmentV16Tests.test_agent_result_failure_codes_roundtrip) ... ok
+test_attempt_one_invalid_title_is_repaired_before_gate (v16.test_alignment_v16.AlignmentV16Tests.test_attempt_one_invalid_title_is_repaired_before_gate) ... ok
+test_attempt_one_without_evidence_requests_more_evidence (v16.test_alignment_v16.AlignmentV16Tests.test_attempt_one_without_evidence_requests_more_evidence) ... ok
+test_attempt_two_partially_usable_can_request_manual_review (v16.test_alignment_v16.AlignmentV16Tests.test_attempt_two_partially_usable_can_request_manual_review) ... ok
+test_attempt_two_runs_directed_repair (v16.test_alignment_v16.AlignmentV16Tests.test_attempt_two_runs_directed_repair) ... ok
+test_attempt_two_unusable_is_rejected_when_manual_review_disabled (v16.test_alignment_v16.AlignmentV16Tests.test_attempt_two_unusable_is_rejected_when_manual_review_disabled) ... ok
+test_clean_attempt_one_approves_and_does_not_choose_03b_or_04 (v16.test_alignment_v16.AlignmentV16Tests.test_clean_attempt_one_approves_and_does_not_choose_03b_or_04) ... ok
+test_credentials_environment_encrypted_and_no_leak (v16.test_alignment_v16.AlignmentV16Tests.test_credentials_environment_encrypted_and_no_leak) ... ok
+test_credentials_missing_error_is_sanitized (v16.test_alignment_v16.AlignmentV16Tests.test_credentials_missing_error_is_sanitized) ... ok
+test_notebook_imports_common_names_before_use (v16.test_alignment_v16.AlignmentV16Tests.test_notebook_imports_common_names_before_use) ... ok
+test_notebook_is_thin_and_real_mode_visible (v16.test_alignment_v16.AlignmentV16Tests.test_notebook_is_thin_and_real_mode_visible) ... ok
+test_optional_classification_failure_is_approved_with_warnings (v16.test_alignment_v16.AlignmentV16Tests.test_optional_classification_failure_is_approved_with_warnings) ... ok
+test_preserved_files_are_byte_identical (v16.test_alignment_v16.AlignmentV16Tests.test_preserved_files_are_byte_identical) ... ok
+test_required_files_and_forbidden_policy_name (v16.test_alignment_v16.AlignmentV16Tests.test_required_files_and_forbidden_policy_name) ... ok
+test_state_store_persists_failure_codes_in_stage_and_log (v16.test_alignment_v16.AlignmentV16Tests.test_state_store_persists_failure_codes_in_stage_and_log) ... ok
+test_ambiguous_list_is_invalid_llm_output (v16.test_attempt2_directed.DirectedAttempt2Tests.test_ambiguous_list_is_invalid_llm_output) ... ok
+test_attempt_two_reuses_attempt_one_cards_and_does_not_regenerate_healthy (v16.test_attempt2_directed.DirectedAttempt2Tests.test_attempt_two_reuses_attempt_one_cards_and_does_not_regenerate_healthy) ... ok
+test_kb_is_built_after_sufficient_attempt_two (v16.test_attempt2_directed.DirectedAttempt2Tests.test_kb_is_built_after_sufficient_attempt_two) ... ok
+test_low_chunk_strategy_expands_evidence (v16.test_attempt2_directed.DirectedAttempt2Tests.test_low_chunk_strategy_expands_evidence) ... ok
+test_no_attempt_three (v16.test_attempt2_directed.DirectedAttempt2Tests.test_no_attempt_three) ... ok
+test_quality_and_revision_plan_exist_before_retry (v16.test_attempt2_directed.DirectedAttempt2Tests.test_quality_and_revision_plan_exist_before_retry) ... ok
+test_retrieval_sufficient_strategy_does_not_expand (v16.test_attempt2_directed.DirectedAttempt2Tests.test_retrieval_sufficient_strategy_does_not_expand) ... ok
+test_singleton_object_list_is_normalized (v16.test_attempt2_directed.DirectedAttempt2Tests.test_singleton_object_list_is_normalized) ... ok
+test_title_only_repair_preserves_scientific_fields (v16.test_attempt2_directed.DirectedAttempt2Tests.test_title_only_repair_preserves_scientific_fields) ... ok
+test_altitude_masl_is_preserved (v16.test_dataset_normalization_repair_v16.DatasetNormalizationRepairV16Tests.test_altitude_masl_is_preserved) ... ok
+test_coordinates_are_preserved (v16.test_dataset_normalization_repair_v16.DatasetNormalizationRepairV16Tests.test_coordinates_are_preserved) ... ok
+test_data_split_is_preserved (v16.test_dataset_normalization_repair_v16.DatasetNormalizationRepairV16Tests.test_data_split_is_preserved) ... ok
+test_dataset_without_descriptive_text_is_kept_not_discarded (v16.test_dataset_normalization_repair_v16.DatasetNormalizationRepairV16Tests.test_dataset_without_descriptive_text_is_kept_not_discarded) ... ok
+test_description_is_used_as_provisional_dataset_name (v16.test_dataset_normalization_repair_v16.DatasetNormalizationRepairV16Tests.test_description_is_used_as_provisional_dataset_name) ... ok
+test_deterministic_repair_preserves_json_and_regenerates_dataset_table (v16.test_dataset_normalization_repair_v16.DatasetNormalizationRepairV16Tests.test_deterministic_repair_preserves_json_and_regenerates_dataset_table) ... ok
+test_named_dataset_behavior_is_not_degraded (v16.test_dataset_normalization_repair_v16.DatasetNormalizationRepairV16Tests.test_named_dataset_behavior_is_not_degraded) ... ok
+test_six_descriptive_datasets_are_all_kept (v16.test_dataset_normalization_repair_v16.DatasetNormalizationRepairV16Tests.test_six_descriptive_datasets_are_all_kept) ... ok
+test_dataset_string_is_supported (v16.test_flattening_repair_v16.FlatteningRepairV16Tests.test_dataset_string_is_supported) ... ok
+test_deterministic_repair_preserves_json_and_skips_llm (v16.test_flattening_repair_v16.FlatteningRepairV16Tests.test_deterministic_repair_preserves_json_and_skips_llm) ... ok
+test_evidence_is_inherited_without_invention (v16.test_flattening_repair_v16.FlatteningRepairV16Tests.test_evidence_is_inherited_without_invention) ... ok
+test_existing_dataset_dict_is_not_degraded (v16.test_flattening_repair_v16.FlatteningRepairV16Tests.test_existing_dataset_dict_is_not_degraded) ... ok
+test_nested_model_metrics_produce_four_rows (v16.test_flattening_repair_v16.FlatteningRepairV16Tests.test_nested_model_metrics_produce_four_rows) ... ok
+test_no_quantitative_data_only_when_raw_and_flat_are_zero (v16.test_flattening_repair_v16.FlatteningRepairV16Tests.test_no_quantitative_data_only_when_raw_and_flat_are_zero) ... ok
+test_numeric_and_unit_values_are_preserved (v16.test_flattening_repair_v16.FlatteningRepairV16Tests.test_numeric_and_unit_values_are_preserved) ... ok
+test_raw_candidates_with_empty_table_is_needs_revision (v16.test_flattening_repair_v16.FlatteningRepairV16Tests.test_raw_candidates_with_empty_table_is_needs_revision) ... ok
+test_raw_path_and_raw_value_are_preserved (v16.test_flattening_repair_v16.FlatteningRepairV16Tests.test_raw_path_and_raw_value_are_preserved) ... ok
+test_string_techniques_produce_rows_without_inventing_fields (v16.test_flattening_repair_v16.FlatteningRepairV16Tests.test_string_techniques_produce_rows_without_inventing_fields) ... ok
+test_unknown_structure_generates_warning_and_discard_count (v16.test_flattening_repair_v16.FlatteningRepairV16Tests.test_unknown_structure_generates_warning_and_discard_count) ... ok
+test_clean_ast_and_explicit_imports (v16.test_notebook_03b_v16.NotebookTests.test_clean_ast_and_explicit_imports) ... ok
+test_thin_shell (v16.test_notebook_03b_v16.NotebookTests.test_thin_shell) ... ok
+test_uses_protocol_and_not_stage04 (v16.test_notebook_03b_v16.NotebookTests.test_uses_protocol_and_not_stage04) ... ok
+test_visible_modes (v16.test_notebook_03b_v16.NotebookTests.test_visible_modes) ... ok
+test_credential_not_in_fingerprint (v16.test_quantitative_capability_v16.QuantitativeCapabilityV16Tests.test_credential_not_in_fingerprint) ... ok
+test_direct_call_writes_nine_atomic_artifacts_and_advances_neutrally (v16.test_quantitative_capability_v16.QuantitativeCapabilityV16Tests.test_direct_call_writes_nine_atomic_artifacts_and_advances_neutrally) ... ok
+test_early_runtime_failure_is_committed (v16.test_quantitative_capability_v16.QuantitativeCapabilityV16Tests.test_early_runtime_failure_is_committed) ... ok
+test_ground_truth_payload_is_rejected (v16.test_quantitative_capability_v16.QuantitativeCapabilityV16Tests.test_ground_truth_payload_is_rejected) ... ok
+test_hash_mismatch (v16.test_quantitative_capability_v16.QuantitativeCapabilityV16Tests.test_hash_mismatch) ... ok
+test_kb_change_invalidates (v16.test_quantitative_capability_v16.QuantitativeCapabilityV16Tests.test_kb_change_invalidates) ... ok
+test_manifest_mismatch (v16.test_quantitative_capability_v16.QuantitativeCapabilityV16Tests.test_manifest_mismatch) ... ok
+test_missing_kb_is_failed_not_raise (v16.test_quantitative_capability_v16.QuantitativeCapabilityV16Tests.test_missing_kb_is_failed_not_raise) ... ok
+test_missing_required_chunks (v16.test_quantitative_capability_v16.QuantitativeCapabilityV16Tests.test_missing_required_chunks) ... ok
+test_no_import_of_extraction_agent_or_stage04 (v16.test_quantitative_capability_v16.QuantitativeCapabilityV16Tests.test_no_import_of_extraction_agent_or_stage04) ... ok
+test_policy_model_prompt_manifest_and_chunks_change_fingerprint (v16.test_quantitative_capability_v16.QuantitativeCapabilityV16Tests.test_policy_model_prompt_manifest_and_chunks_change_fingerprint) ... ok
+test_reuse_by_same_fingerprint_skips_llm (v16.test_quantitative_capability_v16.QuantitativeCapabilityV16Tests.test_reuse_by_same_fingerprint_skips_llm) ... ok
+test_transaction_prepare_persist_commit (v16.test_quantitative_capability_v16.QuantitativeCapabilityV16Tests.test_transaction_prepare_persist_commit) ... ok
+test_verification_statuses_are_preserved (v16.test_quantitative_capability_v16.QuantitativeCapabilityV16Tests.test_verification_statuses_are_preserved) ... ok
 
-......................................................
 ----------------------------------------------------------------------
-Ran 54 tests in 0.484s
+Ran 62 tests in 0.629s
 
 OK
 
-PY_COMPILE_RETURN_CODE=0
-CONTROLLED_INTEGRATION_03B_RETURN_CODE=0
-NOTEBOOK_CLEAN_KERNEL_RETURN_CODE=0
-REAL_EXTERNAL_COLAB_03B_RETURN_CODE=NOT_EXECUTED_IN_CONTAINER
+DATASET NORMALIZATION REPAIR CHECKS
+- description used as provisional dataset name: OK
+- coordinates preserved: OK
+- altitude_masl preserved: OK
+- data_split preserved: OK
+- unnamed descriptive fallback policy: OK
+- six dataset dictionaries retained with discarded=False: OK
+- structured JSON and raw JSONL preserved in deterministic repair: OK
+- OpenAI calls in deterministic repair: 0

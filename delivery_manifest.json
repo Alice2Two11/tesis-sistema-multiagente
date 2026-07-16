@@ -1,48 +1,63 @@
 {
-  "status": "CANDIDATA 03B V1.6 — REPARACIÓN DETERMINISTA DE FLATTENING",
-  "source_candidate": "phase3_03b_quantitative_capability_v16_candidate.zip",
+  "status": "CANDIDATA 03B V1.6 — REPARACIÓN DETERMINISTA DE NORMALIZACIÓN DE DATASETS",
+  "base_candidate": "phase3_03b_flattening_repair_v16_candidate",
+  "openai_called": false,
+  "real_external_colab_status": "NOT_EXECUTED_IN_CONTAINER",
   "modified_files": [
     "03B_extraccion_cuantitativa_kb_migrado_v16.ipynb",
-    "notebook_precheck_report.json",
+    "preserved_sha256.json",
     "return_codes.json",
-    "src/adapters/quantitative_extraction_runtime.py",
-    "src/capabilities/quantitative_extraction.py",
     "src/config/quantitative_extraction_policy_config.py",
     "src/tools/quantitative_extraction/artifacts.py",
-    "src/tools/quantitative_extraction/extraction.py",
     "src/tools/quantitative_extraction/normalization.py",
-    "src/tools/quantitative_extraction/quality.py",
     "test_report.txt",
-    "tests/v16/test_notebook_03b_v16.py"
+    "tests/integration/run_notebook_precheck.py",
+    "tests/integration/run_notebook_structure_preflight.py"
   ],
   "created_files": [
-    "controlled_03b_report.json",
-    "flattening_repair_report.json",
-    "tests/v16/test_flattening_repair_v16.py",
+    "dataset_normalization_repair_report.json",
+    "tests/v16/test_dataset_normalization_repair_v16.py"
+  ],
+  "removed_files": [
     "tests/v16/test_flattening_repair_v16.py.tmp"
   ],
-  "protected_files_unchanged": true,
-  "openai_repeated": false,
-  "structured_sources_preserved": true,
+  "protected_files_preserved": [
+    "03_agente_extraccion_kb_migrado_v16.ipynb",
+    "src/agents/extraction_agent.py",
+    "src/bootstrap/project_bootstrap.py",
+    "src/config/common_config.py",
+    "src/contracts/agent_input.py",
+    "src/contracts/agent_result.py",
+    "src/io/atomic_write.py",
+    "src/io/credentials.py",
+    "src/state/fingerprints.py",
+    "src/state/pipeline_state.py",
+    "src/state/state_store.py",
+    "src/tools/extraction/__init__.py",
+    "src/tools/extraction/card_extraction.py",
+    "src/tools/extraction/card_validation.py",
+    "src/tools/extraction/chunk_validation.py",
+    "src/tools/extraction/knowledge_base.py",
+    "src/tools/extraction/relevance_classification.py",
+    "src/tools/extraction/retrieval.py",
+    "src/tools/extraction/revision_strategy.py",
+    "src/tools/extraction/stage_artifacts.py",
+    "src/tools/extraction/title_repair.py"
+  ],
+  "original_json_policy": {
+    "structured_quantitative_extraction.json": "preserve, do not overwrite",
+    "structured_quantitative_extraction_raw.jsonl": "preserve, do not overwrite"
+  },
   "agent03_modified": false,
-  "agent04_started": false,
-  "notebook": "03B_extraccion_cuantitativa_kb_migrado_v16.ipynb",
+  "advanced_to_agent04": false,
   "tests": {
     "UNITTEST_RETURN_CODE": 0,
     "PY_COMPILE_RETURN_CODE": 0,
     "CONTROLLED_INTEGRATION_03B_RETURN_CODE": 0,
+    "DIRECT_MODULE_CALL_RETURN_CODE": 0,
     "NOTEBOOK_PREFLIGHT_RETURN_CODE": 0,
     "NOTEBOOK_CLEAN_KERNEL_RETURN_CODE": 0,
-    "DETERMINISTIC_REPAIR_RETURN_CODE": 0,
+    "DETERMINISTIC_DATASET_REPAIR_RETURN_CODE": 0,
     "REAL_EXTERNAL_COLAB_03B_RETURN_CODE": "NOT_EXECUTED_IN_CONTAINER"
-  },
-  "repair_features": [
-    "nested quantitative dictionaries",
-    "string techniques",
-    "string datasets",
-    "raw_path/raw_value",
-    "cross-validation raw JSON vs flattened tables",
-    "deterministic repair mode without credentials or LLM",
-    "transformation errors in quantitative_extraction_errors.csv"
-  ]
+  }
 }
