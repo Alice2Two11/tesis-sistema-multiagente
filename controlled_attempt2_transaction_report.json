@@ -1,0 +1,57 @@
+{
+  "status": "OK",
+  "services": "CONTROLLED_DOUBLES",
+  "attempt_1": {
+    "execution_status": "COMPLETED",
+    "quality_status": "NEEDS_REVISION",
+    "failure_reason_codes": [
+      "INVALID_LLM_OUTPUT"
+    ],
+    "transition": {
+      "action": "RETRY",
+      "target_stage": null,
+      "reason_code": "NEEDS_REVISION",
+      "requires_human_confirmation": false
+    },
+    "persisted_result_path": "/tmp/tmp45ktg2nq/05_outputs/00_orchestrator_planner/pipeline_state_agent_results/3bba8096-f2c8-4acf-832d-4badbb2188b4.json",
+    "artifact_names": [
+      "CARDS_ERRORS_CSV_PATH",
+      "CARDS_JSONL_PATH",
+      "CARDS_QUALITY_CSV_PATH",
+      "CARDS_REVISION_PLAN_CSV_PATH",
+      "CARDS_SUMMARY_CSV_PATH",
+      "CHUNKS_VALIDATION_REPORT_PATH",
+      "RETRIEVAL_TRACE_CSV_PATH"
+    ]
+  },
+  "attempt_2": {
+    "execution_status": "COMPLETED",
+    "quality_status": "APPROVED",
+    "failure_reason_codes": [],
+    "transition": {
+      "action": "ADVANCE",
+      "target_stage": null,
+      "reason_code": "EXTRACTION_COMPLETED",
+      "requires_human_confirmation": false
+    },
+    "persisted_result_path": "/tmp/tmp45ktg2nq/05_outputs/00_orchestrator_planner/pipeline_state_agent_results/5df93599-f0d9-4f2a-9ddc-c79da68ca2e5.json",
+    "artifact_names": [
+      "CARDS_ERRORS_CSV_PATH",
+      "CARDS_JSONL_PATH",
+      "CARDS_QUALITY_CSV_PATH",
+      "CARDS_REVISION_PLAN_CSV_PATH",
+      "CARDS_SUMMARY_CSV_PATH",
+      "CHUNKS_VALIDATION_REPORT_PATH",
+      "EXTRACTION_MANIFEST_PATH",
+      "KB_CSV_PATH",
+      "KB_JSONL_PATH",
+      "RETRIEVAL_TRACE_CSV_PATH"
+    ],
+    "kb_created": true
+  },
+  "transactional": {
+    "prepare_count": 2,
+    "attempt_1_committed": true,
+    "attempt_2_committed": true
+  }
+}

@@ -1,0 +1,196 @@
+===== UNITTEST =====
+RETURN_CODE=0
+STDOUT:
+
+STDERR:
+test_03b_is_not_integrated (v16.test_alignment_v16.AlignmentV16Tests.test_03b_is_not_integrated) ... ok
+test_agent_result_failure_codes_roundtrip (v16.test_alignment_v16.AlignmentV16Tests.test_agent_result_failure_codes_roundtrip) ... ok
+test_attempt_one_invalid_title_is_repaired_before_gate (v16.test_alignment_v16.AlignmentV16Tests.test_attempt_one_invalid_title_is_repaired_before_gate) ... ok
+test_attempt_one_without_evidence_requests_more_evidence (v16.test_alignment_v16.AlignmentV16Tests.test_attempt_one_without_evidence_requests_more_evidence) ... ok
+test_attempt_two_partially_usable_can_request_manual_review (v16.test_alignment_v16.AlignmentV16Tests.test_attempt_two_partially_usable_can_request_manual_review) ... ok
+test_attempt_two_runs_directed_repair (v16.test_alignment_v16.AlignmentV16Tests.test_attempt_two_runs_directed_repair) ... ok
+test_attempt_two_unusable_is_rejected_when_manual_review_disabled (v16.test_alignment_v16.AlignmentV16Tests.test_attempt_two_unusable_is_rejected_when_manual_review_disabled) ... ok
+test_clean_attempt_one_approves_and_does_not_choose_03b_or_04 (v16.test_alignment_v16.AlignmentV16Tests.test_clean_attempt_one_approves_and_does_not_choose_03b_or_04) ... ok
+test_credentials_environment_encrypted_and_no_leak (v16.test_alignment_v16.AlignmentV16Tests.test_credentials_environment_encrypted_and_no_leak) ... ok
+test_credentials_missing_error_is_sanitized (v16.test_alignment_v16.AlignmentV16Tests.test_credentials_missing_error_is_sanitized) ... ok
+test_notebook_imports_common_names_before_use (v16.test_alignment_v16.AlignmentV16Tests.test_notebook_imports_common_names_before_use) ... ok
+test_notebook_is_thin_and_real_mode_visible (v16.test_alignment_v16.AlignmentV16Tests.test_notebook_is_thin_and_real_mode_visible) ... ok
+test_optional_classification_failure_is_approved_with_warnings (v16.test_alignment_v16.AlignmentV16Tests.test_optional_classification_failure_is_approved_with_warnings) ... ok
+test_preserved_files_are_byte_identical (v16.test_alignment_v16.AlignmentV16Tests.test_preserved_files_are_byte_identical) ... ok
+test_required_files_and_forbidden_policy_name (v16.test_alignment_v16.AlignmentV16Tests.test_required_files_and_forbidden_policy_name) ... ok
+test_state_store_persists_failure_codes_in_stage_and_log (v16.test_alignment_v16.AlignmentV16Tests.test_state_store_persists_failure_codes_in_stage_and_log) ... ok
+test_ambiguous_list_is_invalid_llm_output (v16.test_attempt2_directed.DirectedAttempt2Tests.test_ambiguous_list_is_invalid_llm_output) ... ok
+test_attempt_two_reuses_attempt_one_cards_and_does_not_regenerate_healthy (v16.test_attempt2_directed.DirectedAttempt2Tests.test_attempt_two_reuses_attempt_one_cards_and_does_not_regenerate_healthy) ... ok
+test_kb_is_built_after_sufficient_attempt_two (v16.test_attempt2_directed.DirectedAttempt2Tests.test_kb_is_built_after_sufficient_attempt_two) ... ok
+test_low_chunk_strategy_expands_evidence (v16.test_attempt2_directed.DirectedAttempt2Tests.test_low_chunk_strategy_expands_evidence) ... ok
+test_no_attempt_three (v16.test_attempt2_directed.DirectedAttempt2Tests.test_no_attempt_three) ... ok
+test_quality_and_revision_plan_exist_before_retry (v16.test_attempt2_directed.DirectedAttempt2Tests.test_quality_and_revision_plan_exist_before_retry) ... ok
+test_retrieval_sufficient_strategy_does_not_expand (v16.test_attempt2_directed.DirectedAttempt2Tests.test_retrieval_sufficient_strategy_does_not_expand) ... ok
+test_singleton_object_list_is_normalized (v16.test_attempt2_directed.DirectedAttempt2Tests.test_singleton_object_list_is_normalized) ... ok
+test_title_only_repair_preserves_scientific_fields (v16.test_attempt2_directed.DirectedAttempt2Tests.test_title_only_repair_preserves_scientific_fields) ... ok
+
+----------------------------------------------------------------------
+Ran 25 tests in 0.402s
+
+OK
+
+
+===== PY_COMPILE =====
+RETURN_CODE=0
+STDOUT:
+
+STDERR:
+
+
+===== DIRECT_MODULE_CALL =====
+RETURN_CODE=0
+STDOUT:
+{
+  "status": "OK",
+  "execution_status": "COMPLETED",
+  "quality_status": "APPROVED",
+  "attempt_number": 1,
+  "requested_transition": {
+    "action": "ADVANCE",
+    "target_stage": null,
+    "reason_code": "EXTRACTION_COMPLETED",
+    "requires_human_confirmation": false
+  },
+  "failure_reason_codes": [],
+  "services": "CONTROLLED_DOUBLES",
+  "direct_module_call": true
+}
+
+STDERR:
+
+
+===== NOTEBOOK_CLEAN_KERNEL =====
+RETURN_CODE=0
+STDOUT:
+{
+  "status": "OK",
+  "mode": "PRECHECK MODE",
+  "clean_kernel": true,
+  "executed_code_cells": 6,
+  "transaction_executed": false,
+  "real_services_called": false
+}
+
+STDERR:
+
+
+===== NOTEBOOK_STRUCTURE_PREFLIGHT =====
+RETURN_CODE=0
+STDOUT:
+{
+  "status": "OK",
+  "notebook": "03_agente_extraccion_kb_migrado_v16.ipynb",
+  "ast_valid": true,
+  "thin_shell": true,
+  "explicit_modes": true
+}
+
+STDERR:
+
+
+===== INTEGRATION_REAL_CONFIG_CONTROLLED =====
+RETURN_CODE=0
+STDOUT:
+Reporte restaurado: /tmp/tmpgkmoubna/proyecto_estado_arte/experimento_paper_02/05_outputs/01_scientific_extraction/chunks_clean_validation_report.json
+Reporte restaurado: /tmp/tmpgkmoubna/proyecto_estado_arte/experimento_paper_02/05_outputs/01_scientific_extraction/chunks_clean_validation_report.json
+OK → /tmp/tmpgkmoubna/proyecto_estado_arte/experimento_paper_02/05_outputs/01_scientific_extraction/scientific_cards.jsonl
+OK → /tmp/tmpgkmoubna/proyecto_estado_arte/experimento_paper_02/05_outputs/01_scientific_extraction/scientific_cards_summary.csv
+OK → /tmp/tmpgkmoubna/proyecto_estado_arte/experimento_paper_02/05_outputs/01_scientific_extraction/scientific_cards_errors.csv
+OK → /tmp/tmpgkmoubna/proyecto_estado_arte/experimento_paper_02/05_outputs/01_scientific_extraction/scientific_cards_quality_check.csv
+OK → /tmp/tmpgkmoubna/proyecto_estado_arte/experimento_paper_02/05_outputs/01_scientific_extraction/extraction_retrieval_trace.csv
+OK → /tmp/tmpgkmoubna/proyecto_estado_arte/experimento_paper_02/05_outputs/02_scientific_knowledge_base/scientific_knowledge_base.csv
+OK → /tmp/tmpgkmoubna/proyecto_estado_arte/experimento_paper_02/05_outputs/02_scientific_knowledge_base/scientific_knowledge_base.jsonl
+OK → /tmp/tmpgkmoubna/proyecto_estado_arte/experimento_paper_02/05_outputs/01_scientific_extraction/scientific_extraction_manifest.json
+OK → /tmp/tmpgkmoubna/proyecto_estado_arte/experimento_paper_02/05_outputs/01_scientific_extraction/chunks_clean_validation_report.json
+Auditoría final 03: OK
+Papers procesados: 1
+Fichas generadas: 1
+Filas de trazabilidad RAG: 10
+Ground Truth usado: False
+Secciones de revisión usadas: False
+{
+  "status": "OK",
+  "experiment_id": "experimento_paper_02",
+  "retrieval_profile": "strict",
+  "rag_policy_technical_keys": [
+    "generation",
+    "indexing",
+    "retrieval_profiles",
+    "use_ground_truth_for_evaluation"
+  ],
+  "runtime_built": true,
+  "agent_status": "COMPLETED",
+  "resume_action": "NO_PENDING",
+  "artifacts": 10,
+  "main_llm_calls": 2,
+  "repair_llm_calls": 0,
+  "collection_queries": 5
+}
+
+STDERR:
+
+
+===== CONTROLLED_ATTEMPT2_TRANSACTION =====
+RETURN_CODE=0
+{
+  "status": "OK",
+  "services": "CONTROLLED_DOUBLES",
+  "attempt_1": {
+    "execution_status": "COMPLETED",
+    "quality_status": "NEEDS_REVISION",
+    "failure_reason_codes": [
+      "INVALID_LLM_OUTPUT"
+    ],
+    "transition": {
+      "action": "RETRY",
+      "target_stage": null,
+      "reason_code": "NEEDS_REVISION",
+      "requires_human_confirmation": false
+    },
+    "persisted_result_path": "/tmp/tmp45ktg2nq/05_outputs/00_orchestrator_planner/pipeline_state_agent_results/3bba8096-f2c8-4acf-832d-4badbb2188b4.json",
+    "artifact_names": [
+      "CARDS_ERRORS_CSV_PATH",
+      "CARDS_JSONL_PATH",
+      "CARDS_QUALITY_CSV_PATH",
+      "CARDS_REVISION_PLAN_CSV_PATH",
+      "CARDS_SUMMARY_CSV_PATH",
+      "CHUNKS_VALIDATION_REPORT_PATH",
+      "RETRIEVAL_TRACE_CSV_PATH"
+    ]
+  },
+  "attempt_2": {
+    "execution_status": "COMPLETED",
+    "quality_status": "APPROVED",
+    "failure_reason_codes": [],
+    "transition": {
+      "action": "ADVANCE",
+      "target_stage": null,
+      "reason_code": "EXTRACTION_COMPLETED",
+      "requires_human_confirmation": false
+    },
+    "persisted_result_path": "/tmp/tmp45ktg2nq/05_outputs/00_orchestrator_planner/pipeline_state_agent_results/5df93599-f0d9-4f2a-9ddc-c79da68ca2e5.json",
+    "artifact_names": [
+      "CARDS_ERRORS_CSV_PATH",
+      "CARDS_JSONL_PATH",
+      "CARDS_QUALITY_CSV_PATH",
+      "CARDS_REVISION_PLAN_CSV_PATH",
+      "CARDS_SUMMARY_CSV_PATH",
+      "CHUNKS_VALIDATION_REPORT_PATH",
+      "EXTRACTION_MANIFEST_PATH",
+      "KB_CSV_PATH",
+      "KB_JSONL_PATH",
+      "RETRIEVAL_TRACE_CSV_PATH"
+    ],
+    "kb_created": true
+  },
+  "transactional": {
+    "prepare_count": 2,
+    "attempt_1_committed": true,
+    "attempt_2_committed": true
+  }
+}

@@ -1,0 +1,42 @@
+CANDIDATA V1.6 CON INTENTO 2 DIRIGIDO
+
+FILES PRESERVED BYTE-FOR-BYTE
+src/contracts/agent_input.py
+src/state/fingerprints.py
+src/io/atomic_write.py
+src/tools/extraction/chunk_validation.py
+src/tools/extraction/retrieval.py
+src/tools/extraction/card_validation.py
+src/tools/extraction/knowledge_base.py
+src/tools/extraction/relevance_classification.py
+src/tools/extraction/card_extraction.py
+src/tools/extraction/title_repair.py
+src/tools/extraction/stage_artifacts.py
+
+FILES MODIFIED
+03_agente_extraccion_kb_migrado_v16.ipynb
+src/adapters/extraction_runtime.py
+src/agents/extraction_agent.py
+src/config/generation_policy_config.py
+tests/v16/agent_environment.py
+tests/v16/test_alignment_v16.py
+
+FILES CREATED
+attempt2_strategy_report.json
+controlled_attempt2_transaction_report.json
+src/tools/extraction/revision_strategy.py
+tests/v16/test_attempt2_directed.py
+
+FILES REMOVED FROM PRIOR CANDIDATE
+AUDIT_ALIGNMENT_V16.md
+delivery_manifest.json
+modified_files.txt
+real_execution_report.json
+return_codes.json
+test_report.txt
+
+CONFIRMATIONS
+- src/config/generation_config.py is not included.
+- PROJECT_DIR/src/generation_config.py is not included or modified.
+- 03B is not imported or executed by Agent 03.
+- No secret files are packaged.

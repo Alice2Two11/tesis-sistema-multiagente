@@ -1,0 +1,57 @@
+{
+  "src/contracts/agent_input.py": {
+    "base_sha256": "7496894a483595a87c6f45f1f22add16a149d21d16d4ff645d06c6690780cefb",
+    "candidate_sha256": "7496894a483595a87c6f45f1f22add16a149d21d16d4ff645d06c6690780cefb",
+    "unchanged": true
+  },
+  "src/state/fingerprints.py": {
+    "base_sha256": "22530976d8187f39c79e4db6b970061cb0d8d18374f155522294d603b75706c0",
+    "candidate_sha256": "22530976d8187f39c79e4db6b970061cb0d8d18374f155522294d603b75706c0",
+    "unchanged": true
+  },
+  "src/io/atomic_write.py": {
+    "base_sha256": "25747667964e462b87c22691feadcbeb78f40023fa90d76a32196586a4d58b4a",
+    "candidate_sha256": "25747667964e462b87c22691feadcbeb78f40023fa90d76a32196586a4d58b4a",
+    "unchanged": true
+  },
+  "src/tools/extraction/chunk_validation.py": {
+    "base_sha256": "e1cc66dc283a501e6d887ed07177c763f258c58dd2efaeaa15f9eba20fae6cb2",
+    "candidate_sha256": "e1cc66dc283a501e6d887ed07177c763f258c58dd2efaeaa15f9eba20fae6cb2",
+    "unchanged": true
+  },
+  "src/tools/extraction/retrieval.py": {
+    "base_sha256": "8fd0f6d87fd5d0eacb9af458ca5580258bd64daf31c8f2e9aea7dc1b4ff60c03",
+    "candidate_sha256": "8fd0f6d87fd5d0eacb9af458ca5580258bd64daf31c8f2e9aea7dc1b4ff60c03",
+    "unchanged": true
+  },
+  "src/tools/extraction/card_validation.py": {
+    "base_sha256": "795a16465dd4d30c740b3baf999f987747c3e2f69de34e7d5c110794a1716bcc",
+    "candidate_sha256": "795a16465dd4d30c740b3baf999f987747c3e2f69de34e7d5c110794a1716bcc",
+    "unchanged": true
+  },
+  "src/tools/extraction/knowledge_base.py": {
+    "base_sha256": "d5a4523c90b14de6f5ee2e23e30f3a8a86657ba36771f49ffbcda85a019c674e",
+    "candidate_sha256": "d5a4523c90b14de6f5ee2e23e30f3a8a86657ba36771f49ffbcda85a019c674e",
+    "unchanged": true
+  },
+  "src/tools/extraction/relevance_classification.py": {
+    "base_sha256": "12462c0eb5206557f27270f19045b5a6498c30fd7273ca7685a71b9c83b44ea6",
+    "candidate_sha256": "12462c0eb5206557f27270f19045b5a6498c30fd7273ca7685a71b9c83b44ea6",
+    "unchanged": true
+  },
+  "src/tools/extraction/card_extraction.py": {
+    "base_sha256": "800e2d1761771fd5f32e8a71e19776fc413089bee7828d1ab685a9eacf99598b",
+    "candidate_sha256": "800e2d1761771fd5f32e8a71e19776fc413089bee7828d1ab685a9eacf99598b",
+    "unchanged": true
+  },
+  "src/tools/extraction/title_repair.py": {
+    "base_sha256": "b7d170818cd7845f7d183b212549fff409d69b3f8783d291516e633e0bf60762",
+    "candidate_sha256": "b7d170818cd7845f7d183b212549fff409d69b3f8783d291516e633e0bf60762",
+    "unchanged": true
+  },
+  "src/tools/extraction/stage_artifacts.py": {
+    "base_sha256": "1f7b70e733af796665aec43a8db5cc5cc801b3dde3ef741bbfcbba703f4e12f3",
+    "candidate_sha256": "1f7b70e733af796665aec43a8db5cc5cc801b3dde3ef741bbfcbba703f4e12f3",
+    "unchanged": true
+  }
+}

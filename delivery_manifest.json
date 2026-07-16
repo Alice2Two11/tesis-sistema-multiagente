@@ -1,0 +1,79 @@
+{
+  "delivery_name": "phase2_agent03_v16_attempt2_candidate",
+  "status": "CANDIDATA V1.6 CON INTENTO 2 DIRIGIDO",
+  "notebook": "03_agente_extraccion_kb_migrado_v16.ipynb",
+  "new_artifact": "scientific_cards_revision_plan.csv",
+  "expected_success_artifacts": [
+    "scientific_cards.jsonl",
+    "scientific_cards_summary.csv",
+    "scientific_cards_errors.csv",
+    "scientific_cards_quality_check.csv",
+    "scientific_cards_revision_plan.csv",
+    "extraction_retrieval_trace.csv",
+    "scientific_knowledge_base.csv",
+    "scientific_knowledge_base.jsonl",
+    "scientific_extraction_manifest.json",
+    "chunks_clean_validation_report.json"
+  ],
+  "attempt_contract": {
+    "attempt_1": "normal extraction, simple title repair, diagnosis, RETRY if recoverable defects remain",
+    "attempt_2": "directed per-paper repair using previous_attempt and previous artifacts",
+    "attempt_3_automatic": false
+  },
+  "real_artifact_strategy_counts": {
+    "REPAIR_SCHEMA_REUSE_RETRIEVAL": 3,
+    "REPAIR_TITLE_ONLY": 6,
+    "REPAIR_SCHEMA_EXPANDED_EVIDENCE": 1
+  },
+  "preserved_files": [
+    "src/contracts/agent_input.py",
+    "src/state/fingerprints.py",
+    "src/io/atomic_write.py",
+    "src/tools/extraction/chunk_validation.py",
+    "src/tools/extraction/retrieval.py",
+    "src/tools/extraction/card_validation.py",
+    "src/tools/extraction/knowledge_base.py",
+    "src/tools/extraction/relevance_classification.py",
+    "src/tools/extraction/card_extraction.py",
+    "src/tools/extraction/title_repair.py",
+    "src/tools/extraction/stage_artifacts.py"
+  ],
+  "modified_files": [
+    "03_agente_extraccion_kb_migrado_v16.ipynb",
+    "src/adapters/extraction_runtime.py",
+    "src/agents/extraction_agent.py",
+    "src/config/generation_policy_config.py",
+    "tests/v16/agent_environment.py",
+    "tests/v16/test_alignment_v16.py"
+  ],
+  "created_files": [
+    "attempt2_strategy_report.json",
+    "controlled_attempt2_transaction_report.json",
+    "src/tools/extraction/revision_strategy.py",
+    "tests/v16/test_attempt2_directed.py"
+  ],
+  "discarded_files": [
+    "AUDIT_ALIGNMENT_V16.md",
+    "delivery_manifest.json",
+    "modified_files.txt",
+    "real_execution_report.json",
+    "return_codes.json",
+    "test_report.txt"
+  ],
+  "return_codes": {
+    "UNITTEST_RETURN_CODE": 0,
+    "PY_COMPILE_RETURN_CODE": 0,
+    "INTEGRATION_REAL_CONFIG_RETURN_CODE": 0,
+    "NOTEBOOK_PREFLIGHT_RETURN_CODE": 0,
+    "DIRECT_MODULE_CALL_RETURN_CODE": 0,
+    "NOTEBOOK_CLEAN_KERNEL_RETURN_CODE": 0,
+    "CONTROLLED_ATTEMPT2_TRANSACTION_RETURN_CODE": 0,
+    "REAL_EXTERNAL_COLAB_ATTEMPT2_RETURN_CODE": "NOT_EXECUTED_IN_CONTAINER",
+    "real_external_validation_required": true,
+    "controlled_service_disclosure": "Integration and attempt-2 transaction use controlled doubles; they are not OpenAI/Chroma production validation."
+  },
+  "scientific_modules_rewritten_from_scratch": false,
+  "03b_integrated": false,
+  "generation_config_modified": false,
+  "external_real_colab_validation_pending": true
+}
