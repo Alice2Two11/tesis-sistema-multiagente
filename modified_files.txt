@@ -1,17 +1,22 @@
-MODIFIED
-- 03B_extraccion_cuantitativa_kb_migrado_v16.ipynb
-- preserved_sha256.json
-- return_codes.json
-- src/config/quantitative_extraction_policy_config.py
-- src/tools/quantitative_extraction/artifacts.py
-- src/tools/quantitative_extraction/normalization.py
-- test_report.txt
-- tests/integration/run_notebook_precheck.py
-- tests/integration/run_notebook_structure_preflight.py
-
 CREATED
-- dataset_normalization_repair_report.json
-- tests/v16/test_dataset_normalization_repair_v16.py
+04_agente_analisis_tematico_migrado_v16.ipynb
+src/adapters/thematic_analysis_runtime.py
+src/agents/thematic_analysis_agent.py
+src/config/thematic_analysis_policy_config.py
+src/runtime/thematic_analysis_protocol.py
+src/tools/thematic_analysis/__init__.py
+src/tools/thematic_analysis/artifacts.py
+src/tools/thematic_analysis/context_builder.py
+src/tools/thematic_analysis/corpus_filtering.py
+src/tools/thematic_analysis/coverage_validation.py
+src/tools/thematic_analysis/input_validation.py
+src/tools/thematic_analysis/prompting.py
+src/tools/thematic_analysis/quality.py
+src/tools/thematic_analysis/quantitative_context.py
+src/tools/thematic_analysis/reference_validation.py
+src/tools/thematic_analysis/repair_strategy.py
+src/tools/thematic_analysis/schema_validation.py
+tests/v16/test_agent04_v16.py
 
-REMOVED
-- tests/v16/test_flattening_repair_v16.py.tmp
+MODIFIED PROTECTED FILES
+NONE

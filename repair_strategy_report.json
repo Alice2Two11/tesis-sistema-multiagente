@@ -1,0 +1,25 @@
+{
+  "attempts": {
+    "attempt_1": "normal thematic generation",
+    "attempt_2": "directed block repair",
+    "automatic_attempt_3": false
+  },
+  "deterministic": [
+    "CORRECT_TITLE_FROM_CLOSED_MAP",
+    "REMOVE_INVALID_REFERENCE",
+    "NORMALIZE_SINGLETON",
+    "NORMALIZE_KNOWN_ALIASES",
+    "RENUMBER_UNAMBIGUOUS_IDS"
+  ],
+  "directed_llm": [
+    "REGENERATE_THEME_ONLY",
+    "REGENERATE_OR_DROP_GAP_ONLY",
+    "REGENERATE_DIMENSION_ONLY",
+    "ASSIGN_UNASSIGNED_PAPERS_ONLY",
+    "REGENERATE_STRUCTURE_ONLY"
+  ],
+  "transition_success": {
+    "action": "ADVANCE",
+    "target_stage": null
+  }
+}

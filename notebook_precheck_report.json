@@ -1,8 +1,8 @@
 {
   "status": "OK",
   "mode": "PRECHECK",
-  "clean_kernel": true,
-  "executed_code_cells": 6,
+  "executed_code_cells": 3,
+  "llm_calls": 0,
   "transaction_executed": false,
-  "real_llm_called": false
+  "clean_kernel": true
 }

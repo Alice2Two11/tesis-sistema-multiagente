@@ -1,38 +1,65 @@
 {
-  "status": "PROVISIONAL_NOT_SCIENTIFICALLY_VALIDATED",
+  "threshold_status": "PROVISIONAL_NOT_SCIENTIFICALLY_VALIDATED",
   "metrics": {
-    "paper_quantitative_coverage": {
-      "formula": "papers_with_quantitative_results / papers_processed",
+    "paper_coverage": {
+      "type": "ratio",
       "threshold": null
     },
-    "source_chunk_confirmation_rate": {
-      "formula": "confirmed_in_source_chunk / quantitative_rows",
+    "theme_coverage": {
+      "type": "ratio",
       "threshold": null
     },
-    "unconfirmed_value_rate": {
-      "formula": "not_confirmed / quantitative_rows",
+    "papers_assigned_to_theme_rate": {
+      "type": "ratio",
       "threshold": null
     },
-    "successful_extraction_rate": {
-      "formula": "papers_without_extraction_error / papers_processed",
+    "supported_theme_rate": {
+      "type": "ratio",
       "threshold": null
     },
-    "dataset_coverage": {
-      "formula": "papers_with_datasets / papers_processed",
+    "supported_gap_rate": {
+      "type": "ratio",
       "threshold": null
     },
-    "technique_coverage": {
-      "formula": "papers_with_techniques / papers_processed",
+    "valid_reference_rate": {
+      "type": "ratio",
       "threshold": null
     },
-    "values_found_only_in_kb_rate": {
-      "formula": "found_only_in_kb_text / quantitative_rows",
+    "title_match_rate": {
+      "type": "ratio",
       "threshold": null
     },
-    "minimum_usable_quality": {
-      "formula": "pending real diagnostic calibration",
+    "comparative_dimension_support_rate": {
+      "type": "ratio",
+      "threshold": null
+    },
+    "unassigned_paper_rate": {
+      "type": "ratio",
+      "threshold": null
+    },
+    "duplicate_assignment_rate": {
+      "type": "ratio",
+      "threshold": null
+    },
+    "structure_source_validity_rate": {
+      "type": "ratio",
+      "threshold": null
+    },
+    "gap_source_validity_rate": {
+      "type": "ratio",
+      "threshold": null
+    },
+    "representative_source_validity_rate": {
+      "type": "ratio",
+      "threshold": null
+    },
+    "invalid_record_rate": {
+      "type": "ratio",
+      "threshold": null
+    },
+    "section_count": {
+      "type": "integer",
       "threshold": null
     }
-  },
-  "note": "La primera ejecución real debe reportar la distribución observada; estos valores no son umbrales científicos aprobados."
+  }
 }
