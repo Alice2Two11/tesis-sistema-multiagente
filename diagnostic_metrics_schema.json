@@ -1,0 +1,38 @@
+{
+  "status": "PROVISIONAL_NOT_SCIENTIFICALLY_VALIDATED",
+  "metrics": {
+    "paper_quantitative_coverage": {
+      "formula": "papers_with_quantitative_results / papers_processed",
+      "threshold": null
+    },
+    "source_chunk_confirmation_rate": {
+      "formula": "confirmed_in_source_chunk / quantitative_rows",
+      "threshold": null
+    },
+    "unconfirmed_value_rate": {
+      "formula": "not_confirmed / quantitative_rows",
+      "threshold": null
+    },
+    "successful_extraction_rate": {
+      "formula": "papers_without_extraction_error / papers_processed",
+      "threshold": null
+    },
+    "dataset_coverage": {
+      "formula": "papers_with_datasets / papers_processed",
+      "threshold": null
+    },
+    "technique_coverage": {
+      "formula": "papers_with_techniques / papers_processed",
+      "threshold": null
+    },
+    "values_found_only_in_kb_rate": {
+      "formula": "found_only_in_kb_text / quantitative_rows",
+      "threshold": null
+    },
+    "minimum_usable_quality": {
+      "formula": "pending real diagnostic calibration",
+      "threshold": null
+    }
+  },
+  "note": "La primera ejecución real debe reportar la distribución observada; estos valores no son umbrales científicos aprobados."
+}

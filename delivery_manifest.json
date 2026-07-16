@@ -1,79 +1,136 @@
 {
-  "delivery_name": "phase2_agent03_v16_attempt2_candidate",
-  "status": "CANDIDATA V1.6 CON INTENTO 2 DIRIGIDO",
-  "notebook": "03_agente_extraccion_kb_migrado_v16.ipynb",
-  "new_artifact": "scientific_cards_revision_plan.csv",
-  "expected_success_artifacts": [
-    "scientific_cards.jsonl",
-    "scientific_cards_summary.csv",
-    "scientific_cards_errors.csv",
-    "scientific_cards_quality_check.csv",
-    "scientific_cards_revision_plan.csv",
-    "extraction_retrieval_trace.csv",
-    "scientific_knowledge_base.csv",
-    "scientific_knowledge_base.jsonl",
-    "scientific_extraction_manifest.json",
-    "chunks_clean_validation_report.json"
+  "delivery_name": "phase3_03b_quantitative_capability_v16_candidate",
+  "status": "CANDIDATA 03B V1.6 PARA VALIDACIÓN REAL",
+  "architecture": "invocable contractual capability + scientific tools + transactional adapter",
+  "stage_name": "03B_extraccion_cuantitativa_kb",
+  "attempt_numbers_supported": [
+    1
   ],
-  "attempt_contract": {
-    "attempt_1": "normal extraction, simple title repair, diagnosis, RETRY if recoverable defects remain",
-    "attempt_2": "directed per-paper repair using previous_attempt and previous artifacts",
-    "attempt_3_automatic": false
+  "artifact_names": [
+    "structured_quantitative_extraction.json",
+    "structured_quantitative_extraction_raw.jsonl",
+    "quantitative_extraction_errors.csv",
+    "quantitative_comparative_table.csv",
+    "quantitative_datasets_table.csv",
+    "quantitative_techniques_table.csv",
+    "dataset_technique_summary.csv",
+    "quantitative_extraction_report.md",
+    "quantitative_extraction_manifest.json"
+  ],
+  "controlled_execution": {
+    "status": "OK",
+    "controlled_doubles": true,
+    "execution_status": "COMPLETED",
+    "quality_status": "APPROVED",
+    "transition": {
+      "action": "ADVANCE",
+      "target_stage": null,
+      "reason_code": "QUANTITATIVE_EXTRACTION_COMPLETED",
+      "requires_human_confirmation": false
+    },
+    "artifact_count": 9,
+    "artifact_names": [
+      "dataset_technique_summary.csv",
+      "quantitative_comparative_table.csv",
+      "quantitative_datasets_table.csv",
+      "quantitative_extraction_errors.csv",
+      "quantitative_extraction_manifest.json",
+      "quantitative_extraction_report.md",
+      "quantitative_techniques_table.csv",
+      "structured_quantitative_extraction.json",
+      "structured_quantitative_extraction_raw.jsonl"
+    ],
+    "metrics": {
+      "technical": {
+        "llm_calls": 1
+      },
+      "scientific": {
+        "paper_quantitative_coverage": 1.0,
+        "source_chunk_confirmation_rate": 1.0,
+        "unconfirmed_value_rate": 0.0,
+        "successful_extraction_rate": 1.0,
+        "dataset_coverage": 1.0,
+        "technique_coverage": 1.0,
+        "values_found_only_in_kb_rate": 0.0,
+        "counts": {
+          "papers_processed": 1,
+          "quantitative_rows": 1,
+          "dataset_rows": 1,
+          "technique_rows": 1,
+          "extraction_errors": 0,
+          "confirmed_in_source_chunks": 1,
+          "found_only_in_kb_text": 0,
+          "not_confirmed": 0
+        }
+      }
+    }
   },
-  "real_artifact_strategy_counts": {
-    "REPAIR_SCHEMA_REUSE_RETRIEVAL": 3,
-    "REPAIR_TITLE_ONLY": 6,
-    "REPAIR_SCHEMA_EXPANDED_EVIDENCE": 1
-  },
-  "preserved_files": [
-    "src/contracts/agent_input.py",
-    "src/state/fingerprints.py",
-    "src/io/atomic_write.py",
-    "src/tools/extraction/chunk_validation.py",
-    "src/tools/extraction/retrieval.py",
-    "src/tools/extraction/card_validation.py",
-    "src/tools/extraction/knowledge_base.py",
-    "src/tools/extraction/relevance_classification.py",
-    "src/tools/extraction/card_extraction.py",
-    "src/tools/extraction/title_repair.py",
-    "src/tools/extraction/stage_artifacts.py"
-  ],
-  "modified_files": [
-    "03_agente_extraccion_kb_migrado_v16.ipynb",
-    "src/adapters/extraction_runtime.py",
-    "src/agents/extraction_agent.py",
-    "src/config/generation_policy_config.py",
-    "tests/v16/agent_environment.py",
-    "tests/v16/test_alignment_v16.py"
-  ],
-  "created_files": [
-    "attempt2_strategy_report.json",
-    "controlled_attempt2_transaction_report.json",
-    "src/tools/extraction/revision_strategy.py",
-    "tests/v16/test_attempt2_directed.py"
-  ],
-  "discarded_files": [
-    "AUDIT_ALIGNMENT_V16.md",
-    "delivery_manifest.json",
-    "modified_files.txt",
-    "real_execution_report.json",
-    "return_codes.json",
-    "test_report.txt"
-  ],
   "return_codes": {
     "UNITTEST_RETURN_CODE": 0,
     "PY_COMPILE_RETURN_CODE": 0,
-    "INTEGRATION_REAL_CONFIG_RETURN_CODE": 0,
-    "NOTEBOOK_PREFLIGHT_RETURN_CODE": 0,
+    "CONTROLLED_INTEGRATION_03B_RETURN_CODE": 0,
     "DIRECT_MODULE_CALL_RETURN_CODE": 0,
+    "NOTEBOOK_PREFLIGHT_RETURN_CODE": 0,
     "NOTEBOOK_CLEAN_KERNEL_RETURN_CODE": 0,
-    "CONTROLLED_ATTEMPT2_TRANSACTION_RETURN_CODE": 0,
-    "REAL_EXTERNAL_COLAB_ATTEMPT2_RETURN_CODE": "NOT_EXECUTED_IN_CONTAINER",
-    "real_external_validation_required": true,
-    "controlled_service_disclosure": "Integration and attempt-2 transaction use controlled doubles; they are not OpenAI/Chroma production validation."
+    "REAL_EXTERNAL_COLAB_03B_RETURN_CODE": "NOT_EXECUTED_IN_CONTAINER"
   },
-  "scientific_modules_rewritten_from_scratch": false,
-  "03b_integrated": false,
-  "generation_config_modified": false,
-  "external_real_colab_validation_pending": true
+  "preserved_files": {
+    "src/contracts/agent_input.py": "7496894a483595a87c6f45f1f22add16a149d21d16d4ff645d06c6690780cefb",
+    "src/contracts/agent_result.py": "b45bf47c49755979f7901613d952614feeca5bf3601d10df5433c521915617f9",
+    "src/state/pipeline_state.py": "fbe086b5fe36dae55770917d609d1bf5871c52007001bba2f499e573cbe7c82b",
+    "src/state/state_store.py": "84beb973abb65ff4fe6cc199128961e9fee9d5c67da0a4d618110465b5a1d5c7",
+    "src/state/fingerprints.py": "22530976d8187f39c79e4db6b970061cb0d8d18374f155522294d603b75706c0",
+    "src/io/atomic_write.py": "25747667964e462b87c22691feadcbeb78f40023fa90d76a32196586a4d58b4a",
+    "src/io/credentials.py": "8704ef5bd3dc2ea94a58876b5bf93f43978bc2a8ffd76edc94c16a75750ff982",
+    "src/config/common_config.py": "cbffe02e667ff4ee8aba01a42e812261a056a914da46d410d2a61ba6993ebdb6",
+    "src/bootstrap/project_bootstrap.py": "eb760500ce20653f8dab9ac1d683f4d47c57b784bb33d2e8bd841848614b9f71",
+    "src/agents/extraction_agent.py": "d6a20ffbec6628f55aa6212bd158a10ea8a138e02c94a09404d89325fd4733c1",
+    "src/tools/extraction/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/tools/extraction/card_extraction.py": "800e2d1761771fd5f32e8a71e19776fc413089bee7828d1ab685a9eacf99598b",
+    "src/tools/extraction/card_validation.py": "795a16465dd4d30c740b3baf999f987747c3e2f69de34e7d5c110794a1716bcc",
+    "src/tools/extraction/chunk_validation.py": "e1cc66dc283a501e6d887ed07177c763f258c58dd2efaeaa15f9eba20fae6cb2",
+    "src/tools/extraction/knowledge_base.py": "d5a4523c90b14de6f5ee2e23e30f3a8a86657ba36771f49ffbcda85a019c674e",
+    "src/tools/extraction/relevance_classification.py": "12462c0eb5206557f27270f19045b5a6498c30fd7273ca7685a71b9c83b44ea6",
+    "src/tools/extraction/retrieval.py": "8fd0f6d87fd5d0eacb9af458ca5580258bd64daf31c8f2e9aea7dc1b4ff60c03",
+    "src/tools/extraction/revision_strategy.py": "00b552c7cf6377a731f5a8df9dabcda2e29fe0323876043579b74114efb2b24b",
+    "src/tools/extraction/stage_artifacts.py": "1f7b70e733af796665aec43a8db5cc5cc801b3dde3ef741bbfcbba703f4e12f3",
+    "src/tools/extraction/title_repair.py": "b7d170818cd7845f7d183b212549fff409d69b3f8783d291516e633e0bf60762"
+  },
+  "created_files": [
+    "src/config/quantitative_extraction_policy_config.py",
+    "src/tools/quantitative_extraction/__init__.py",
+    "src/tools/quantitative_extraction/input_validation.py",
+    "src/tools/quantitative_extraction/source_context.py",
+    "src/tools/quantitative_extraction/prompting.py",
+    "src/tools/quantitative_extraction/extraction.py",
+    "src/tools/quantitative_extraction/normalization.py",
+    "src/tools/quantitative_extraction/evidence_verification.py",
+    "src/tools/quantitative_extraction/quality.py",
+    "src/tools/quantitative_extraction/artifacts.py",
+    "src/capabilities/__init__.py",
+    "src/capabilities/quantitative_extraction.py",
+    "src/adapters/quantitative_extraction_runtime.py",
+    "src/runtime/quantitative_extraction_protocol.py",
+    "03B_extraccion_cuantitativa_kb_migrado_v16.ipynb",
+    "tests/v16/test_quantitative_capability_v16.py",
+    "tests/v16/test_notebook_03b_v16.py",
+    "tests/integration/run_03b_controlled.py",
+    "diagnostic_metrics_schema.json",
+    "AUDIT_IMPLEMENTATION_03B_V16.md",
+    "test_report.txt",
+    "return_codes.json",
+    "delivery_manifest.json",
+    "modified_files.txt"
+  ],
+  "confirmations": {
+    "extraction_agent_modified": false,
+    "stage03_notebook_modified": false,
+    "03b_imports_extraction_agent": false,
+    "03b_executes_stage04": false,
+    "target_stage_on_advance": null,
+    "ground_truth_used": false,
+    "credentials_centralized": true,
+    "atomic_writes": true,
+    "src_config_generation_config_included": false
+  }
 }
