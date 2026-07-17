@@ -42,6 +42,14 @@ def write_raw_section_output(raw_dir, section_id, generation_attempt, text):
     return path
 
 
+def write_raw_section_validation(raw_dir, section_id, generation_attempt, validation):
+    raw_dir = Path(raw_dir)
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    path = raw_dir / f"{section_id}_attempt_{generation_attempt}_validation.json"
+    _write(path, json.dumps(validation, ensure_ascii=False, indent=2))
+    return path
+
+
 def write_draft_artifacts(
     out,
     draft,
