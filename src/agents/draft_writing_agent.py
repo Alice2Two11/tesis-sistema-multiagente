@@ -44,13 +44,69 @@ class DraftWritingAgent:
                 for generation_attempt in range(1,int(policy.get('max_section_revision_attempts',2))+2):
                     prompt=build_section_prompt(section,evidence,self._quant_context(section,bundle,int(policy.get('max_quantitative_rows_per_section',12))),previous,policy)
                     raw=self.runtime.invoke(prompt);llm_calls+=1
-                    write_raw_section_output(raw_dir,sid,generation_attempt,raw)
+                    raw_path=write_raw_section_output(raw_dir,sid,generation_attempt,raw)
                     parsed=self.runtime.parse(raw);allowed={(r['source_filename'],r['chunk_id']) for r in evidence};norm=normalize_generated_section(parsed,allowed);norm['generation_attempt']=generation_attempt
-                    val=validate_generated_section(norm,section,evidence);validation_calls+=1;norm['section_validation']=val;logs.append({'attempt':generation_attempt,'validation':val})
+                    val=validate_generated_section(norm,section,evidence);validation_calls+=1;norm['section_validation']=val
+                    citation_errors=list(val.get('citation_errors') or [])
+                    claim_errors=list(val.get('claim_errors') or [])
+                    numeric_errors=list(val.get('numeric_errors') or [])
+                    def _reason(item):
+                        return str(item.get('reason','')) if isinstance(item,dict) else str(item)
+                    attempt_validation={
+                        'section_id':sid,
+                        'generation_attempt':generation_attempt,
+                        'validation_ok':bool(val.get('validation_ok')),
+                        'validation_errors':list(val.get('errors') or [])+citation_errors+claim_errors+numeric_errors,
+                        'invalid_citations':[item for item in citation_errors if _reason(item) in {'invalid_citation','citation_not_in_section_evidence','citation_in_source_free_section'}],
+                        'unsupported_claims':[item for item in claim_errors if _reason(item) in {'missing_claim_for_sentence','claim_without_supporting_citations','claim_citation_not_in_section_evidence','claim_not_exact_sentence','substantive_sentence_missing_from_claims'}],
+                        'substantive_sentences_without_claim':[item for item in claim_errors if _reason(item) in {'missing_claim_for_sentence','substantive_sentence_missing_from_claims'}],
+                        'substantive_sentences_without_citation':[item for item in citation_errors if _reason(item) in {'uncited_substantive_sentence','substantive_sentence_without_citation','section_without_citations'}],
+                        'claim_sentence_mismatches':[item for item in claim_errors if _reason(item) in {'claim_citation_mismatch','claim_sentence_citation_mismatch','claim_not_exact_sentence'}],
+                        'numeric_support_errors':numeric_errors,
+                        'word_count':count_words(norm.get('draft_text','')),
+                        'citation_count':len(CITATION_RE.findall(str(norm.get('draft_text','')))),
+                        'raw_output_path':str(raw_path),
+                    }
+                    validation_path=write_raw_section_validation(raw_dir,sid,generation_attempt,attempt_validation)
+                    logs.append({'attempt':generation_attempt,'validation':val,'attempt_validation_path':str(validation_path)})
                     if val['validation_ok']:accepted=norm;break
-                    previous=val['errors']+val['numeric_errors']
+                    previous=list(val.get('errors') or [])+citation_errors+claim_errors+numeric_errors
                 attempt_logs[sid]=logs
-                if accepted is None:raise ValueError(f'SECTION_VALIDATION_FAILED:{sid}')
+                if accepted is None:
+                    last_attempt=logs[-1] if logs else {'attempt':0,'validation':{}}
+                    last_validation=last_attempt.get('validation') or {}
+                    partial_validation={
+                        'stage':'06_agente_redactor',
+                        'experiment_id':agent_input.experiment_id,
+                        'validation_version':policy.get('validation_version'),
+                        'validation_ok':False,
+                        'failed_section':sid,
+                        'section_attempts':len(logs),
+                        'last_attempt_errors':list(last_validation.get('errors') or [])+list(last_validation.get('citation_errors') or [])+list(last_validation.get('claim_errors') or [])+list(last_validation.get('numeric_errors') or []),
+                        'generation_attempts':attempt_logs,
+                        'raw_section_outputs_directory':str(raw_dir),
+                        'published_draft':False,
+                    }
+                    report_path=write_partial_validation(out,partial_validation)
+                    arts={
+                        'draft_validation_report.json':ArtifactReference(str(report_path),sha256_file(report_path)),
+                        'raw_section_outputs':ArtifactReference(str(raw_dir),'DIRECTORY'),
+                    }
+                    action=TransitionAction.RETRY if agent_input.attempt_number==1 else TransitionAction.HALT_STAGE
+                    return AgentResult(
+                        execution_status=ExecutionStatus.COMPLETED,
+                        quality_status=QualityStatus.NEEDS_REVISION,
+                        decision=DecisionInfo(code='SECTION_VALIDATION_FAILED',rationale=f'La sección {sid} agotó sus reintentos internos; se preservaron salidas y validaciones por intento.'),
+                        quality_metrics={'scientific':{},'technical':{'validation_ok':False,'reused':False,'failed_section':sid,'section_attempts':len(logs)}},
+                        warnings=(AgentWarning(code='SECTION_VALIDATION_FAILED',severity=WarningSeverity.ERROR,blocking=True,message=f'La sección {sid} no superó la validación tras {len(logs)} intentos.'),),
+                        failure_reason_codes=('SECTION_VALIDATION_FAILED',),
+                        requested_transition=RequestedTransition(action=action,target_stage=None,reason_code='NEEDS_REVISION',requires_human_confirmation=False),
+                        output_artifacts=arts,
+                        tool_usage=ToolUsage(retrieval_rounds=retrieval_rounds,llm_calls=llm_calls,validation_calls=validation_calls),
+                        attempt_number=agent_input.attempt_number,
+                        started_at=start,
+                        completed_at=datetime.now(timezone.utc).isoformat(),
+                    )
                 generated.append(accepted)
             evidence_map={}
             for row in all_evidence:evidence_map.setdefault(row['section_id'],[]).append({k:v for k,v in row.items() if k!='section_id'})
