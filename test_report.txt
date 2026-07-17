@@ -1,11 +1,11 @@
-........................./mnt/data/phase6_agent06_behavior_preserving_agentic_v16_chroma_dir_fixed_candidate/tests/v16/test_agent04_v16.py:91: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpukzuv5jc/out/thematic_validation_report.json' mode='r' encoding='utf-8'>
+........................./mnt/data/phase6_agent06_behavior_preserving_agentic_v16_section_failure_trace_candidate/tests/v16/test_agent04_v16.py:91: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp7wb0hhp3/out/thematic_validation_report.json' mode='r' encoding='utf-8'>
   prev=PreviousAttemptSummary('NEEDS_REVISION',failure_reason_codes=('MISSING_THEME_EVIDENCE',));x=self.agent().execute(self.ai(attempt=2,prev=prev));m=json.load(open(x.output_artifacts['validation'].path));self.assertEqual(m['repair_plan'][0]['strategy'],'REGENERATE_THEME_ONLY')
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-..................../mnt/data/phase6_agent06_behavior_preserving_agentic_v16_chroma_dir_fixed_candidate/tests/v16/test_agent04_v16.py:77: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp47ijg5o2/out/thematic_analysis_manifest.json' mode='r' encoding='utf-8'>
+..................../mnt/data/phase6_agent06_behavior_preserving_agentic_v16_section_failure_trace_candidate/tests/v16/test_agent04_v16.py:77: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpl2h7wnjk/out/thematic_analysis_manifest.json' mode='r' encoding='utf-8'>
   x=self.agent().execute(self.ai());m=json.load(open(x.output_artifacts['manifest'].path));self.assertFalse(m['safety_policy']['uses_ground_truth'])
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-......................................................................................................................................
+........................................................................................................................................
 ----------------------------------------------------------------------
-Ran 179 tests in 4.585s
+Ran 181 tests in 4.508s
 
 OK

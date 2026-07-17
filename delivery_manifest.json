@@ -1,28 +1,36 @@
 {
-  "candidate_name": "phase6_agent06_behavior_preserving_agentic_v16_chroma_dir_fixed_candidate",
-  "status": "CANDIDATA AGENTE 06 V1.6 CON RESOLUCION CHROMA_DIR CORREGIDA",
+  "candidate_name": "phase6_agent06_behavior_preserving_agentic_v16_section_failure_trace_candidate",
+  "status": "CANDIDATA AGENTE 06 V1.6 CON TRAZABILIDAD DE FALLO POR SECCION",
   "stage": "06_agente_redactor",
   "agent": "DraftWritingAgent",
   "behavior_preserving": true,
-  "root_cause": "04_chroma existed but was empty; the persisted collection reference_papers_chunks was stored in 04_chroma_index",
+  "root_cause": "SECTION_VALIDATION_FAILED was raised before a partial draft_validation_report.json and per-attempt validation traces were persisted.",
   "productive_files_modified": [
-    "src/adapters/draft_writing_runtime.py",
-    "src/tools/draft_writing/input_validation.py"
+    "src/agents/draft_writing_agent.py",
+    "src/tools/draft_writing/artifacts.py"
   ],
   "tests_added": [
-    "tests/v16/test_agent06_chroma_dir_resolution_v16.py"
+    "tests/v16/test_agent06_section_failure_trace_v16.py"
   ],
-  "main_artifact_count": 12,
-  "auxiliary_artifacts": ["raw_section_outputs/"],
+  "failure_translation": {
+    "attempt_1": "COMPLETED -> NEEDS_REVISION -> RETRY",
+    "attempt_2": "COMPLETED -> NEEDS_REVISION -> HALT_STAGE"
+  },
+  "partial_artifacts_on_section_failure": [
+    "draft_validation_report.json",
+    "raw_section_outputs/<section_id>_attempt_<n>.txt",
+    "raw_section_outputs/<section_id>_attempt_<n>_validation.json"
+  ],
+  "published_draft_on_failure": false,
+  "main_artifact_count_on_success": 12,
   "suite": {
     "command": "python -m unittest discover -s tests -p \"test_*.py\"",
-    "tests": 179,
+    "tests": 181,
     "result": "OK"
   },
   "real_external_colab": "NOT_EXECUTED_IN_CONTAINER",
   "openai_called_in_container": false,
   "chroma_real_called_in_container": false,
   "agent07_executed": false,
-  "protected_stages_modified": false,
-  "required_rerun_attempt_number": 1
+  "protected_stages_modified": false
 }
