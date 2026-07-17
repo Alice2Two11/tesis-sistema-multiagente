@@ -1,29 +1,28 @@
 {
-  "candidate_name": "phase6_agent06_behavior_preserving_agentic_v16_validation_restored_candidate",
-  "status": "CANDIDATA AGENTE 06 V1.6 CON VALIDACIÓN ORIGINAL RESTAURADA",
+  "candidate_name": "phase6_agent06_behavior_preserving_agentic_v16_chroma_dir_fixed_candidate",
+  "status": "CANDIDATA AGENTE 06 V1.6 CON RESOLUCION CHROMA_DIR CORREGIDA",
   "stage": "06_agente_redactor",
   "agent": "DraftWritingAgent",
   "behavior_preserving": true,
-  "restored_functions": [
-    "build_section_prompt",
-    "assign_section_budgets",
-    "build_draft_reports",
-    "validate_draft_global",
-    "validate_draft_dependencies",
-    "write_raw_section_output"
+  "root_cause": "04_chroma existed but was empty; the persisted collection reference_papers_chunks was stored in 04_chroma_index",
+  "productive_files_modified": [
+    "src/adapters/draft_writing_runtime.py",
+    "src/tools/draft_writing/input_validation.py"
+  ],
+  "tests_added": [
+    "tests/v16/test_agent06_chroma_dir_resolution_v16.py"
   ],
   "main_artifact_count": 12,
-  "auxiliary_artifacts": [
-    "raw_section_outputs/"
-  ],
+  "auxiliary_artifacts": ["raw_section_outputs/"],
   "suite": {
     "command": "python -m unittest discover -s tests -p \"test_*.py\"",
-    "tests": 173,
+    "tests": 179,
     "result": "OK"
   },
   "real_external_colab": "NOT_EXECUTED_IN_CONTAINER",
   "openai_called_in_container": false,
   "chroma_real_called_in_container": false,
   "agent07_executed": false,
-  "protected_stages_modified": false
+  "protected_stages_modified": false,
+  "required_rerun_attempt_number": 1
 }
