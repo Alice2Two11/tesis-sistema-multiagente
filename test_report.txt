@@ -1,23 +1,16 @@
-CANDIDATA AGENTE 04 V1.6 — COLAB FIXED TESTS FIXED
+COMMAND: python -m unittest discover -s tests -p "test_*.py"
+RETURN_CODE: 0
+DISCOVERED_TESTS: 140
+STATUS: OK
 
-Command:
-python -m unittest discover -s tests -p "test_*.py"
-
-Ran 123 tests in 2.932s
+........................./mnt/data/phase5_agent05_behavior_preserving_agentic_v16_colab_tests_fixed_candidate/tests/v16/test_agent04_v16.py:91: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp98iga217/out/thematic_validation_report.json' mode='r' encoding='utf-8'>
+  prev=PreviousAttemptSummary('NEEDS_REVISION',failure_reason_codes=('MISSING_THEME_EVIDENCE',));x=self.agent().execute(self.ai(attempt=2,prev=prev));m=json.load(open(x.output_artifacts['validation'].path));self.assertEqual(m['repair_plan'][0]['strategy'],'REGENERATE_THEME_ONLY')
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+..................../mnt/data/phase5_agent05_behavior_preserving_agentic_v16_colab_tests_fixed_candidate/tests/v16/test_agent04_v16.py:77: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpjaukv8bz/out/thematic_analysis_manifest.json' mode='r' encoding='utf-8'>
+  x=self.agent().execute(self.ai());m=json.load(open(x.output_artifacts['manifest'].path));self.assertFalse(m['safety_policy']['uses_ground_truth'])
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+...............................................................................................
+----------------------------------------------------------------------
+Ran 140 tests in 4.247s
 
 OK
-
-UNITTEST_RETURN_CODE=0
-UNITTEST_DISCOVERED_TESTS=123
-PRESERVED_MANIFEST_STATUS_VALIDATION_RETURN_CODE=0
-PY_COMPILE_RETURN_CODE=0
-NOTEBOOK_CLEAN_KERNEL_RETURN_CODE=0
-CODE_ROOT_MISSING_CLONE_TEST_RETURN_CODE=0
-SRC_IMPORT_AFTER_BOOTSTRAP_RETURN_CODE=0
-PIPELINE_STATE_CANONICAL_RESOLUTION_RETURN_CODE=0
-PIPELINE_STATE_UNIQUE_RGLOB_RETURN_CODE=0
-ATTEMPT2_PREVIOUS_STATE_READ_RETURN_CODE=0
-DETERMINISTIC_REPAIR_SAME_STATE_RETURN_CODE=0
-MODULE_NOT_FOUND_ERROR_OBSERVED=false
-MISSING_ATTEMPT1_STATE_ERROR_OBSERVED=false
-REAL_EXTERNAL_COLAB_AGENT04_RETURN_CODE=NOT_EXECUTED_IN_CONTAINER

@@ -1,22 +1,22 @@
-MODIFIED
-04_agente_analisis_tematico_migrado_v16.ipynb
-AUDIT_IMPLEMENTATION_AGENT04_COLAB_FIXED_V16.md
-test_report.txt
-return_codes.json
+05_generador_esquema_migrado_v16.ipynb
+AUDIT_IMPLEMENTATION_AGENT05_BEHAVIOR_PRESERVING_V16.md
 delivery_manifest.json
 modified_files.txt
-preserved_sha256.json
 notebook_precheck_report.json
-
-ADDED
-tests/v16/test_agent04_colab_operational_fix_v16.py
-
-SCIENTIFIC LOGIC MODIFIED
-NONE
-
-PROTECTED AND UNCHANGED
-src/**
-03_agente_extraccion_kb_migrado_v16.ipynb
-03B_extraccion_cuantitativa_kb_migrado_v16.ipynb
-
-tests/v16/test_alignment_v16.py — corrected preserved_sha256.json payload parsing and status validation
+preserved_sha256.json
+return_codes.json
+src/adapters/outline_generation_runtime.py
+src/agents/outline_generation_agent.py
+src/config/outline_generation_policy_config.py
+src/runtime/outline_generation_protocol.py
+src/tools/outline_generation/__init__.py
+src/tools/outline_generation/artifacts.py
+src/tools/outline_generation/context_builder.py
+src/tools/outline_generation/input_validation.py
+src/tools/outline_generation/outline_validation.py
+src/tools/outline_generation/prompting.py
+src/tools/outline_generation/response_parsing.py
+src/tools/outline_generation/source_repair.py
+test_report.txt
+tests/v16/test_agent05_notebook_v16.py
+tests/v16/test_agent05_v16.py

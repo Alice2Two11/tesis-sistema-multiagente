@@ -1,11 +1,12 @@
 {
   "status": "OK",
   "mode": "PRECHECK",
-  "clean_kernel": true,
-  "bootstrap_imports_ok": true,
-  "pipeline_state_path": "PROJECT_DIR/experiment_id/05_outputs/00_orchestrator_planner/pipeline_state.json",
-  "transaction_executed": false,
-  "credentials_resolved": false,
-  "openai_called": false,
-  "module_not_found_error": false
+  "llm_calls": 0,
+  "bootstrap_before_src_import": true,
+  "shell_only": true,
+  "real_mode_visible": true,
+  "default_repository_url": "https://github.com/Alice2Two11/tesis-sistema-multiagente.git",
+  "project_source_url_override_supported": true,
+  "clean_runtime_clone_command_simulated_in_isolated_process": true,
+  "external_network_clone": "NOT_EXECUTED_NETWORK_UNAVAILABLE_IN_CONTAINER"
 }
