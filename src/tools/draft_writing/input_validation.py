@@ -22,7 +22,7 @@ def _safe(value):
 
 
 def validate_draft_dependencies(agent_input):
-    required=("outline_json","outline_mapping","outline_validation","outline_manifest","kb_final","thematic_manifest","thematic_validation","chunks_clean","chroma_manifest")
+    required=("outline_json","outline_mapping","outline_validation","outline_manifest","kb_final","thematic_manifest","thematic_validation","chunks_clean")
     for name in required:
         if name not in agent_input.dependencies or not Path(agent_input.dependencies[name].path).is_file():
             raise FileNotFoundError(f"DRAFT_INPUT_NOT_FOUND:{name}")
@@ -31,8 +31,10 @@ def validate_draft_dependencies(agent_input):
     oman=_load_json(agent_input.dependencies["outline_manifest"].path)
     tman=_load_json(agent_input.dependencies["thematic_manifest"].path)
     tval=_load_json(agent_input.dependencies["thematic_validation"].path)
-    cman=_load_json(agent_input.dependencies["chroma_manifest"].path)
-    for name,payload in (("outline",oman),("thematic",tman),("chroma",cman)):
+    cman=_load_json(agent_input.dependencies["chroma_manifest"].path) if "chroma_manifest" in agent_input.dependencies else None
+    manifest_pairs=[("outline",oman),("thematic",tman)]
+    if cman is not None: manifest_pairs.append(("chroma",cman))
+    for name,payload in manifest_pairs:
         if payload.get("experiment_id") not in (None,agent_input.experiment_id):
             raise ValueError(f"{name.upper()}_MANIFEST_MISMATCH")
     if not oval.get("validation_ok",False):
@@ -43,7 +45,9 @@ def validate_draft_dependencies(agent_input):
         raise ValueError("OUTLINE_MANIFEST_NOT_APPROVED")
     if tman.get("validation_ok") is False:
         raise ValueError("THEMATIC_MANIFEST_NOT_APPROVED")
-    for stage_name,manifest in (("outline",oman),("thematic",tman),("chroma",cman)):
+    safety_pairs=[("outline",oman),("thematic",tman)]
+    if cman is not None: safety_pairs.append(("chroma",cman))
+    for stage_name,manifest in safety_pairs:
         safety=manifest.get("safety_policy",{})
         if not isinstance(safety,dict):
             raise ValueError(f"INVALID_{stage_name.upper()}_SAFETY_POLICY")
@@ -65,13 +69,14 @@ def validate_draft_dependencies(agent_input):
         raise ValueError("OUTLINE_TITLES_NOT_VALIDATED")
     expected_collection=agent_input.agent_context.runtime_resources.get("chroma_collection_name")
     expected_embedding=agent_input.agent_context.runtime_resources.get("embedding_model_name")
-    if expected_collection is not None and cman.get("collection_name") != expected_collection:
-        raise ValueError("CHROMA_COLLECTION_MISMATCH")
-    if expected_embedding is not None and cman.get("embedding_model") != expected_embedding:
-        raise ValueError("CHROMA_EMBEDDING_MODEL_MISMATCH")
-    for flag in ("ground_truth_indexed","review_sections_indexed","bibliography_indexed","excluded_chunks_indexed"):
-        if cman.get(flag,False):
-            raise ValueError(f"UNSAFE_CHROMA_INDEX:{flag}")
+    if cman is not None:
+        if expected_collection is not None and cman.get("collection_name") != expected_collection:
+            raise ValueError("CHROMA_COLLECTION_MISMATCH")
+        if expected_embedding is not None and cman.get("embedding_model") != expected_embedding:
+            raise ValueError("CHROMA_EMBEDDING_MODEL_MISMATCH")
+        for flag in ("ground_truth_indexed","review_sections_indexed","bibliography_indexed","excluded_chunks_indexed"):
+            if cman.get(flag,False):
+                raise ValueError(f"UNSAFE_CHROMA_INDEX:{flag}")
     kb=pd.read_csv(agent_input.dependencies["kb_final"].path)
     chunks=pd.read_csv(agent_input.dependencies["chunks_clean"].path)
     mapping=pd.read_csv(agent_input.dependencies["outline_mapping"].path)
@@ -89,9 +94,10 @@ def validate_draft_dependencies(agent_input):
     for column in ("is_review_section_chunk","is_bibliography_chunk","excluded_from_rag"):
         if column in chunks.columns and chunks[column].apply(_to_bool).any():
             raise ValueError(f"UNSAFE_CHUNKS:{column}")
-    expected_count=int(cman.get("num_chunks_indexed",-1))
-    if expected_count != len(chunks):
-        raise ValueError("CHROMA_CHUNK_COUNT_MISMATCH")
+    if cman is not None:
+        expected_count=int(cman.get("num_chunks_indexed",-1))
+        if expected_count != len(chunks):
+            raise ValueError("CHROMA_CHUNK_COUNT_MISMATCH")
     sections=outline.get("sections",[])
     if not isinstance(sections,list) or not sections:
         raise ValueError("INVALID_OUTLINE_SCHEMA")
