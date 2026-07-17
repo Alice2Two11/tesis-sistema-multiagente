@@ -1,513 +1,107 @@
 {
-  "candidate_name": "phase4_agent04_thematic_analysis_v16_candidate",
-  "status": "CANDIDATA AGENTE 04 V1.6 PARA VALIDACI\u00d3N REAL",
-  "real_external_colab": "NOT_EXECUTED_IN_CONTAINER",
-  "tests": {
-    "DIRECT_MODULE_CALL_RETURN_CODE": 0,
-    "CONTROLLED_INTEGRATION_AGENT04_RETURN_CODE": 0,
-    "UNITTEST_RETURN_CODE": 0,
-    "PY_COMPILE_RETURN_CODE": 0,
-    "NOTEBOOK_PREFLIGHT_RETURN_CODE": 0,
-    "NOTEBOOK_CLEAN_KERNEL_RETURN_CODE": 0,
-    "REAL_EXTERNAL_COLAB_AGENT04_RETURN_CODE": "NOT_EXECUTED_IN_CONTAINER"
-  },
-  "protected_status": "IDENTICAL",
+  "status": "CANDIDATA",
+  "name": "phase4_agent04_deterministic_flattening_repair_v16_candidate",
   "created_files": [
+    "tests/v16/test_agent04_deterministic_flattening_repair_v16.py",
+    "tests/__pycache__/__init__.cpython-313.pyc",
+    "tests/v16/__pycache__/__init__.cpython-313.pyc",
+    "tests/v16/__pycache__/agent_environment.cpython-313.pyc",
+    "tests/v16/__pycache__/extraction_agent_doubles.cpython-313.pyc",
+    "tests/v16/__pycache__/test_agent04_v16.cpython-313.pyc",
+    "tests/v16/__pycache__/test_alignment_v16.cpython-313.pyc",
+    "tests/v16/__pycache__/test_attempt2_directed.cpython-313.pyc",
+    "tests/v16/__pycache__/test_dataset_normalization_repair_v16.cpython-313.pyc",
+    "tests/v16/__pycache__/test_flattening_repair_v16.cpython-313.pyc",
+    "tests/v16/__pycache__/test_notebook_03b_v16.cpython-313.pyc",
+    "tests/v16/__pycache__/test_quantitative_capability_v16.cpython-313.pyc",
+    "tests/v16/__pycache__/test_agent04_deterministic_flattening_repair_v16.cpython-313.pyc",
+    "tests/integration/__pycache__/__init__.cpython-313.pyc",
+    "tests/integration/__pycache__/run_03b_controlled.cpython-313.pyc",
+    "tests/integration/__pycache__/run_direct_module_call.cpython-313.pyc",
+    "tests/integration/__pycache__/run_notebook_precheck.cpython-313.pyc",
+    "tests/integration/__pycache__/run_notebook_structure_preflight.cpython-313.pyc",
+    "tests/integration/__pycache__/run_real_config_integration.cpython-313.pyc",
+    "tests/integration/__pycache__/run_real_notebook_transaction.cpython-313.pyc",
+    "src/__pycache__/__init__.cpython-313.pyc",
+    "src/tools/thematic_analysis/deterministic_repair.py",
+    "src/tools/__pycache__/__init__.cpython-313.pyc",
+    "src/tools/thematic_analysis/__pycache__/__init__.cpython-313.pyc",
+    "src/tools/thematic_analysis/__pycache__/context_builder.cpython-313.pyc",
+    "src/tools/thematic_analysis/__pycache__/corpus_filtering.cpython-313.pyc",
+    "src/tools/thematic_analysis/__pycache__/deterministic_repair.cpython-313.pyc",
+    "src/tools/thematic_analysis/__pycache__/input_validation.cpython-313.pyc",
+    "src/tools/thematic_analysis/__pycache__/prompting.cpython-313.pyc",
+    "src/tools/thematic_analysis/__pycache__/quality.cpython-313.pyc",
+    "src/tools/thematic_analysis/__pycache__/quantitative_context.cpython-313.pyc",
+    "src/tools/thematic_analysis/__pycache__/reference_validation.cpython-313.pyc",
+    "src/tools/thematic_analysis/__pycache__/repair_strategy.cpython-313.pyc",
+    "src/tools/thematic_analysis/__pycache__/coverage_validation.cpython-313.pyc",
+    "src/tools/thematic_analysis/__pycache__/schema_validation.cpython-313.pyc",
+    "src/tools/thematic_analysis/__pycache__/artifacts.cpython-313.pyc",
+    "src/tools/quantitative_extraction/__pycache__/__init__.cpython-313.pyc",
+    "src/tools/quantitative_extraction/__pycache__/artifacts.cpython-313.pyc",
+    "src/tools/quantitative_extraction/__pycache__/evidence_verification.cpython-313.pyc",
+    "src/tools/quantitative_extraction/__pycache__/extraction.cpython-313.pyc",
+    "src/tools/quantitative_extraction/__pycache__/input_validation.cpython-313.pyc",
+    "src/tools/quantitative_extraction/__pycache__/normalization.cpython-313.pyc",
+    "src/tools/quantitative_extraction/__pycache__/prompting.cpython-313.pyc",
+    "src/tools/quantitative_extraction/__pycache__/quality.cpython-313.pyc",
+    "src/tools/quantitative_extraction/__pycache__/source_context.cpython-313.pyc",
+    "src/tools/extraction/__pycache__/__init__.cpython-313.pyc",
+    "src/tools/extraction/__pycache__/card_extraction.cpython-313.pyc",
+    "src/tools/extraction/__pycache__/card_validation.cpython-313.pyc",
+    "src/tools/extraction/__pycache__/chunk_validation.cpython-313.pyc",
+    "src/tools/extraction/__pycache__/knowledge_base.cpython-313.pyc",
+    "src/tools/extraction/__pycache__/relevance_classification.cpython-313.pyc",
+    "src/tools/extraction/__pycache__/retrieval.cpython-313.pyc",
+    "src/tools/extraction/__pycache__/revision_strategy.cpython-313.pyc",
+    "src/tools/extraction/__pycache__/stage_artifacts.cpython-313.pyc",
+    "src/tools/extraction/__pycache__/title_repair.cpython-313.pyc",
+    "src/state/__pycache__/__init__.cpython-313.pyc",
+    "src/state/__pycache__/fingerprints.cpython-313.pyc",
+    "src/state/__pycache__/pipeline_state.cpython-313.pyc",
+    "src/state/__pycache__/state_store.cpython-313.pyc",
+    "src/runtime/__pycache__/__init__.cpython-313.pyc",
+    "src/runtime/__pycache__/extraction_protocol.cpython-313.pyc",
+    "src/runtime/__pycache__/quantitative_extraction_protocol.cpython-313.pyc",
+    "src/runtime/__pycache__/thematic_analysis_protocol.cpython-313.pyc",
+    "src/io/__pycache__/__init__.cpython-313.pyc",
+    "src/io/__pycache__/atomic_write.cpython-313.pyc",
+    "src/io/__pycache__/credentials.cpython-313.pyc",
+    "src/contracts/__pycache__/__init__.cpython-313.pyc",
+    "src/contracts/__pycache__/agent_input.cpython-313.pyc",
+    "src/contracts/__pycache__/agent_result.cpython-313.pyc",
+    "src/config/__pycache__/__init__.cpython-313.pyc",
+    "src/config/__pycache__/common_config.cpython-313.pyc",
+    "src/config/__pycache__/generation_policy_config.cpython-313.pyc",
+    "src/config/__pycache__/quantitative_extraction_policy_config.cpython-313.pyc",
+    "src/config/__pycache__/thematic_analysis_policy_config.cpython-313.pyc",
+    "src/capabilities/__pycache__/__init__.cpython-313.pyc",
+    "src/capabilities/__pycache__/quantitative_extraction.cpython-313.pyc",
+    "src/bootstrap/__pycache__/__init__.cpython-313.pyc",
+    "src/bootstrap/__pycache__/project_bootstrap.cpython-313.pyc",
+    "src/agents/__pycache__/__init__.cpython-313.pyc",
+    "src/agents/__pycache__/extraction_agent.cpython-313.pyc",
+    "src/agents/__pycache__/thematic_analysis_agent.cpython-313.pyc",
+    "src/adapters/__pycache__/__init__.cpython-313.pyc",
+    "src/adapters/__pycache__/extraction_runtime.cpython-313.pyc",
+    "src/adapters/__pycache__/quantitative_extraction_runtime.cpython-313.pyc",
+    "src/adapters/__pycache__/thematic_analysis_runtime.cpython-313.pyc"
+  ],
+  "modified_files": [
     "04_agente_analisis_tematico_migrado_v16.ipynb",
-    "src/adapters/thematic_analysis_runtime.py",
+    "notebook_precheck_report.json",
+    "preserved_sha256.json",
     "src/agents/thematic_analysis_agent.py",
-    "src/config/thematic_analysis_policy_config.py",
     "src/runtime/thematic_analysis_protocol.py",
     "src/tools/thematic_analysis/__init__.py",
     "src/tools/thematic_analysis/artifacts.py",
-    "src/tools/thematic_analysis/context_builder.py",
-    "src/tools/thematic_analysis/corpus_filtering.py",
     "src/tools/thematic_analysis/coverage_validation.py",
-    "src/tools/thematic_analysis/input_validation.py",
-    "src/tools/thematic_analysis/prompting.py",
     "src/tools/thematic_analysis/quality.py",
-    "src/tools/thematic_analysis/quantitative_context.py",
-    "src/tools/thematic_analysis/reference_validation.py",
-    "src/tools/thematic_analysis/repair_strategy.py",
-    "src/tools/thematic_analysis/schema_validation.py",
-    "tests/v16/test_agent04_v16.py"
+    "src/tools/thematic_analysis/schema_validation.py"
   ],
-  "file_count": 95,
-  "files": [
-    {
-      "path": ".gitignore",
-      "sha256": "cfd7a2475c6f323b5090ac1462fe4220042a58aa670d7b26ac9e8a17261dcdf4",
-      "size_bytes": 149
-    },
-    {
-      "path": "03B_extraccion_cuantitativa_kb_migrado_v16.ipynb",
-      "sha256": "7e5899caaa54b4f9cb40c67cde0c881f56b81ce1945e3997f8d4558f307d4031",
-      "size_bytes": 7137
-    },
-    {
-      "path": "03_agente_extraccion_kb_migrado_v16.ipynb",
-      "sha256": "f6fb9257ecf5e8fa6234e4366d8dc0dddaa614950253ab82ad5707757591fb53",
-      "size_bytes": 17635
-    },
-    {
-      "path": "04_agente_analisis_tematico_migrado_v16.ipynb",
-      "sha256": "03ffa6dfc4907abd70f7c2c7a6d5b19688815f8833d2d8aa97f3b958c4b826c0",
-      "size_bytes": 2807
-    },
-    {
-      "path": "AUDIT_IMPLEMENTATION_AGENT04_V16.md",
-      "sha256": "e69ce5ce091f7e03cef0f16c54b0ff60422321f98f1bb66ff063ac8ea253ba36",
-      "size_bytes": 615
-    },
-    {
-      "path": "controlled_03b_report.json",
-      "sha256": "740afeca1d77ecbe8b7c6c38b9def91fe148de4a092f47f69c0c6a3d4b5e6ef9",
-      "size_bytes": 1809
-    },
-    {
-      "path": "delivery_manifest.json",
-      "sha256": "dadca74f979aba9e01c7a74f70a0510c03d13d2cf69c19ca5c45a205ab75290e",
-      "size_bytes": 2426
-    },
-    {
-      "path": "diagnostic_metrics_schema.json",
-      "sha256": "b345f422748806afa9e22763569c391181be7cfe003f20e48534a8e81249ca17",
-      "size_bytes": 1382
-    },
-    {
-      "path": "modified_files.txt",
-      "sha256": "89858886097a4a48465f4fd52c2e68e6e3c492f402f4961293291ae60c89838f",
-      "size_bytes": 838
-    },
-    {
-      "path": "notebook_precheck_report.json",
-      "sha256": "141273f19d82d0b65a772be61426c45c4db163180ce6f1b8a1681c88668f06a5",
-      "size_bytes": 146
-    },
-    {
-      "path": "preserved_sha256.json",
-      "sha256": "fde84a1e0331bc508028d61f788d3eb326df2924fc2edf937d10f9596ad7fbd9",
-      "size_bytes": 9222
-    },
-    {
-      "path": "repair_strategy_report.json",
-      "sha256": "d9c67d71c8838acbcf63ec6d547ffddbc16505f74b321b35834dbccea93473f0",
-      "size_bytes": 602
-    },
-    {
-      "path": "return_codes.json",
-      "sha256": "e13f2d3042d42dbfb3ea1d7d945178b16258f91212bf8e99dc2a72f5b1fe026c",
-      "size_bytes": 308
-    },
-    {
-      "path": "src/__init__.py",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": "src/adapters/__init__.py",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": "src/adapters/extraction_runtime.py",
-      "sha256": "421c5155284b174eb72f701d2e3476779c6dd8e00e9889488ee9050ca504043d",
-      "size_bytes": 40188
-    },
-    {
-      "path": "src/adapters/quantitative_extraction_runtime.py",
-      "sha256": "ae30eef514f625a7d32e3196f058042ac39d9e16513dfdfe9ee65f9d8f4f961f",
-      "size_bytes": 3493
-    },
-    {
-      "path": "src/adapters/thematic_analysis_runtime.py",
-      "sha256": "1a5e8166276ba8f4d169f90b3aead1047014166539f135901a3382fd8505fee2",
-      "size_bytes": 6913
-    },
-    {
-      "path": "src/agents/__init__.py",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": "src/agents/extraction_agent.py",
-      "sha256": "d6a20ffbec6628f55aa6212bd158a10ea8a138e02c94a09404d89325fd4733c1",
-      "size_bytes": 68976
-    },
-    {
-      "path": "src/agents/thematic_analysis_agent.py",
-      "sha256": "6415311874be9bd2095d5f2136a477cfc68ac51f0d6e4373af5ed68c4d4223fe",
-      "size_bytes": 6028
-    },
-    {
-      "path": "src/bootstrap/__init__.py",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": "src/bootstrap/project_bootstrap.py",
-      "sha256": "eb760500ce20653f8dab9ac1d683f4d47c57b784bb33d2e8bd841848614b9f71",
-      "size_bytes": 18510
-    },
-    {
-      "path": "src/capabilities/__init__.py",
-      "sha256": "5d2aeab17c8939a84ec88c82a05884ee97553177ad6c282f2f3399e8e80f612b",
-      "size_bytes": 70
-    },
-    {
-      "path": "src/capabilities/quantitative_extraction.py",
-      "sha256": "d7b32da7b51047e57c670a581e9eeae86b034081803fefd65a028115d6e400af",
-      "size_bytes": 11488
-    },
-    {
-      "path": "src/config/__init__.py",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": "src/config/common_config.py",
-      "sha256": "cbffe02e667ff4ee8aba01a42e812261a056a914da46d410d2a61ba6993ebdb6",
-      "size_bytes": 19660
-    },
-    {
-      "path": "src/config/generation_policy_config.py",
-      "sha256": "48ac5e464f3065d75428271eda4fd2fe64831d438b45a08b869e41624cb4732e",
-      "size_bytes": 15443
-    },
-    {
-      "path": "src/config/quantitative_extraction_policy_config.py",
-      "sha256": "b5769905bbef7f2af204b038ef727f2499ba0f0ff5b6e61be55732797a99ace3",
-      "size_bytes": 2944
-    },
-    {
-      "path": "src/config/thematic_analysis_policy_config.py",
-      "sha256": "54cef578564cf5cf4c40ffeb1073530aa5ee10aa2293f63db577523c08cf16bd",
-      "size_bytes": 1354
-    },
-    {
-      "path": "src/contracts/__init__.py",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": "src/contracts/agent_input.py",
-      "sha256": "7496894a483595a87c6f45f1f22add16a149d21d16d4ff645d06c6690780cefb",
-      "size_bytes": 13221
-    },
-    {
-      "path": "src/contracts/agent_result.py",
-      "sha256": "b45bf47c49755979f7901613d952614feeca5bf3601d10df5433c521915617f9",
-      "size_bytes": 15302
-    },
-    {
-      "path": "src/io/__init__.py",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": "src/io/atomic_write.py",
-      "sha256": "25747667964e462b87c22691feadcbeb78f40023fa90d76a32196586a4d58b4a",
-      "size_bytes": 11976
-    },
-    {
-      "path": "src/io/credentials.py",
-      "sha256": "8704ef5bd3dc2ea94a58876b5bf93f43978bc2a8ffd76edc94c16a75750ff982",
-      "size_bytes": 6861
-    },
-    {
-      "path": "src/runtime/__init__.py",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": "src/runtime/extraction_protocol.py",
-      "sha256": "dcedfc152b3970d95ecfc7c674d41dd63d358dd2246077b85652fd2687fb1e3f",
-      "size_bytes": 10231
-    },
-    {
-      "path": "src/runtime/quantitative_extraction_protocol.py",
-      "sha256": "758f67125cc2f5b585fecc92eb788606a2e94eb24b27ea43b638147389a0952e",
-      "size_bytes": 4436
-    },
-    {
-      "path": "src/runtime/thematic_analysis_protocol.py",
-      "sha256": "b847ca21bd499b3bfce8ba640ac5503a74ac4b70f96d2b64cdd713bdef447a34",
-      "size_bytes": 3345
-    },
-    {
-      "path": "src/state/__init__.py",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": "src/state/fingerprints.py",
-      "sha256": "22530976d8187f39c79e4db6b970061cb0d8d18374f155522294d603b75706c0",
-      "size_bytes": 5458
-    },
-    {
-      "path": "src/state/pipeline_state.py",
-      "sha256": "fbe086b5fe36dae55770917d609d1bf5871c52007001bba2f499e573cbe7c82b",
-      "size_bytes": 27697
-    },
-    {
-      "path": "src/state/state_store.py",
-      "sha256": "84beb973abb65ff4fe6cc199128961e9fee9d5c67da0a4d618110465b5a1d5c7",
-      "size_bytes": 12313
-    },
-    {
-      "path": "src/tools/__init__.py",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": "src/tools/extraction/__init__.py",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": "src/tools/extraction/card_extraction.py",
-      "sha256": "800e2d1761771fd5f32e8a71e19776fc413089bee7828d1ab685a9eacf99598b",
-      "size_bytes": 12215
-    },
-    {
-      "path": "src/tools/extraction/card_validation.py",
-      "sha256": "795a16465dd4d30c740b3baf999f987747c3e2f69de34e7d5c110794a1716bcc",
-      "size_bytes": 7145
-    },
-    {
-      "path": "src/tools/extraction/chunk_validation.py",
-      "sha256": "e1cc66dc283a501e6d887ed07177c763f258c58dd2efaeaa15f9eba20fae6cb2",
-      "size_bytes": 3838
-    },
-    {
-      "path": "src/tools/extraction/knowledge_base.py",
-      "sha256": "d5a4523c90b14de6f5ee2e23e30f3a8a86657ba36771f49ffbcda85a019c674e",
-      "size_bytes": 5765
-    },
-    {
-      "path": "src/tools/extraction/relevance_classification.py",
-      "sha256": "12462c0eb5206557f27270f19045b5a6498c30fd7273ca7685a71b9c83b44ea6",
-      "size_bytes": 6887
-    },
-    {
-      "path": "src/tools/extraction/retrieval.py",
-      "sha256": "8fd0f6d87fd5d0eacb9af458ca5580258bd64daf31c8f2e9aea7dc1b4ff60c03",
-      "size_bytes": 6079
-    },
-    {
-      "path": "src/tools/extraction/revision_strategy.py",
-      "sha256": "00b552c7cf6377a731f5a8df9dabcda2e29fe0323876043579b74114efb2b24b",
-      "size_bytes": 5782
-    },
-    {
-      "path": "src/tools/extraction/stage_artifacts.py",
-      "sha256": "1f7b70e733af796665aec43a8db5cc5cc801b3dde3ef741bbfcbba703f4e12f3",
-      "size_bytes": 20568
-    },
-    {
-      "path": "src/tools/extraction/title_repair.py",
-      "sha256": "b7d170818cd7845f7d183b212549fff409d69b3f8783d291516e633e0bf60762",
-      "size_bytes": 5181
-    },
-    {
-      "path": "src/tools/quantitative_extraction/__init__.py",
-      "sha256": "adc3c17df20f0359968683b63ba3a78ed15eac639ffb930a4e0c4999efd1d3b1",
-      "size_bytes": 52
-    },
-    {
-      "path": "src/tools/quantitative_extraction/artifacts.py",
-      "sha256": "a4d48ef2711f33a69fc8909777da35682f832537c6d76657be9d980bacb636c5",
-      "size_bytes": 6443
-    },
-    {
-      "path": "src/tools/quantitative_extraction/evidence_verification.py",
-      "sha256": "379cb24807d9b9fdf39b1e97ba835c4e9f830e3ff0ef4c91212c85029618bdc1",
-      "size_bytes": 1465
-    },
-    {
-      "path": "src/tools/quantitative_extraction/extraction.py",
-      "sha256": "ff020258d00c964db0e8fd4ffe8fd747aac17c2b8cd2f3acd62518fc9d68bd6f",
-      "size_bytes": 1937
-    },
-    {
-      "path": "src/tools/quantitative_extraction/input_validation.py",
-      "sha256": "42fef7a71eeb89ddbba508b23c1de7459a963bae37ee269be94c0145323f69df",
-      "size_bytes": 4833
-    },
-    {
-      "path": "src/tools/quantitative_extraction/normalization.py",
-      "sha256": "6d485c23c3e2f230b0e828647522d990a3e1d4108673780296f40affdb517734",
-      "size_bytes": 16744
-    },
-    {
-      "path": "src/tools/quantitative_extraction/prompting.py",
-      "sha256": "d82f4ecff8ed0d5f1c886cd8da559f14d0ea7c5409923050c1f6635ab210c8c2",
-      "size_bytes": 1080
-    },
-    {
-      "path": "src/tools/quantitative_extraction/quality.py",
-      "sha256": "8cac73d2b38947e79f2f584416ab14d2e5244dbbb164a86287a215bba2bdb38e",
-      "size_bytes": 3292
-    },
-    {
-      "path": "src/tools/quantitative_extraction/source_context.py",
-      "sha256": "11e24ea25ab809ecc6eab655f9633df56899b156a2d7a555f06c8031123b6af7",
-      "size_bytes": 1033
-    },
-    {
-      "path": "src/tools/thematic_analysis/__init__.py",
-      "sha256": "f0ec4e1324cd47f6b25917dafcbe3aef2dab1ac2ed6e96658cefab01207400c3",
-      "size_bytes": 601
-    },
-    {
-      "path": "src/tools/thematic_analysis/artifacts.py",
-      "sha256": "ace46e0c7fcb79c9f52d1601980295906e1c6c61bed7b9d68823bc99255a5278",
-      "size_bytes": 2357
-    },
-    {
-      "path": "src/tools/thematic_analysis/context_builder.py",
-      "sha256": "06202e8527ce32b587ba4ee2a2971ac4582123725fe71caa92880b868dc8a87c",
-      "size_bytes": 683
-    },
-    {
-      "path": "src/tools/thematic_analysis/corpus_filtering.py",
-      "sha256": "b037387da59307c5fe077190de8b61fefeff14eaef1292468f75453c5884fa15",
-      "size_bytes": 534
-    },
-    {
-      "path": "src/tools/thematic_analysis/coverage_validation.py",
-      "sha256": "50f8ca65c90d376d69785fd5da188e84b882bb1ffccc39deae83a690d6bb0aa3",
-      "size_bytes": 2100
-    },
-    {
-      "path": "src/tools/thematic_analysis/input_validation.py",
-      "sha256": "7525fce9d573047035fd083734ce32d52413f4ba6aadf4b44f67d78774144d06",
-      "size_bytes": 3470
-    },
-    {
-      "path": "src/tools/thematic_analysis/prompting.py",
-      "sha256": "a246dc1b9e859f60cba19310761cba27a2efb2a256fb6c9caa0b4d2dafdaa7f2",
-      "size_bytes": 998
-    },
-    {
-      "path": "src/tools/thematic_analysis/quality.py",
-      "sha256": "23ae1db7fd6bc3565227095c4270e85b6ae53651204025383844e0e041df9391",
-      "size_bytes": 1137
-    },
-    {
-      "path": "src/tools/thematic_analysis/quantitative_context.py",
-      "sha256": "c5d75bd19b236cf3389b95f8420d3780fafbc7d953792de4ee3509d52b83083c",
-      "size_bytes": 1413
-    },
-    {
-      "path": "src/tools/thematic_analysis/reference_validation.py",
-      "sha256": "fe189dd40e675672d5458a49c52baaac4a90080fd14405e1e528e748664d14c2",
-      "size_bytes": 1985
-    },
-    {
-      "path": "src/tools/thematic_analysis/repair_strategy.py",
-      "sha256": "95ab2dcc1541807bcdc688179bef69e1f361fbbd4a8674f681d1576e88c68ded",
-      "size_bytes": 1666
-    },
-    {
-      "path": "src/tools/thematic_analysis/schema_validation.py",
-      "sha256": "5470e655e57074908a92b3f0fb76b03a0adf1c100c2853ea90037a72106f78f5",
-      "size_bytes": 1388
-    },
-    {
-      "path": "test_report.txt",
-      "sha256": "689bf8ce6d2c338a1cc793d330f16b2b3fd89881c5f6c9910958b62108d07c34",
-      "size_bytes": 1238
-    },
-    {
-      "path": "tests/__init__.py",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": "tests/integration/__init__.py",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": "tests/integration/run_03b_controlled.py",
-      "sha256": "9eb84fa99bc0e853afd6451525ceb92b8cc20613142083e4948aba56ce9d0d39",
-      "size_bytes": 942
-    },
-    {
-      "path": "tests/integration/run_direct_module_call.py",
-      "sha256": "b9b83d4e2a0d5d64b00040fc9522c538909531a64f8a94816f41df3a993d3bf2",
-      "size_bytes": 1181
-    },
-    {
-      "path": "tests/integration/run_notebook_precheck.py",
-      "sha256": "e9587a814ef15b267aed1fd3e9318d13401840cada23308c8bc7cb0058e9f64b",
-      "size_bytes": 3265
-    },
-    {
-      "path": "tests/integration/run_notebook_structure_preflight.py",
-      "sha256": "924fce80ac395b4213d307b7576c7671372fc5c23fe4ab5a22cca425f62f87f6",
-      "size_bytes": 1488
-    },
-    {
-      "path": "tests/integration/run_real_config_integration.py",
-      "sha256": "f8936f09964a82e9696fe0e06f973ee0706b1c54e2e5ecb509d0a0248a7e2347",
-      "size_bytes": 17520
-    },
-    {
-      "path": "tests/integration/run_real_notebook_transaction.py",
-      "sha256": "a06cee758ad8e139258bf488337138f89330200cf72ef8c2c6dbd3c2966fb80d",
-      "size_bytes": 4172
-    },
-    {
-      "path": "tests/v16/__init__.py",
-      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "size_bytes": 0
-    },
-    {
-      "path": "tests/v16/agent_environment.py",
-      "sha256": "7207d4a70e3b0794a884e02ae47e1193dfd36a6cb38b84c7fd3ea0678caf8f40",
-      "size_bytes": 14333
-    },
-    {
-      "path": "tests/v16/extraction_agent_doubles.py",
-      "sha256": "3e75b8c9371acf0e95f760ccb15ef36bd67587575d864ff153d44277b493cbe6",
-      "size_bytes": 8812
-    },
-    {
-      "path": "tests/v16/test_agent04_v16.py",
-      "sha256": "b28e3032bed080039e6ab7d6f69a15ef62f9cdb8fdf13362d664294ca87e492e",
-      "size_bytes": 10882
-    },
-    {
-      "path": "tests/v16/test_alignment_v16.py",
-      "sha256": "879e7f95f71ff367d4e9d167d62f654d12d6c47b10610620e14d6e2a17d3459b",
-      "size_bytes": 15404
-    },
-    {
-      "path": "tests/v16/test_attempt2_directed.py",
-      "sha256": "7e241b9e0b4dd0aba32ad085febe6760c49b0aaa0829e721d090b45982ad9cb0",
-      "size_bytes": 7259
-    },
-    {
-      "path": "tests/v16/test_dataset_normalization_repair_v16.py",
-      "sha256": "9d9023b89ccd1e58564b209ec9a2c10325c16938945f31cf54858ebb1455b1c8",
-      "size_bytes": 6329
-    },
-    {
-      "path": "tests/v16/test_flattening_repair_v16.py",
-      "sha256": "492f9b1c2cf42c8aa89f5cdfbb7b72b59a0df095fdfb4168b74e85029b29846b",
-      "size_bytes": 7013
-    },
-    {
-      "path": "tests/v16/test_notebook_03b_v16.py",
-      "sha256": "79564fc9f74e88535d429e1a3b4366340df1193e4f8f8130b82286ac317090f2",
-      "size_bytes": 1141
-    },
-    {
-      "path": "tests/v16/test_quantitative_capability_v16.py",
-      "sha256": "8aedd65fc19bf58e3f9e364c88500b2096a4e67789a31dfe5d83fcf1a1a8f789",
-      "size_bytes": 12911
-    }
-  ]
+  "protected_files_sha256": "preserved_sha256.json",
+  "real_external_validation": "NOT_EXECUTED_IN_CONTAINER",
+  "openai_called_for_repair": false,
+  "agent05_advanced": false
 }

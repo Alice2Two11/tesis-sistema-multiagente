@@ -21,3 +21,19 @@ def execute_thematic_runtime_transaction(*,store,build_execution,attempt_number=
         result=AgentResult(execution_status=ExecutionStatus.FAILED,quality_status=QualityStatus.REJECTED,decision=DecisionInfo(code='THEMATIC_RUNTIME_FAILED',rationale='Falló la preparación de 04.'),quality_metrics={'technical':{},'scientific':{}},warnings=(AgentWarning(code=code,severity=WarningSeverity.ERROR,blocking=True,message=str(exc)),),failure_reason_codes=(code,),requested_transition=RequestedTransition(action=TransitionAction.HALT_STAGE,target_stage=None,reason_code=code,requires_human_confirmation=False),output_artifacts={},tool_usage=ToolUsage(),attempt_number=attempt_number,started_at=now,completed_at=now,error={'type':type(exc).__name__,'message':str(exc),'stage':'04_agente_analisis_tematico'}); fp=build_stage_fingerprints(input_data={'stage_name':'04_agente_analisis_tematico','attempt_number':attempt_number},config_data={'runtime_resolution':'FAILED'},dependencies_data={})
     p=store.persist_agent_result(prep.decision_id,result); s=store.commit_execution(decision_id=prep.decision_id,result=result,stage_name='04_agente_analisis_tematico',fingerprints=fp,observations=dict(observations or {})); return ThematicTransactionResult(prep,result,str(p),s)
 def resolve_thematic_resume(*,store,agent_input,observations=None): return store.resolve_resume(stage_name=agent_input.stage_name,fingerprints=build_thematic_fingerprints(agent_input),observations=dict(observations or {}))
+
+
+def execute_deterministic_thematic_repair_transaction(*, store, output_dir, attempt_number=2, observations=None):
+    """Persist a deterministic repair as its own transaction without invoking an LLM."""
+    from src.tools.thematic_analysis.deterministic_repair import execute_deterministic_thematic_repair
+    from src.state.fingerprints import build_stage_fingerprints
+    prep=store.prepare_execution(target_stage='04_agente_analisis_tematico',intended_action='DETERMINISTIC_THEMATIC_FLATTENING_REPAIR',attempt_number=attempt_number)
+    result=execute_deterministic_thematic_repair(output_dir=output_dir,attempt_number=attempt_number)
+    path=store.persist_agent_result(prep.decision_id,result)
+    fingerprints=build_stage_fingerprints(
+        input_data={'stage_name':'04_agente_analisis_tematico','attempt_number':attempt_number,'repair_mode':'deterministic_thematic_flattening'},
+        config_data={'openai_called':False,'alias_version':'v16_deterministic_alias_mapping_1'},
+        dependencies_data={k:v.to_dict() for k,v in result.output_artifacts.items() if k in {'analysis','raw','kb_final','kb_excluded'}},
+    )
+    state=store.commit_execution(decision_id=prep.decision_id,result=result,stage_name='04_agente_analisis_tematico',fingerprints=fingerprints,observations=dict(observations or {}))
+    return ThematicTransactionResult(prep,result,str(path),state)

@@ -1,180 +1,63 @@
 {
-  "status": "IDENTICAL",
-  "files": {
-    "03B_extraccion_cuantitativa_kb_migrado_v16.ipynb": {
-      "candidate_sha256": "7e5899caaa54b4f9cb40c67cde0c881f56b81ce1945e3997f8d4558f307d4031",
-      "base_sha256": "7e5899caaa54b4f9cb40c67cde0c881f56b81ce1945e3997f8d4558f307d4031",
-      "identical": true
-    },
-    "03_agente_extraccion_kb_migrado_v16.ipynb": {
-      "candidate_sha256": "f6fb9257ecf5e8fa6234e4366d8dc0dddaa614950253ab82ad5707757591fb53",
-      "base_sha256": "f6fb9257ecf5e8fa6234e4366d8dc0dddaa614950253ab82ad5707757591fb53",
-      "identical": true
-    },
-    "src/adapters/quantitative_extraction_runtime.py": {
-      "candidate_sha256": "ae30eef514f625a7d32e3196f058042ac39d9e16513dfdfe9ee65f9d8f4f961f",
-      "base_sha256": "ae30eef514f625a7d32e3196f058042ac39d9e16513dfdfe9ee65f9d8f4f961f",
-      "identical": true
-    },
-    "src/agents/extraction_agent.py": {
-      "candidate_sha256": "d6a20ffbec6628f55aa6212bd158a10ea8a138e02c94a09404d89325fd4733c1",
-      "base_sha256": "d6a20ffbec6628f55aa6212bd158a10ea8a138e02c94a09404d89325fd4733c1",
-      "identical": true
-    },
-    "src/bootstrap/project_bootstrap.py": {
-      "candidate_sha256": "eb760500ce20653f8dab9ac1d683f4d47c57b784bb33d2e8bd841848614b9f71",
-      "base_sha256": "eb760500ce20653f8dab9ac1d683f4d47c57b784bb33d2e8bd841848614b9f71",
-      "identical": true
-    },
-    "src/capabilities/quantitative_extraction.py": {
-      "candidate_sha256": "d7b32da7b51047e57c670a581e9eeae86b034081803fefd65a028115d6e400af",
-      "base_sha256": "d7b32da7b51047e57c670a581e9eeae86b034081803fefd65a028115d6e400af",
-      "identical": true
-    },
-    "src/contracts/__init__.py": {
-      "candidate_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "base_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "identical": true
-    },
-    "src/contracts/agent_input.py": {
-      "candidate_sha256": "7496894a483595a87c6f45f1f22add16a149d21d16d4ff645d06c6690780cefb",
-      "base_sha256": "7496894a483595a87c6f45f1f22add16a149d21d16d4ff645d06c6690780cefb",
-      "identical": true
-    },
-    "src/contracts/agent_result.py": {
-      "candidate_sha256": "b45bf47c49755979f7901613d952614feeca5bf3601d10df5433c521915617f9",
-      "base_sha256": "b45bf47c49755979f7901613d952614feeca5bf3601d10df5433c521915617f9",
-      "identical": true
-    },
-    "src/io/atomic_write.py": {
-      "candidate_sha256": "25747667964e462b87c22691feadcbeb78f40023fa90d76a32196586a4d58b4a",
-      "base_sha256": "25747667964e462b87c22691feadcbeb78f40023fa90d76a32196586a4d58b4a",
-      "identical": true
-    },
-    "src/io/credentials.py": {
-      "candidate_sha256": "8704ef5bd3dc2ea94a58876b5bf93f43978bc2a8ffd76edc94c16a75750ff982",
-      "base_sha256": "8704ef5bd3dc2ea94a58876b5bf93f43978bc2a8ffd76edc94c16a75750ff982",
-      "identical": true
-    },
-    "src/runtime/quantitative_extraction_protocol.py": {
-      "candidate_sha256": "758f67125cc2f5b585fecc92eb788606a2e94eb24b27ea43b638147389a0952e",
-      "base_sha256": "758f67125cc2f5b585fecc92eb788606a2e94eb24b27ea43b638147389a0952e",
-      "identical": true
-    },
-    "src/state/__init__.py": {
-      "candidate_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "base_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "identical": true
-    },
-    "src/state/fingerprints.py": {
-      "candidate_sha256": "22530976d8187f39c79e4db6b970061cb0d8d18374f155522294d603b75706c0",
-      "base_sha256": "22530976d8187f39c79e4db6b970061cb0d8d18374f155522294d603b75706c0",
-      "identical": true
-    },
-    "src/state/pipeline_state.py": {
-      "candidate_sha256": "fbe086b5fe36dae55770917d609d1bf5871c52007001bba2f499e573cbe7c82b",
-      "base_sha256": "fbe086b5fe36dae55770917d609d1bf5871c52007001bba2f499e573cbe7c82b",
-      "identical": true
-    },
-    "src/state/state_store.py": {
-      "candidate_sha256": "84beb973abb65ff4fe6cc199128961e9fee9d5c67da0a4d618110465b5a1d5c7",
-      "base_sha256": "84beb973abb65ff4fe6cc199128961e9fee9d5c67da0a4d618110465b5a1d5c7",
-      "identical": true
-    },
-    "src/tools/extraction/__init__.py": {
-      "candidate_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "base_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "identical": true
-    },
-    "src/tools/extraction/card_extraction.py": {
-      "candidate_sha256": "800e2d1761771fd5f32e8a71e19776fc413089bee7828d1ab685a9eacf99598b",
-      "base_sha256": "800e2d1761771fd5f32e8a71e19776fc413089bee7828d1ab685a9eacf99598b",
-      "identical": true
-    },
-    "src/tools/extraction/card_validation.py": {
-      "candidate_sha256": "795a16465dd4d30c740b3baf999f987747c3e2f69de34e7d5c110794a1716bcc",
-      "base_sha256": "795a16465dd4d30c740b3baf999f987747c3e2f69de34e7d5c110794a1716bcc",
-      "identical": true
-    },
-    "src/tools/extraction/chunk_validation.py": {
-      "candidate_sha256": "e1cc66dc283a501e6d887ed07177c763f258c58dd2efaeaa15f9eba20fae6cb2",
-      "base_sha256": "e1cc66dc283a501e6d887ed07177c763f258c58dd2efaeaa15f9eba20fae6cb2",
-      "identical": true
-    },
-    "src/tools/extraction/knowledge_base.py": {
-      "candidate_sha256": "d5a4523c90b14de6f5ee2e23e30f3a8a86657ba36771f49ffbcda85a019c674e",
-      "base_sha256": "d5a4523c90b14de6f5ee2e23e30f3a8a86657ba36771f49ffbcda85a019c674e",
-      "identical": true
-    },
-    "src/tools/extraction/relevance_classification.py": {
-      "candidate_sha256": "12462c0eb5206557f27270f19045b5a6498c30fd7273ca7685a71b9c83b44ea6",
-      "base_sha256": "12462c0eb5206557f27270f19045b5a6498c30fd7273ca7685a71b9c83b44ea6",
-      "identical": true
-    },
-    "src/tools/extraction/retrieval.py": {
-      "candidate_sha256": "8fd0f6d87fd5d0eacb9af458ca5580258bd64daf31c8f2e9aea7dc1b4ff60c03",
-      "base_sha256": "8fd0f6d87fd5d0eacb9af458ca5580258bd64daf31c8f2e9aea7dc1b4ff60c03",
-      "identical": true
-    },
-    "src/tools/extraction/revision_strategy.py": {
-      "candidate_sha256": "00b552c7cf6377a731f5a8df9dabcda2e29fe0323876043579b74114efb2b24b",
-      "base_sha256": "00b552c7cf6377a731f5a8df9dabcda2e29fe0323876043579b74114efb2b24b",
-      "identical": true
-    },
-    "src/tools/extraction/stage_artifacts.py": {
-      "candidate_sha256": "1f7b70e733af796665aec43a8db5cc5cc801b3dde3ef741bbfcbba703f4e12f3",
-      "base_sha256": "1f7b70e733af796665aec43a8db5cc5cc801b3dde3ef741bbfcbba703f4e12f3",
-      "identical": true
-    },
-    "src/tools/extraction/title_repair.py": {
-      "candidate_sha256": "b7d170818cd7845f7d183b212549fff409d69b3f8783d291516e633e0bf60762",
-      "base_sha256": "b7d170818cd7845f7d183b212549fff409d69b3f8783d291516e633e0bf60762",
-      "identical": true
-    },
-    "src/tools/quantitative_extraction/__init__.py": {
-      "candidate_sha256": "adc3c17df20f0359968683b63ba3a78ed15eac639ffb930a4e0c4999efd1d3b1",
-      "base_sha256": "adc3c17df20f0359968683b63ba3a78ed15eac639ffb930a4e0c4999efd1d3b1",
-      "identical": true
-    },
-    "src/tools/quantitative_extraction/artifacts.py": {
-      "candidate_sha256": "a4d48ef2711f33a69fc8909777da35682f832537c6d76657be9d980bacb636c5",
-      "base_sha256": "a4d48ef2711f33a69fc8909777da35682f832537c6d76657be9d980bacb636c5",
-      "identical": true
-    },
-    "src/tools/quantitative_extraction/evidence_verification.py": {
-      "candidate_sha256": "379cb24807d9b9fdf39b1e97ba835c4e9f830e3ff0ef4c91212c85029618bdc1",
-      "base_sha256": "379cb24807d9b9fdf39b1e97ba835c4e9f830e3ff0ef4c91212c85029618bdc1",
-      "identical": true
-    },
-    "src/tools/quantitative_extraction/extraction.py": {
-      "candidate_sha256": "ff020258d00c964db0e8fd4ffe8fd747aac17c2b8cd2f3acd62518fc9d68bd6f",
-      "base_sha256": "ff020258d00c964db0e8fd4ffe8fd747aac17c2b8cd2f3acd62518fc9d68bd6f",
-      "identical": true
-    },
-    "src/tools/quantitative_extraction/input_validation.py": {
-      "candidate_sha256": "42fef7a71eeb89ddbba508b23c1de7459a963bae37ee269be94c0145323f69df",
-      "base_sha256": "42fef7a71eeb89ddbba508b23c1de7459a963bae37ee269be94c0145323f69df",
-      "identical": true
-    },
-    "src/tools/quantitative_extraction/normalization.py": {
-      "candidate_sha256": "6d485c23c3e2f230b0e828647522d990a3e1d4108673780296f40affdb517734",
-      "base_sha256": "6d485c23c3e2f230b0e828647522d990a3e1d4108673780296f40affdb517734",
-      "identical": true
-    },
-    "src/tools/quantitative_extraction/prompting.py": {
-      "candidate_sha256": "d82f4ecff8ed0d5f1c886cd8da559f14d0ea7c5409923050c1f6635ab210c8c2",
-      "base_sha256": "d82f4ecff8ed0d5f1c886cd8da559f14d0ea7c5409923050c1f6635ab210c8c2",
-      "identical": true
-    },
-    "src/tools/quantitative_extraction/quality.py": {
-      "candidate_sha256": "8cac73d2b38947e79f2f584416ab14d2e5244dbbb164a86287a215bba2bdb38e",
-      "base_sha256": "8cac73d2b38947e79f2f584416ab14d2e5244dbbb164a86287a215bba2bdb38e",
-      "identical": true
-    },
-    "src/tools/quantitative_extraction/source_context.py": {
-      "candidate_sha256": "11e24ea25ab809ecc6eab655f9633df56899b156a2d7a555f06c8031123b6af7",
-      "base_sha256": "11e24ea25ab809ecc6eab655f9633df56899b156a2d7a555f06c8031123b6af7",
-      "identical": true
-    }
-  }
+  "03B_extraccion_cuantitativa_kb_migrado_v16.ipynb": "7e5899caaa54b4f9cb40c67cde0c881f56b81ce1945e3997f8d4558f307d4031",
+  "03_agente_extraccion_kb_migrado_v16.ipynb": "f6fb9257ecf5e8fa6234e4366d8dc0dddaa614950253ab82ad5707757591fb53",
+  "src/adapters/quantitative_extraction_runtime.py": "ae30eef514f625a7d32e3196f058042ac39d9e16513dfdfe9ee65f9d8f4f961f",
+  "src/agents/extraction_agent.py": "d6a20ffbec6628f55aa6212bd158a10ea8a138e02c94a09404d89325fd4733c1",
+  "src/bootstrap/project_bootstrap.py": "eb760500ce20653f8dab9ac1d683f4d47c57b784bb33d2e8bd841848614b9f71",
+  "src/capabilities/quantitative_extraction.py": "d7b32da7b51047e57c670a581e9eeae86b034081803fefd65a028115d6e400af",
+  "src/contracts/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/contracts/__pycache__/__init__.cpython-313.pyc": "5ceed9dedfecaa6a608304c2f45056755e3a02bf2cb8e44aaaefecdf33b6baa4",
+  "src/contracts/__pycache__/agent_input.cpython-313.pyc": "6c147273534fe8f7c2767959c2b11b94edc202c515b7eaa5fe52acfdabe781a3",
+  "src/contracts/__pycache__/agent_result.cpython-313.pyc": "99382f33d5275e7c6517be627d300618f18421850ffa2b7e456f041111e87dff",
+  "src/contracts/agent_input.py": "7496894a483595a87c6f45f1f22add16a149d21d16d4ff645d06c6690780cefb",
+  "src/contracts/agent_result.py": "b45bf47c49755979f7901613d952614feeca5bf3601d10df5433c521915617f9",
+  "src/io/atomic_write.py": "25747667964e462b87c22691feadcbeb78f40023fa90d76a32196586a4d58b4a",
+  "src/io/credentials.py": "8704ef5bd3dc2ea94a58876b5bf93f43978bc2a8ffd76edc94c16a75750ff982",
+  "src/runtime/quantitative_extraction_protocol.py": "758f67125cc2f5b585fecc92eb788606a2e94eb24b27ea43b638147389a0952e",
+  "src/state/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/state/__pycache__/__init__.cpython-313.pyc": "54e8994b7c934a1acbd4e7e86da7a821de7018553ddd938e6e4275b134a864a6",
+  "src/state/__pycache__/fingerprints.cpython-313.pyc": "efe698a944619335740e85414f55a0ffbcf3e7f92f34c83593341fac160f15e9",
+  "src/state/__pycache__/pipeline_state.cpython-313.pyc": "6521f4d0615824895b40ad13f019509df4a475766a7a1f9de5842d68ebb37c10",
+  "src/state/__pycache__/state_store.cpython-313.pyc": "7bc9bd60ad5d9bf7542e90bf7a65e947b66a606d4b5adfef4e400badb7854de3",
+  "src/state/fingerprints.py": "22530976d8187f39c79e4db6b970061cb0d8d18374f155522294d603b75706c0",
+  "src/state/pipeline_state.py": "fbe086b5fe36dae55770917d609d1bf5871c52007001bba2f499e573cbe7c82b",
+  "src/state/state_store.py": "84beb973abb65ff4fe6cc199128961e9fee9d5c67da0a4d618110465b5a1d5c7",
+  "src/tools/extraction/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/tools/extraction/__pycache__/__init__.cpython-313.pyc": "4eccb5965cf982e7e05503c08956bd2225f95daddf88caa354999aa46ffc546c",
+  "src/tools/extraction/__pycache__/card_extraction.cpython-313.pyc": "2b7bd7e78062e3987f0eb38b8528de3a242c7482cdf6ee0d85dc507efed3470b",
+  "src/tools/extraction/__pycache__/card_validation.cpython-313.pyc": "377c3dbee3be99544d72a0918f31c21a3bc929072ed1b64017835b8b932fc6cd",
+  "src/tools/extraction/__pycache__/chunk_validation.cpython-313.pyc": "029d98810158023a773d4877df9b5a438042f62a58b076e015f076db09182465",
+  "src/tools/extraction/__pycache__/knowledge_base.cpython-313.pyc": "372bccd32f3057906b2e104af3290d26d17e188da12a4d5bc9de6460b9d1b9a2",
+  "src/tools/extraction/__pycache__/relevance_classification.cpython-313.pyc": "5cad505df312b2d6af247177aceadfed8df68ac9940ebb4a7594d0f0ae62895d",
+  "src/tools/extraction/__pycache__/retrieval.cpython-313.pyc": "8aa4f964f2eced663e0bc7d4058dc2d389cb8fd7df043b593cfdd631692bb59e",
+  "src/tools/extraction/__pycache__/revision_strategy.cpython-313.pyc": "cd25d6d1a809aa4e6bb2f28b4583045d44cef645257c6cc27df56b56f301d291",
+  "src/tools/extraction/__pycache__/stage_artifacts.cpython-313.pyc": "7ef9231a533af34581a70ae69d712e7692f58d5d18af0267511294877b214540",
+  "src/tools/extraction/__pycache__/title_repair.cpython-313.pyc": "6e22f75045291e83a2f4c448163eaba5e8712e50f7843a67f436df84e53bf850",
+  "src/tools/extraction/card_extraction.py": "800e2d1761771fd5f32e8a71e19776fc413089bee7828d1ab685a9eacf99598b",
+  "src/tools/extraction/card_validation.py": "795a16465dd4d30c740b3baf999f987747c3e2f69de34e7d5c110794a1716bcc",
+  "src/tools/extraction/chunk_validation.py": "e1cc66dc283a501e6d887ed07177c763f258c58dd2efaeaa15f9eba20fae6cb2",
+  "src/tools/extraction/knowledge_base.py": "d5a4523c90b14de6f5ee2e23e30f3a8a86657ba36771f49ffbcda85a019c674e",
+  "src/tools/extraction/relevance_classification.py": "12462c0eb5206557f27270f19045b5a6498c30fd7273ca7685a71b9c83b44ea6",
+  "src/tools/extraction/retrieval.py": "8fd0f6d87fd5d0eacb9af458ca5580258bd64daf31c8f2e9aea7dc1b4ff60c03",
+  "src/tools/extraction/revision_strategy.py": "00b552c7cf6377a731f5a8df9dabcda2e29fe0323876043579b74114efb2b24b",
+  "src/tools/extraction/stage_artifacts.py": "1f7b70e733af796665aec43a8db5cc5cc801b3dde3ef741bbfcbba703f4e12f3",
+  "src/tools/extraction/title_repair.py": "b7d170818cd7845f7d183b212549fff409d69b3f8783d291516e633e0bf60762",
+  "src/tools/quantitative_extraction/__init__.py": "adc3c17df20f0359968683b63ba3a78ed15eac639ffb930a4e0c4999efd1d3b1",
+  "src/tools/quantitative_extraction/__pycache__/__init__.cpython-313.pyc": "49e4bdc79a1459e48cca61bb04606b48aab48c50032a6b29ecf7f9e924351a98",
+  "src/tools/quantitative_extraction/__pycache__/artifacts.cpython-313.pyc": "02dfd41bc4d73667ac5947c7f9e5fa5e5ae94badc49c390021cdac0b044b70bb",
+  "src/tools/quantitative_extraction/__pycache__/evidence_verification.cpython-313.pyc": "4309d19988954a77f099dc642909d7e2b9e3983b668de252a9185934d82014c6",
+  "src/tools/quantitative_extraction/__pycache__/extraction.cpython-313.pyc": "780784fc92c53fec477da3596336e3b853c717d27ec96d2dee1073a98187c3a8",
+  "src/tools/quantitative_extraction/__pycache__/input_validation.cpython-313.pyc": "e4e24c35d8e6b788f7eaa53bfbd8f80282ced486af7ef61166f1cd4e81dce9f3",
+  "src/tools/quantitative_extraction/__pycache__/normalization.cpython-313.pyc": "1739ec42dec94e74a91808c982b655fea77ebe8dc13d8985774511cdfe641c05",
+  "src/tools/quantitative_extraction/__pycache__/prompting.cpython-313.pyc": "2a7e0b0a73991d24d01dd41ca20f2b55f9e13ef1e22dac2425c261569e09ae0a",
+  "src/tools/quantitative_extraction/__pycache__/quality.cpython-313.pyc": "8e10581f8da90ef451650d4eec0de6aebe1edb5365c6ef645f41d7ec345c8e19",
+  "src/tools/quantitative_extraction/__pycache__/source_context.cpython-313.pyc": "11c19da10f98a8922c7686476b530c909ea10311b2d821a89237c2f905fe0a4d",
+  "src/tools/quantitative_extraction/artifacts.py": "a4d48ef2711f33a69fc8909777da35682f832537c6d76657be9d980bacb636c5",
+  "src/tools/quantitative_extraction/evidence_verification.py": "379cb24807d9b9fdf39b1e97ba835c4e9f830e3ff0ef4c91212c85029618bdc1",
+  "src/tools/quantitative_extraction/extraction.py": "ff020258d00c964db0e8fd4ffe8fd747aac17c2b8cd2f3acd62518fc9d68bd6f",
+  "src/tools/quantitative_extraction/input_validation.py": "42fef7a71eeb89ddbba508b23c1de7459a963bae37ee269be94c0145323f69df",
+  "src/tools/quantitative_extraction/normalization.py": "6d485c23c3e2f230b0e828647522d990a3e1d4108673780296f40affdb517734",
+  "src/tools/quantitative_extraction/prompting.py": "d82f4ecff8ed0d5f1c886cd8da559f14d0ea7c5409923050c1f6635ab210c8c2",
+  "src/tools/quantitative_extraction/quality.py": "8cac73d2b38947e79f2f584416ab14d2e5244dbbb164a86287a215bba2bdb38e",
+  "src/tools/quantitative_extraction/source_context.py": "11e24ea25ab809ecc6eab655f9633df56899b156a2d7a555f06c8031123b6af7"
 }

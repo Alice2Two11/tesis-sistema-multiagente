@@ -14,8 +14,8 @@ class ThematicAnalysisAgent:
             context=compact_for_thematic_analysis(final,int(agent_input.policy.get('max_field_chars',3500))); valid=set(final.source_filename.astype(str)); title_map=dict(zip(final.source_filename.astype(str),final.title.astype(str)))
             repair_plan=build_repair_plan(agent_input.previous_attempt.failure_reason_codes if agent_input.previous_attempt else ()) if agent_input.attempt_number==2 else None
             prompt=self.dependencies.build_prompt(context,list(valid),title_map,repair_plan); raw=self.dependencies.invoke(prompt); llm_calls=1
-            payload=self.dependencies.parse(raw); data,schema_issues=normalize_thematic_output(payload); data,repairs=apply_deterministic_repairs(data,title_map,valid)
-            ref_codes,counts,_=validate_references(data,final); codes=[x['code'] for x in schema_issues]+ref_codes
+            payload=self.dependencies.parse(raw); raw_counts=inspect_thematic_payload(payload); data,schema_issues,alias_repairs=normalize_thematic_output(payload,return_repairs=True); data,deterministic_repairs=apply_deterministic_repairs(data,title_map,valid); repairs=alias_repairs+deterministic_repairs
+            ref_codes,counts,_=validate_references(data,final); table_counts=thematic_table_counts(data); flattening_codes,consistency=validate_json_to_tables(raw_counts,table_counts); codes=[x['code'] for x in schema_issues]+ref_codes+flattening_codes
             if any(r.get('type')=='INVALID_REFERENCE_REMOVED' for r in repairs): codes.append('INVALID_REPRESENTATIVE_SOURCE')
             for t in data['themes']:
                 if not t.get('representative_papers'): codes.append('MISSING_THEME_EVIDENCE')
@@ -29,8 +29,9 @@ class ThematicAnalysisAgent:
             if max_s is not None and sc>int(max_s): codes.append('STRUCTURE_TOO_LONG')
             metrics=calculate_diagnostic_metrics(data,final,counts)
             if metrics['unassigned_paper_rate']>0: codes.append('UNASSIGNED_PAPERS')
+            if repair_plan and not repairs: codes.append('REPAIR_PLAN_NOT_APPLIED')
             codes=tuple(dict.fromkeys(codes)); quality,action=classify_quality(codes,agent_input.attempt_number,bool(agent_input.policy.get('manual_review_policy',{}).get('allowed',True)))
-            validation={'validation_ok':not codes,'failure_reason_codes':list(codes),'metrics':metrics,'repairs':repairs,'repair_plan':repair_plan or [],**qmeta}
+            validation={'validation_ok':not codes,'failure_reason_codes':list(codes),'metrics':metrics,'repairs':repairs,'repair_plan':repair_plan or [],'json_to_tables_consistency':consistency,**qmeta}
             manifest={'stage':agent_input.stage_name,'experiment_id':agent_input.experiment_id,'run_id':agent_input.run_id,'attempt_number':agent_input.attempt_number,'quality_status':quality.value,'safety_policy':{'uses_ground_truth':False,'uses_external_knowledge':False,'uses_review_sections':False,'uses_bibliography':False},'diagnostic_metrics':metrics,'quantitative_context':qmeta}
             artifacts=write_thematic_artifacts(agent_input.agent_context.output_directory,final,excluded,raw if isinstance(raw,str) else json.dumps(raw,ensure_ascii=False),data,validation,manifest)
             warnings=tuple(AgentWarning(code=c,severity=WarningSeverity.WARNING,blocking=codes!=(),message=c) for c in tuple(qwarn)+codes)

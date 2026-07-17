@@ -6,7 +6,7 @@ def calculate_diagnostic_metrics(data,df,ref_counts):
     for t in data['themes']:
         srcs=[_src(p) for p in t.get('representative_papers',[]) if _src(p)]
         assignments+=srcs
-        if srcs and any(str(t.get(k,'')).strip() for k in ['description','evidence','summary']): supported_themes+=1
+        if srcs and bool(str(t.get('theme_name') or t.get('theme') or '').strip()): supported_themes+=1
     unique=set(assignments)&corpus
     gaps=data['research_gaps']; supported_gaps=sum(bool(g.get('supporting_sources')) and bool(str(g.get('basis') or g.get('description') or '').strip()) for g in gaps)
     dims=data['comparative_dimensions']; supported_dims=sum(len(d.get('relevant_sources',[]) or [])>=2 for d in dims)

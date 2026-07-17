@@ -1,8 +1,9 @@
 {
   "status": "OK",
+  "notebook": "04_agente_analisis_tematico_migrado_v16.ipynb",
   "mode": "PRECHECK",
-  "executed_code_cells": 3,
-  "llm_calls": 0,
+  "clean_kernel": true,
   "transaction_executed": false,
-  "clean_kernel": true
+  "real_services_called": false,
+  "executed_code_cells": 3
 }

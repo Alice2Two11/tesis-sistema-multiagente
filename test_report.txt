@@ -1,11 +1,10 @@
-..../mnt/data/phase4_agent04_thematic_analysis_v16_candidate/tests/v16/test_agent04_v16.py:91: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp_y_d_vn9/out/thematic_validation_report.json' mode='r' encoding='UTF-8'>
-  prev=PreviousAttemptSummary('NEEDS_REVISION',failure_reason_codes=('MISSING_THEME_EVIDENCE',));x=self.agent().execute(self.ai(attempt=2,prev=prev));m=json.load(open(x.output_artifacts['validation'].path));self.assertEqual(m['repair_plan'][0]['strategy'],'REGENERATE_THEME_ONLY')
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-..................../mnt/data/phase4_agent04_thematic_analysis_v16_candidate/tests/v16/test_agent04_v16.py:77: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpo8j2nwms/out/thematic_analysis_manifest.json' mode='r' encoding='UTF-8'>
-  x=self.agent().execute(self.ai());m=json.load(open(x.output_artifacts['manifest'].path));self.assertFalse(m['safety_policy']['uses_ground_truth'])
-ResourceWarning: Enable tracemalloc to get the object allocation traceback
-..............................................................................
-----------------------------------------------------------------------
-Ran 102 tests in 0.903s
+CANDIDATA AGENTE 04 V1.6 — REPARACIÓN DETERMINISTA DE FLATTENING
 
+Ran 114 tests
 OK
+
+Python compileall: OK
+Notebook PRECHECK clean kernel: OK
+Deterministic repair tests: OK
+OpenAI real: NOT EXECUTED IN CONTAINER
+Doubles are controlled tests only.
