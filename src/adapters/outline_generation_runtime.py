@@ -8,16 +8,17 @@ class OutlineGenerationRuntime:
  def parse(self,raw):
   from src.tools.outline_generation.response_parsing import extract_first_valid_json
   return extract_first_valid_json(raw,self.parse_fallback)
-def build_openai_outline_runtime(model):
+def build_openai_outline_runtime(model, *, project_dir=None, llm_factory=None, human_message_factory=None):
  from src.io.credentials import load_runtime_credential
- load_runtime_credential('OPENAI_API_KEY')
- from langchain_core.messages import HumanMessage
- try:
-  from llm_utils import get_llm,parse_json_safely
- except Exception:
-  from src.llm_utils import get_llm,parse_json_safely
- llm=get_llm(model=model,temperature=0)
- return OutlineGenerationRuntime(lambda prompt: llm.invoke([HumanMessage(content=prompt)]).content,parse_json_safely)
+ load_runtime_credential('OPENAI_API_KEY', project_dir=project_dir)
+ if llm_factory is None:
+  from langchain_openai import ChatOpenAI
+  llm_factory=ChatOpenAI
+ if human_message_factory is None:
+  from langchain_core.messages import HumanMessage
+  human_message_factory=HumanMessage
+ llm=llm_factory(model=model,temperature=0)
+ return OutlineGenerationRuntime(lambda prompt: llm.invoke([human_message_factory(content=prompt)]).content)
 
 from pathlib import Path
 import json
@@ -57,4 +58,4 @@ def build_outline_agent_input(cfg):
  cfg['policy']['current_fingerprint']=fingerprint_mapping(signature)
  return AgentInput(experiment_id=cfg['experiment_id'],run_id=cfg['run_id'],stage_name='05_generador_esquema',attempt_number=cfg['attempt_number'],mode=ExecutionMode.FULL_RUN,agent_context=AgentContext(allowed_tools=('llm','atomic_write','outline_validation'),output_directory=str(cfg['output_dir']),runtime_resources={'model':cfg['model']}),dependencies=deps,policy=cfg['policy'],previous_attempt=_previous_outline_attempt(cfg))
 def build_real_outline_execution(project_dir,attempt_number=1):
- cfg=load_outline_configuration(project_dir,attempt_number);return OutlineGenerationAgent(build_openai_outline_runtime(cfg['model'])),build_outline_agent_input(cfg),cfg
+ cfg=load_outline_configuration(project_dir,attempt_number);return OutlineGenerationAgent(build_openai_outline_runtime(cfg['model'],project_dir=cfg['project_dir'])),build_outline_agent_input(cfg),cfg
