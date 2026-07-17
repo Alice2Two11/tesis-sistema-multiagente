@@ -47,10 +47,64 @@ def resolve_pipeline_state_path(project_dir,experiment_id):
     if not candidates:raise FileNotFoundError(f'pipeline_state.json no encontrado en {exp}')
     raise RuntimeError(f'pipeline_state.json ambiguo: {candidates}')
 
-def load_draft_configuration(project_dir,attempt_number=1):
+def _collection_name(item):
+    name=getattr(item,'name',None)
+    return str(name if name is not None else item)
+
+def _open_chroma_client(path,client_factory=None):
+    if client_factory is None:
+        import chromadb
+        client_factory=chromadb.PersistentClient
+    try:
+        return client_factory(path=str(path))
+    except TypeError:
+        return client_factory(str(path))
+
+def resolve_chroma_dir(experiment_dir,expected_collection,explicit_path=None,*,client_factory=None):
+    exp=Path(experiment_dir).resolve()
+    ordered=[]
+    if explicit_path:
+        ordered.append(Path(explicit_path).expanduser())
+    ordered.append(exp/'04_chroma_index')
+    ordered.extend(sorted({p.parent for p in exp.rglob('chroma.sqlite3')},key=lambda x:str(x)))
+    candidates=[];seen=set()
+    for item in ordered:
+        path=item if item.is_absolute() else (exp/item)
+        try:key=str(path.resolve())
+        except Exception:key=str(path)
+        if key not in seen:
+            seen.add(key);candidates.append(Path(key))
+    valid=[];observed={}
+    for path in candidates:
+        if not path.is_dir() or not (path/'chroma.sqlite3').is_file():
+            continue
+        try:
+            client=_open_chroma_client(path,client_factory)
+            names=sorted({_collection_name(x) for x in client.list_collections()})
+        except Exception as exc:
+            observed[str(path)]=[f'CLIENT_ERROR:{type(exc).__name__}']
+            continue
+        observed[str(path)]=names
+        if expected_collection in names:
+            valid.append(path.resolve())
+    unique=[];seen_valid=set()
+    for path in valid:
+        key=str(path)
+        if key not in seen_valid:
+            seen_valid.add(key);unique.append(path)
+    if len(unique)==1:
+        return unique[0]
+    if len(unique)>1:
+        raise RuntimeError(f'CHROMA_DIR_AMBIGUOUS:{[str(x) for x in unique]}')
+    raise FileNotFoundError(f'CHROMA_COLLECTION_NOT_FOUND:{expected_collection}; observed={observed}')
+
+def load_draft_configuration(project_dir,attempt_number=1,*,chroma_client_factory=None):
     root=Path(project_dir).resolve();active=json.loads((root/'active_experiment.json').read_text(encoding='utf-8'));eid=active['active_experiment_id'];exp=root/eid;outputs=exp/'05_outputs';outline=outputs/'04_outline';thematic=outputs/'03_thematic_analysis';draft=outputs/'05_draft';rag=active.get('rag_policy',{});policy=get_draft_writing_policy(active.get('draft_generation_policy',{}));generation=active.get('generation_profile',{});policy.update({'experiment_profile':active.get('experiment_profile',{}),'topic_profile':active.get('topic_profile',{}),'generation_profile':generation,'rag_policy':rag,'output_language':generation.get('output_language','español académico'),'writing_mode':generation.get('writing_mode',''),'focus_mode':generation.get('focus_mode',''),'citation_style':generation.get('citation_style',''),'target_total_words':int(generation.get('target_total_words',1000)),'min_total_words':int(generation.get('min_total_words',650)),'max_total_words':int(generation.get('max_total_words',1400))})
+    collection_name=active.get('chroma_collection_name','reference_papers_chunks')
+    explicit=active.get('chroma_dir')
+    chroma_dir=resolve_chroma_dir(exp,collection_name,explicit,client_factory=chroma_client_factory)
     paths={'outline_json':outline/'state_of_art_outline.json','outline_mapping':outline/'outline_paper_mapping.csv','outline_validation':outline/'outline_validation_report.json','outline_manifest':outline/'outline_generation_manifest.json','kb_final':thematic/'kb_final_for_thematic_analysis.csv','thematic_manifest':thematic/'thematic_analysis_manifest.json','thematic_validation':thematic/'thematic_validation_report.json','chunks_clean':Path(active.get('chunks_clean_path',exp/'03_chunks'/'chunks_clean_for_rag.csv')),'chroma_manifest':Path(active.get('chroma_manifest_path',outputs/'01_rag'/'chroma_index_manifest.json')),'quantitative_table':outputs/'02_scientific_knowledge_base'/'quantitative_comparative_table.csv','dataset_summary':outputs/'02_scientific_knowledge_base'/'dataset_technique_summary.csv','quantitative_manifest':outputs/'02_scientific_knowledge_base'/'quantitative_extraction_manifest.json'}
-    return {'project_dir':root,'experiment_id':eid,'run_id':active.get('run_id',eid),'attempt_number':int(attempt_number),'model':active.get('openai_model','gpt-4o-mini'),'embedding_model_name':active.get('embedding_model_name','sentence-transformers/all-MiniLM-L6-v2'),'chroma_collection_name':active.get('chroma_collection_name','scientific_chunks'),'chroma_dir':Path(active.get('chroma_dir',exp/'04_chroma')),'policy':policy,'output_dir':draft,'state_path':resolve_pipeline_state_path(root,eid),'paths':paths,'experiment_dir':exp}
+    return {'project_dir':root,'experiment_id':eid,'run_id':active.get('run_id',eid),'attempt_number':int(attempt_number),'model':active.get('openai_model','gpt-4o-mini'),'embedding_model_name':active.get('embedding_model_name','sentence-transformers/all-MiniLM-L6-v2'),'chroma_collection_name':collection_name,'chroma_dir':chroma_dir,'policy':policy,'output_dir':draft,'state_path':resolve_pipeline_state_path(root,eid),'paths':paths,'experiment_dir':exp}
 
 def _previous_draft_attempt(cfg):
     if cfg['attempt_number']!=2:return None
@@ -59,11 +113,13 @@ def _previous_draft_attempt(cfg):
     return PreviousAttemptSummary(quality_status=stage.get('quality_status','NEEDS_REVISION'),failure_reason_codes=tuple(stage.get('failure_reason_codes',[])),blocking_warnings=tuple(str(x.get('code','')) for x in stage.get('warnings',[]) if x.get('blocking') and x.get('code')),previous_artifacts={})
 
 def build_draft_agent_input(cfg):
-    required=('outline_json','outline_mapping','outline_validation','outline_manifest','kb_final','thematic_manifest','thematic_validation','chunks_clean','chroma_manifest');deps={}
+    required=('outline_json','outline_mapping','outline_validation','outline_manifest','kb_final','thematic_manifest','thematic_validation','chunks_clean');deps={}
     for n in required:
         p=Path(cfg['paths'][n]);
         if not p.is_file():raise FileNotFoundError(f'{n} no existe: {p}')
         deps[n]=ArtifactReference(str(p),sha256_file(p))
+    if Path(cfg['paths']['chroma_manifest']).is_file():
+        deps['chroma_manifest']=ArtifactReference(str(cfg['paths']['chroma_manifest']),sha256_file(cfg['paths']['chroma_manifest']))
     optional=('quantitative_table','dataset_summary','quantitative_manifest');present=[n for n in optional if Path(cfg['paths'][n]).is_file()]
     if present and len(present)!=3:raise FileNotFoundError('INVALID_QUANTITATIVE_CONTEXT')
     for n in present:deps[n]=ArtifactReference(str(cfg['paths'][n]),sha256_file(cfg['paths'][n]))
@@ -78,5 +134,5 @@ def build_chroma_collection(cfg):
     emb=embedding_functions.SentenceTransformerEmbeddingFunction(model_name=cfg['embedding_model_name'])
     return client.get_collection(name=cfg['chroma_collection_name'],embedding_function=emb)
 
-def build_real_draft_execution(project_dir,attempt_number=1,*,collection_factory=None,runtime_factory=None):
-    cfg=load_draft_configuration(project_dir,attempt_number);collection=(collection_factory or build_chroma_collection)(cfg);rf=runtime_factory or build_openai_draft_runtime;runtime=rf(cfg['model'],cfg['policy']['temperature'],collection,project_dir=cfg['project_dir']);return DraftWritingAgent(runtime),build_draft_agent_input(cfg),cfg
+def build_real_draft_execution(project_dir,attempt_number=1,*,collection_factory=None,runtime_factory=None,chroma_client_factory=None):
+    cfg=load_draft_configuration(project_dir,attempt_number,chroma_client_factory=chroma_client_factory);collection=(collection_factory or build_chroma_collection)(cfg);rf=runtime_factory or build_openai_draft_runtime;runtime=rf(cfg['model'],cfg['policy']['temperature'],collection,project_dir=cfg['project_dir']);return DraftWritingAgent(runtime),build_draft_agent_input(cfg),cfg
