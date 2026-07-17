@@ -38,7 +38,7 @@ No se implementaron Chroma/RAG, nuevas métricas, cobertura total, asignación o
 
 ## E. Validación
 
-- Suite real: Ran 137 tests — OK.
+- Suite real final: Ran 144 tests — OK.
 - PRECHECK de notebook en kernel limpio: OK.
 - Ejecución OpenAI real: pendiente de Colab.
 
@@ -56,7 +56,43 @@ El notebook conserva `PROJECT_SOURCE_URL` como override y usa por defecto `https
 
 Comando: `python -m unittest discover -s tests -p "test_*.py"`
 
-Resultado: `Ran 140 tests in 4.247s — OK`.
+Resultado histórico previo: `Ran 140 tests in 4.247s — OK`; sustituido por la suite final de esta corrección.
 
 No se modificaron el prompt, schema, cutoff 0.55, siete artefactos, quality gate, política de intentos, rutas, contratos ni etapas 00–04. No se llamó a OpenAI.
 
+
+
+## Corrección de resolución del runtime LLM — candidata final
+
+### Causa raíz
+
+`src/adapters/outline_generation_runtime.py` intentaba importar `llm_utils` y, como fallback, `src.llm_utils`. La estructura real del repositorio migrado no contiene `src/llm_utils.py`; por ello la ejecución real fallaba con `RUNTIME_DEPENDENCY_FAILED` antes de la primera llamada al LLM. Las pruebas anteriores no reproducían esta ausencia.
+
+### Corrección limitada
+
+Se modificó únicamente `src/adapters/outline_generation_runtime.py`. El runtime ahora reutiliza el patrón existente de los agentes cerrados: `load_runtime_credential("OPENAI_API_KEY", project_dir=...)`, `langchain_openai.ChatOpenAI`, `langchain_core.messages.HumanMessage`, `temperature=0` y el parser local `extract_first_valid_json` de `src/tools/outline_generation/response_parsing.py`. No se creó `src/llm_utils.py` ni otra dependencia ficticia.
+
+No se modificaron prompt, schema, cutoff 0.55, validaciones, siete artefactos, rutas, quality gate, política de intentos ni etapas 00–04.
+
+### Pruebas nuevas
+
+`tests/v16/test_agent05_runtime_resolution_v16.py` valida:
+
+- construcción de `build_openai_outline_runtime` sin `llm_utils` ni `src.llm_utils`;
+- credencial común y `temperature=0`;
+- parseo observable del primer JSON válido;
+- `build_real_outline_execution` contra una estructura equivalente al repositorio real, sin `src/llm_utils.py`;
+- llamada literal `build_real_outline_execution("/content/proyecto_estado_arte", attempt_number=1)`;
+- ausencia de imports o rutas artificiales hacia `llm_utils`.
+
+Las pruebas utilizan un stub controlado y no llaman a OpenAI.
+
+### Suite final exacta
+
+Comando: `python -m unittest discover -s tests -p "test_*.py"`
+
+Resultado final: `Ran 144 tests in 4.317s — OK`.
+
+### Reejecución después del fallo técnico
+
+No debe ejecutarse `attempt_number=2`, porque el intento fallido no produjo `NEEDS_REVISION` ni una transición `RETRY`. Para validar nuevamente el Agente 05 aislado, se debe volver a ejecutar `AGENT05_ATTEMPT_NUMBER=1`. El `StateStore` puede comprometer un nuevo resultado del intento 1 sobre la misma etapa cuando no existe una ejecución pendiente. Si quedó `pending_execution` por una interrupción, primero debe ejecutarse el mecanismo común `RESUME`; no se debe editar manualmente el estado ni crear un segundo `pipeline_state.json`. El nuevo `COMPLETED` sustituirá el estado técnico fallido de la etapa y conservará el historial transaccional.
