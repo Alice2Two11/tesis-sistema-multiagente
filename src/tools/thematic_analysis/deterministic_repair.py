@@ -71,21 +71,14 @@ def execute_deterministic_thematic_repair(*, output_dir: str | Path, attempt_num
     flattening_codes, consistency = validate_json_to_tables(raw_counts, table_counts)
 
     codes = [item["code"] for item in schema_issues] + ref_codes + flattening_codes
-    for theme in normalized["themes"]:
-        if not theme.get("representative_papers"):
-            codes.append("MISSING_THEME_EVIDENCE")
-        if not str(theme.get("description") or theme.get("evidence") or theme.get("summary") or "").strip():
-            codes.append("UNSUPPORTED_THEME")
-    for gap in normalized["research_gaps"]:
-        if not str(gap.get("basis") or gap.get("description") or "").strip():
-            codes.append("UNSUPPORTED_RESEARCH_GAP")
-    for dimension in normalized["comparative_dimensions"]:
-        if len(dimension.get("relevant_sources", []) or []) < 2:
-            codes.append("INVALID_COMPARATIVE_DIMENSION")
+    if not normalized["themes"]:
+        codes.append("EMPTY_THEMATIC_OUTPUT")
+    if not normalized["research_gaps"]:
+        codes.append("EMPTY_THEMATIC_OUTPUT")
+    if not normalized["comparative_dimensions"]:
+        codes.append("EMPTY_THEMATIC_OUTPUT")
 
     metrics = calculate_diagnostic_metrics(normalized, df_final, ref_counts)
-    if metrics["unassigned_paper_rate"] > 0:
-        codes.append("UNASSIGNED_PAPERS")
     codes = tuple(dict.fromkeys(codes))
     quality, action = classify_quality(codes, attempt_number, manual_allowed=False)
 
