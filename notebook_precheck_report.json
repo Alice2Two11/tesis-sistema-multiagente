@@ -1,12 +1,8 @@
 {
-  "status": "OK",
-  "mode": "PRECHECK",
-  "llm_calls": 0,
-  "bootstrap_before_src_import": true,
-  "shell_only": true,
-  "real_mode_visible": true,
-  "default_repository_url": "https://github.com/Alice2Two11/tesis-sistema-multiagente.git",
-  "project_source_url_override_supported": true,
-  "clean_runtime_clone_command_simulated_in_isolated_process": true,
-  "external_network_clone": "NOT_EXECUTED_NETWORK_UNAVAILABLE_IN_CONTAINER"
+  "notebook": "06_agente_redactor_migrado_v16.ipynb",
+  "status": "PASSED",
+  "kernel_mode": "clean_static_preflight",
+  "src_import_after_bootstrap": true,
+  "openai_called": false,
+  "chroma_real_called": false
 }

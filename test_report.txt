@@ -1,14 +1,11 @@
-COMMAND: python -m unittest discover -s tests -p "test_*.py"
-
-........................./mnt/data/phase5_agent05_runtime_resolution_fixed_candidate/tests/v16/test_agent04_v16.py:91: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpcesudp2x/out/thematic_validation_report.json' mode='r' encoding='utf-8'>
+........................./mnt/data/phase6_agent06_behavior_preserving_agentic_v16_validation_restored_candidate/tests/v16/test_agent04_v16.py:91: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmpuy2qo4we/out/thematic_validation_report.json' mode='r' encoding='utf-8'>
   prev=PreviousAttemptSummary('NEEDS_REVISION',failure_reason_codes=('MISSING_THEME_EVIDENCE',));x=self.agent().execute(self.ai(attempt=2,prev=prev));m=json.load(open(x.output_artifacts['validation'].path));self.assertEqual(m['repair_plan'][0]['strategy'],'REGENERATE_THEME_ONLY')
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-..................../mnt/data/phase5_agent05_runtime_resolution_fixed_candidate/tests/v16/test_agent04_v16.py:77: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmps_7ecb5v/out/thematic_analysis_manifest.json' mode='r' encoding='utf-8'>
+..................../mnt/data/phase6_agent06_behavior_preserving_agentic_v16_validation_restored_candidate/tests/v16/test_agent04_v16.py:77: ResourceWarning: unclosed file <_io.TextIOWrapper name='/tmp/tmp_3knde82/out/thematic_analysis_manifest.json' mode='r' encoding='utf-8'>
   x=self.agent().execute(self.ai());m=json.load(open(x.output_artifacts['manifest'].path));self.assertFalse(m['safety_policy']['uses_ground_truth'])
 ResourceWarning: Enable tracemalloc to get the object allocation traceback
-...................................................................................................
+................................................................................................................................
 ----------------------------------------------------------------------
-Ran 144 tests in 4.317s
+Ran 173 tests in 4.328s
 
 OK
-ELAPSED=5.67

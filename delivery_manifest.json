@@ -1,37 +1,29 @@
 {
-  "delivery_status": "CANDIDATA AGENTE 05 V1.6 RUNTIME RESOLUTION FIXED PARA VALIDACIÓN REAL",
-  "artifact_name": "phase5_agent05_runtime_resolution_fixed_v16_candidate.zip",
-  "stage": "05_generador_esquema",
-  "agent": "OutlineGenerationAgent",
-  "root_cause": "outline_generation_runtime imported llm_utils/src.llm_utils, which is absent from the migrated GitHub repository",
-  "runtime_resolution": "src.io.credentials.load_runtime_credential + langchain_openai.ChatOpenAI + langchain_core.messages.HumanMessage + local outline response parser",
-  "temperature": 0,
-  "test_command": "python -m unittest discover -s tests -p \"test_*.py\"",
-  "tests_run": 144,
-  "tests_status": "OK",
-  "test_duration_seconds": 4.317,
-  "exact_colab_build_call_tested": "build_real_outline_execution(\"/content/proyecto_estado_arte\", attempt_number=1)",
-  "src_llm_utils_created": false,
-  "openai_called_for_fix": false,
-  "controlled_llm_stub_used": true,
-  "scientific_behavior_preserved": true,
-  "modified_files": [
-    "AUDIT_IMPLEMENTATION_AGENT05_BEHAVIOR_PRESERVING_V16.md",
-    "delivery_manifest.json",
-    "modified_files.txt",
-    "return_codes.json",
-    "src/adapters/outline_generation_runtime.py",
-    "test_report.txt",
-    "tests/v16/test_agent05_runtime_resolution_v16.py"
+  "candidate_name": "phase6_agent06_behavior_preserving_agentic_v16_validation_restored_candidate",
+  "status": "CANDIDATA AGENTE 06 V1.6 CON VALIDACIÓN ORIGINAL RESTAURADA",
+  "stage": "06_agente_redactor",
+  "agent": "DraftWritingAgent",
+  "behavior_preserving": true,
+  "restored_functions": [
+    "build_section_prompt",
+    "assign_section_budgets",
+    "build_draft_reports",
+    "validate_draft_global",
+    "validate_draft_dependencies",
+    "write_raw_section_output"
   ],
-  "exact_output_artifacts": [
-    "state_of_art_outline.json",
-    "state_of_art_outline_raw.txt",
-    "state_of_art_outline.md",
-    "outline_sections.csv",
-    "outline_paper_mapping.csv",
-    "outline_validation_report.json",
-    "outline_generation_manifest.json"
+  "main_artifact_count": 12,
+  "auxiliary_artifacts": [
+    "raw_section_outputs/"
   ],
-  "rerun_instruction": "Re-run AGENT05_ATTEMPT_NUMBER=1. Do not run attempt 2 because the failed attempt never reached scientific validation or NEEDS_REVISION."
+  "suite": {
+    "command": "python -m unittest discover -s tests -p \"test_*.py\"",
+    "tests": 173,
+    "result": "OK"
+  },
+  "real_external_colab": "NOT_EXECUTED_IN_CONTAINER",
+  "openai_called_in_container": false,
+  "chroma_real_called_in_container": false,
+  "agent07_executed": false,
+  "protected_stages_modified": false
 }
