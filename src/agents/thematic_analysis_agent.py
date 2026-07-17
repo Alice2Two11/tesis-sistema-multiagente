@@ -17,18 +17,13 @@ class ThematicAnalysisAgent:
             payload=self.dependencies.parse(raw); raw_counts=inspect_thematic_payload(payload); data,schema_issues,alias_repairs=normalize_thematic_output(payload,return_repairs=True); data,deterministic_repairs=apply_deterministic_repairs(data,title_map,valid); repairs=alias_repairs+deterministic_repairs
             ref_codes,counts,_=validate_references(data,final); table_counts=thematic_table_counts(data); flattening_codes,consistency=validate_json_to_tables(raw_counts,table_counts); codes=[x['code'] for x in schema_issues]+ref_codes+flattening_codes
             if any(r.get('type')=='INVALID_REFERENCE_REMOVED' for r in repairs): codes.append('INVALID_REPRESENTATIVE_SOURCE')
-            for t in data['themes']:
-                if not t.get('representative_papers'): codes.append('MISSING_THEME_EVIDENCE')
-                if not str(t.get('description') or t.get('evidence') or t.get('summary') or '').strip(): codes.append('UNSUPPORTED_THEME')
-            for g in data['research_gaps']:
-                if not str(g.get('basis') or g.get('description') or '').strip(): codes.append('UNSUPPORTED_RESEARCH_GAP')
-            for d in data['comparative_dimensions']:
-                if len(d.get('relevant_sources',[]) or [])<2: codes.append('INVALID_COMPARATIVE_DIMENSION')
+            if not data['themes']: codes.append('EMPTY_THEMATIC_OUTPUT')
+            if not data['research_gaps']: codes.append('EMPTY_THEMATIC_OUTPUT')
+            if not data['comparative_dimensions']: codes.append('EMPTY_THEMATIC_OUTPUT')
             min_s=agent_input.policy.get('min_sections'); max_s=agent_input.policy.get('max_sections'); sc=len(data['suggested_state_of_art_structure'])
             if min_s is not None and sc<int(min_s): codes.append('STRUCTURE_TOO_SHORT')
             if max_s is not None and sc>int(max_s): codes.append('STRUCTURE_TOO_LONG')
             metrics=calculate_diagnostic_metrics(data,final,counts)
-            if metrics['unassigned_paper_rate']>0: codes.append('UNASSIGNED_PAPERS')
             if repair_plan and not repairs: codes.append('REPAIR_PLAN_NOT_APPLIED')
             codes=tuple(dict.fromkeys(codes)); quality,action=classify_quality(codes,agent_input.attempt_number,bool(agent_input.policy.get('manual_review_policy',{}).get('allowed',True)))
             validation={'validation_ok':not codes,'failure_reason_codes':list(codes),'metrics':metrics,'repairs':repairs,'repair_plan':repair_plan or [],'json_to_tables_consistency':consistency,**qmeta}

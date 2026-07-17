@@ -1,25 +1,16 @@
 {
-  "attempts": {
-    "attempt_1": "normal thematic generation",
-    "attempt_2": "directed block repair",
-    "automatic_attempt_3": false
-  },
-  "deterministic": [
-    "CORRECT_TITLE_FROM_CLOSED_MAP",
-    "REMOVE_INVALID_REFERENCE",
-    "NORMALIZE_SINGLETON",
-    "NORMALIZE_KNOWN_ALIASES",
-    "RENUMBER_UNAMBIGUOUS_IDS"
+  "attempt_policy": {"attempt_1": "NORMAL_THEMATIC_ANALYSIS", "attempt_2": "DIRECTED_REPAIR", "automatic_attempt_3": false},
+  "deterministic_repairs": [
+    "SAFE_ALIAS_MAPPING",
+    "DETERMINISTIC_ID_GENERATION",
+    "TITLE_CORRECTION_FROM_VALID_SOURCE_MAP",
+    "INVALID_REFERENCE_REMOVAL_WHEN_VALID_REFERENCES_REMAIN",
+    "REBUILD_DERIVED_TABLES_FROM_PERSISTED_JSON"
   ],
-  "directed_llm": [
-    "REGENERATE_THEME_ONLY",
-    "REGENERATE_OR_DROP_GAP_ONLY",
-    "REGENERATE_DIMENSION_ONLY",
-    "ASSIGN_UNASSIGNED_PAPERS_ONLY",
-    "REGENERATE_STRUCTURE_ONLY"
-  ],
-  "transition_success": {
-    "action": "ADVANCE",
-    "target_stage": null
-  }
+  "rejected_out_of_scope_repairs": [
+    "AUTOMATIC_EXHAUSTIVE_PAPER_THEME_ASSIGNMENT",
+    "COMPATIBILITY_SCORING",
+    "ASSIGNED_PAPERS",
+    "PAPER_THEME_ASSIGNMENTS_ARTIFACT"
+  ]
 }

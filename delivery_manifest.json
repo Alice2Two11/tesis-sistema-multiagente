@@ -1,107 +1,715 @@
 {
-  "status": "CANDIDATA",
-  "name": "phase4_agent04_deterministic_flattening_repair_v16_candidate",
-  "created_files": [
-    "tests/v16/test_agent04_deterministic_flattening_repair_v16.py",
-    "tests/__pycache__/__init__.cpython-313.pyc",
-    "tests/v16/__pycache__/__init__.cpython-313.pyc",
-    "tests/v16/__pycache__/agent_environment.cpython-313.pyc",
-    "tests/v16/__pycache__/extraction_agent_doubles.cpython-313.pyc",
-    "tests/v16/__pycache__/test_agent04_v16.cpython-313.pyc",
-    "tests/v16/__pycache__/test_alignment_v16.cpython-313.pyc",
-    "tests/v16/__pycache__/test_attempt2_directed.cpython-313.pyc",
-    "tests/v16/__pycache__/test_dataset_normalization_repair_v16.cpython-313.pyc",
-    "tests/v16/__pycache__/test_flattening_repair_v16.cpython-313.pyc",
-    "tests/v16/__pycache__/test_notebook_03b_v16.cpython-313.pyc",
-    "tests/v16/__pycache__/test_quantitative_capability_v16.cpython-313.pyc",
-    "tests/v16/__pycache__/test_agent04_deterministic_flattening_repair_v16.cpython-313.pyc",
-    "tests/integration/__pycache__/__init__.cpython-313.pyc",
-    "tests/integration/__pycache__/run_03b_controlled.cpython-313.pyc",
-    "tests/integration/__pycache__/run_direct_module_call.cpython-313.pyc",
-    "tests/integration/__pycache__/run_notebook_precheck.cpython-313.pyc",
-    "tests/integration/__pycache__/run_notebook_structure_preflight.cpython-313.pyc",
-    "tests/integration/__pycache__/run_real_config_integration.cpython-313.pyc",
-    "tests/integration/__pycache__/run_real_notebook_transaction.cpython-313.pyc",
-    "src/__pycache__/__init__.cpython-313.pyc",
-    "src/tools/thematic_analysis/deterministic_repair.py",
-    "src/tools/__pycache__/__init__.cpython-313.pyc",
-    "src/tools/thematic_analysis/__pycache__/__init__.cpython-313.pyc",
-    "src/tools/thematic_analysis/__pycache__/context_builder.cpython-313.pyc",
-    "src/tools/thematic_analysis/__pycache__/corpus_filtering.cpython-313.pyc",
-    "src/tools/thematic_analysis/__pycache__/deterministic_repair.cpython-313.pyc",
-    "src/tools/thematic_analysis/__pycache__/input_validation.cpython-313.pyc",
-    "src/tools/thematic_analysis/__pycache__/prompting.cpython-313.pyc",
-    "src/tools/thematic_analysis/__pycache__/quality.cpython-313.pyc",
-    "src/tools/thematic_analysis/__pycache__/quantitative_context.cpython-313.pyc",
-    "src/tools/thematic_analysis/__pycache__/reference_validation.cpython-313.pyc",
-    "src/tools/thematic_analysis/__pycache__/repair_strategy.cpython-313.pyc",
-    "src/tools/thematic_analysis/__pycache__/coverage_validation.cpython-313.pyc",
-    "src/tools/thematic_analysis/__pycache__/schema_validation.cpython-313.pyc",
-    "src/tools/thematic_analysis/__pycache__/artifacts.cpython-313.pyc",
-    "src/tools/quantitative_extraction/__pycache__/__init__.cpython-313.pyc",
-    "src/tools/quantitative_extraction/__pycache__/artifacts.cpython-313.pyc",
-    "src/tools/quantitative_extraction/__pycache__/evidence_verification.cpython-313.pyc",
-    "src/tools/quantitative_extraction/__pycache__/extraction.cpython-313.pyc",
-    "src/tools/quantitative_extraction/__pycache__/input_validation.cpython-313.pyc",
-    "src/tools/quantitative_extraction/__pycache__/normalization.cpython-313.pyc",
-    "src/tools/quantitative_extraction/__pycache__/prompting.cpython-313.pyc",
-    "src/tools/quantitative_extraction/__pycache__/quality.cpython-313.pyc",
-    "src/tools/quantitative_extraction/__pycache__/source_context.cpython-313.pyc",
-    "src/tools/extraction/__pycache__/__init__.cpython-313.pyc",
-    "src/tools/extraction/__pycache__/card_extraction.cpython-313.pyc",
-    "src/tools/extraction/__pycache__/card_validation.cpython-313.pyc",
-    "src/tools/extraction/__pycache__/chunk_validation.cpython-313.pyc",
-    "src/tools/extraction/__pycache__/knowledge_base.cpython-313.pyc",
-    "src/tools/extraction/__pycache__/relevance_classification.cpython-313.pyc",
-    "src/tools/extraction/__pycache__/retrieval.cpython-313.pyc",
-    "src/tools/extraction/__pycache__/revision_strategy.cpython-313.pyc",
-    "src/tools/extraction/__pycache__/stage_artifacts.cpython-313.pyc",
-    "src/tools/extraction/__pycache__/title_repair.cpython-313.pyc",
-    "src/state/__pycache__/__init__.cpython-313.pyc",
-    "src/state/__pycache__/fingerprints.cpython-313.pyc",
-    "src/state/__pycache__/pipeline_state.cpython-313.pyc",
-    "src/state/__pycache__/state_store.cpython-313.pyc",
-    "src/runtime/__pycache__/__init__.cpython-313.pyc",
-    "src/runtime/__pycache__/extraction_protocol.cpython-313.pyc",
-    "src/runtime/__pycache__/quantitative_extraction_protocol.cpython-313.pyc",
-    "src/runtime/__pycache__/thematic_analysis_protocol.cpython-313.pyc",
-    "src/io/__pycache__/__init__.cpython-313.pyc",
-    "src/io/__pycache__/atomic_write.cpython-313.pyc",
-    "src/io/__pycache__/credentials.cpython-313.pyc",
-    "src/contracts/__pycache__/__init__.cpython-313.pyc",
-    "src/contracts/__pycache__/agent_input.cpython-313.pyc",
-    "src/contracts/__pycache__/agent_result.cpython-313.pyc",
-    "src/config/__pycache__/__init__.cpython-313.pyc",
-    "src/config/__pycache__/common_config.cpython-313.pyc",
-    "src/config/__pycache__/generation_policy_config.cpython-313.pyc",
-    "src/config/__pycache__/quantitative_extraction_policy_config.cpython-313.pyc",
-    "src/config/__pycache__/thematic_analysis_policy_config.cpython-313.pyc",
-    "src/capabilities/__pycache__/__init__.cpython-313.pyc",
-    "src/capabilities/__pycache__/quantitative_extraction.cpython-313.pyc",
-    "src/bootstrap/__pycache__/__init__.cpython-313.pyc",
-    "src/bootstrap/__pycache__/project_bootstrap.cpython-313.pyc",
-    "src/agents/__pycache__/__init__.cpython-313.pyc",
-    "src/agents/__pycache__/extraction_agent.cpython-313.pyc",
-    "src/agents/__pycache__/thematic_analysis_agent.cpython-313.pyc",
-    "src/adapters/__pycache__/__init__.cpython-313.pyc",
-    "src/adapters/__pycache__/extraction_runtime.cpython-313.pyc",
-    "src/adapters/__pycache__/quantitative_extraction_runtime.cpython-313.pyc",
-    "src/adapters/__pycache__/thematic_analysis_runtime.cpython-313.pyc"
-  ],
-  "modified_files": [
-    "04_agente_analisis_tematico_migrado_v16.ipynb",
-    "notebook_precheck_report.json",
-    "preserved_sha256.json",
-    "src/agents/thematic_analysis_agent.py",
-    "src/runtime/thematic_analysis_protocol.py",
-    "src/tools/thematic_analysis/__init__.py",
-    "src/tools/thematic_analysis/artifacts.py",
-    "src/tools/thematic_analysis/coverage_validation.py",
-    "src/tools/thematic_analysis/quality.py",
-    "src/tools/thematic_analysis/schema_validation.py"
-  ],
-  "protected_files_sha256": "preserved_sha256.json",
-  "real_external_validation": "NOT_EXECUTED_IN_CONTAINER",
-  "openai_called_for_repair": false,
-  "agent05_advanced": false
+  "status": "CANDIDATA AGENTE 04 V1.6 — BEHAVIOR PRESERVING COLAB FIXED TESTS FIXED",
+  "created_at": "2026-07-17T15:53:19.041663+00:00",
+  "scientific_behavior_changed": false,
+  "agent03_modified": false,
+  "agent03b_modified": false,
+  "openai_real_executed": false,
+  "tests_run": 123,
+  "files": {
+    ".gitignore": {
+      "sha256": "cfd7a2475c6f323b5090ac1462fe4220042a58aa670d7b26ac9e8a17261dcdf4",
+      "size": 149
+    },
+    "03B_extraccion_cuantitativa_kb_migrado_v16.ipynb": {
+      "sha256": "7e5899caaa54b4f9cb40c67cde0c881f56b81ce1945e3997f8d4558f307d4031",
+      "size": 7137
+    },
+    "03_agente_extraccion_kb_migrado_v16.ipynb": {
+      "sha256": "f6fb9257ecf5e8fa6234e4366d8dc0dddaa614950253ab82ad5707757591fb53",
+      "size": 17635
+    },
+    "04_agente_analisis_tematico_migrado_v16.ipynb": {
+      "sha256": "524ca77d8e5f5a445667671fd00fdeadba0cd565be4d727d39777d87e1da8245",
+      "size": 8885
+    },
+    "AUDIT_IMPLEMENTATION_AGENT04_BEHAVIOR_PRESERVING_V16.md": {
+      "sha256": "ac5166b6091bc5b232328c782fd6c10437ed2bfb1726a48e501f505351c46779",
+      "size": 3757
+    },
+    "AUDIT_IMPLEMENTATION_AGENT04_COLAB_FIXED_V16.md": {
+      "sha256": "0737ba0cad5e1876c61f39fc19b919e803c6969a7881f738c1773843328ffedc",
+      "size": 2947
+    },
+    "AUDIT_IMPLEMENTATION_AGENT04_FLATTENING_REPAIR_V16.md": {
+      "sha256": "9d9701d91b7869e3b73482cae6a0956e37d3590868cee2809ba99b1a68f7817a",
+      "size": 376
+    },
+    "AUDIT_IMPLEMENTATION_AGENT04_V16.md": {
+      "sha256": "e69ce5ce091f7e03cef0f16c54b0ff60422321f98f1bb66ff063ac8ea253ba36",
+      "size": 615
+    },
+    "controlled_03b_report.json": {
+      "sha256": "740afeca1d77ecbe8b7c6c38b9def91fe148de4a092f47f69c0c6a3d4b5e6ef9",
+      "size": 1809
+    },
+    "diagnostic_metrics_schema.json": {
+      "sha256": "5a66cf44a7b3ee45d46461b0e7468aec527c90f2895bab6ffe9b2ba9106d374d",
+      "size": 1088
+    },
+    "modified_files.txt": {
+      "sha256": "3c9461cddd21c44815a35a5f7e40d893a510d81af0eba7f813282a86977dcca9",
+      "size": 552
+    },
+    "notebook_precheck_report.json": {
+      "sha256": "be72b11687b82efccd4cbd2006c5c888fd706b54bed067160a6105ef0aa988b5",
+      "size": 335
+    },
+    "preserved_sha256.json": {
+      "sha256": "c90b9c547dc60cafdb4e2c9b3d54fa5335192d1f5246c308f3f4084f8b2d12ef",
+      "size": 7558
+    },
+    "repair_strategy_report.json": {
+      "sha256": "bb32c42ef3940af013aba028afddecf5a8fbb2f2b743258a3fa6fb2b77a3197b",
+      "size": 564
+    },
+    "return_codes.json": {
+      "sha256": "3339fa9504b985254eab56ab1df04acd772a40ef88480725b1b86a29e0c5e28f",
+      "size": 694
+    },
+    "src/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "src/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "c535e92e6fdef15a485d45a8fe2bc33aad5b9d314132e127eb0d0a70a47539e1",
+      "size": 207
+    },
+    "src/adapters/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "src/adapters/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "3151ea90ca581ff2805cf9eceb5497db2b1d046f0894b1885bc15ed7077e6605",
+      "size": 216
+    },
+    "src/adapters/__pycache__/quantitative_extraction_runtime.cpython-313.pyc": {
+      "sha256": "7b5bd6d7b86333cf60ed9dab2b7e362e463f31cd512c3b6a98834084b065864e",
+      "size": 5291
+    },
+    "src/adapters/__pycache__/thematic_analysis_runtime.cpython-313.pyc": {
+      "sha256": "d9041538fb78fc6accacd11791149f98bb3d87a7808f5a9caa243e8a74837af1",
+      "size": 9256
+    },
+    "src/adapters/extraction_runtime.py": {
+      "sha256": "421c5155284b174eb72f701d2e3476779c6dd8e00e9889488ee9050ca504043d",
+      "size": 40188
+    },
+    "src/adapters/quantitative_extraction_runtime.py": {
+      "sha256": "ae30eef514f625a7d32e3196f058042ac39d9e16513dfdfe9ee65f9d8f4f961f",
+      "size": 3493
+    },
+    "src/adapters/thematic_analysis_runtime.py": {
+      "sha256": "1a5e8166276ba8f4d169f90b3aead1047014166539f135901a3382fd8505fee2",
+      "size": 6913
+    },
+    "src/agents/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "src/agents/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "d8d9e629f46ddbfde27d4c358bf8ea0d9c10463f8815ed52bd6f7f40042d1497",
+      "size": 214
+    },
+    "src/agents/__pycache__/extraction_agent.cpython-313.pyc": {
+      "sha256": "4e478e8376d0daec293c3e60de348148a75a56e98634ad4ed1b955188462a60c",
+      "size": 51103
+    },
+    "src/agents/__pycache__/thematic_analysis_agent.cpython-313.pyc": {
+      "sha256": "3e34ff65d981adc39ed88690ddc6dc192666ddcdface35c449e463d41fab4d10",
+      "size": 10458
+    },
+    "src/agents/extraction_agent.py": {
+      "sha256": "d6a20ffbec6628f55aa6212bd158a10ea8a138e02c94a09404d89325fd4733c1",
+      "size": 68976
+    },
+    "src/agents/thematic_analysis_agent.py": {
+      "sha256": "de829a55d2f6b6d6957d6e328b19829e920478d31d98515a398b0a6cc1ee4a03",
+      "size": 5989
+    },
+    "src/bootstrap/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "src/bootstrap/project_bootstrap.py": {
+      "sha256": "eb760500ce20653f8dab9ac1d683f4d47c57b784bb33d2e8bd841848614b9f71",
+      "size": 18510
+    },
+    "src/capabilities/__init__.py": {
+      "sha256": "5d2aeab17c8939a84ec88c82a05884ee97553177ad6c282f2f3399e8e80f612b",
+      "size": 70
+    },
+    "src/capabilities/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "1fab17f88f4eec8336fe89c7984f481e103acf3768bc80ab305be70339459d6e",
+      "size": 298
+    },
+    "src/capabilities/__pycache__/quantitative_extraction.cpython-313.pyc": {
+      "sha256": "f1486ebc597df95779aabdd965d735ed5715ae3d7b983895d5254952f75d6bb6",
+      "size": 14764
+    },
+    "src/capabilities/quantitative_extraction.py": {
+      "sha256": "d7b32da7b51047e57c670a581e9eeae86b034081803fefd65a028115d6e400af",
+      "size": 11488
+    },
+    "src/config/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "src/config/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "59afb5c162475be2d94d4cfc9c25232d00dafd9fe755877267472d4c3c79256e",
+      "size": 214
+    },
+    "src/config/__pycache__/quantitative_extraction_policy_config.cpython-313.pyc": {
+      "sha256": "bad6b0b89eaa0d1d54d7e574e0c733de6f2222f0daf3915df8ff8809fb87a012",
+      "size": 3437
+    },
+    "src/config/__pycache__/thematic_analysis_policy_config.cpython-313.pyc": {
+      "sha256": "e380ef0480879ad65c94362d655db45bc030c10a8e31e06d9b92889678130abd",
+      "size": 1656
+    },
+    "src/config/common_config.py": {
+      "sha256": "cbffe02e667ff4ee8aba01a42e812261a056a914da46d410d2a61ba6993ebdb6",
+      "size": 19660
+    },
+    "src/config/generation_policy_config.py": {
+      "sha256": "48ac5e464f3065d75428271eda4fd2fe64831d438b45a08b869e41624cb4732e",
+      "size": 15443
+    },
+    "src/config/quantitative_extraction_policy_config.py": {
+      "sha256": "b5769905bbef7f2af204b038ef727f2499ba0f0ff5b6e61be55732797a99ace3",
+      "size": 2944
+    },
+    "src/config/thematic_analysis_policy_config.py": {
+      "sha256": "54cef578564cf5cf4c40ffeb1073530aa5ee10aa2293f63db577523c08cf16bd",
+      "size": 1354
+    },
+    "src/contracts/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "src/contracts/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "305ad955f69d382d4515fa9741697a0351f12c7ea9c0ac0d668798be1d1b71e2",
+      "size": 217
+    },
+    "src/contracts/__pycache__/agent_input.cpython-313.pyc": {
+      "sha256": "168534196e26f216ecb3f50b0bc165918440899b9c6249285dc845327b6d2fc9",
+      "size": 19817
+    },
+    "src/contracts/__pycache__/agent_result.cpython-313.pyc": {
+      "sha256": "730e7b9cffa68c5d12fe18d0f968af033eb56c350943f86a6d493445ec2d75c3",
+      "size": 20562
+    },
+    "src/contracts/agent_input.py": {
+      "sha256": "7496894a483595a87c6f45f1f22add16a149d21d16d4ff645d06c6690780cefb",
+      "size": 13221
+    },
+    "src/contracts/agent_result.py": {
+      "sha256": "b45bf47c49755979f7901613d952614feeca5bf3601d10df5433c521915617f9",
+      "size": 15302
+    },
+    "src/io/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "src/io/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "6f3fc64db582e9833b336d2a14899c36abea9a9fb881734d08a45cf8ec24f77c",
+      "size": 210
+    },
+    "src/io/__pycache__/atomic_write.cpython-313.pyc": {
+      "sha256": "c9bcee5eeae92365318024540b06a1f492d0bb6ed4e27e5cba84ec32964c460b",
+      "size": 16490
+    },
+    "src/io/__pycache__/credentials.cpython-313.pyc": {
+      "sha256": "c68ce550a5b76952af5012429ec47041f1e04226ffc6e3c4fbabe3178dab5a65",
+      "size": 9266
+    },
+    "src/io/atomic_write.py": {
+      "sha256": "25747667964e462b87c22691feadcbeb78f40023fa90d76a32196586a4d58b4a",
+      "size": 11976
+    },
+    "src/io/credentials.py": {
+      "sha256": "8704ef5bd3dc2ea94a58876b5bf93f43978bc2a8ffd76edc94c16a75750ff982",
+      "size": 6861
+    },
+    "src/runtime/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "src/runtime/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "57e00d490f3e0a8e53ff7025cb950a42bbe13cc1fc122ef37eaa60afc3a0d2d1",
+      "size": 215
+    },
+    "src/runtime/__pycache__/extraction_protocol.cpython-313.pyc": {
+      "sha256": "972aff750b86566a43672ff7e3e7f45482c124636adff0540545c9d0160bbb10",
+      "size": 10960
+    },
+    "src/runtime/__pycache__/quantitative_extraction_protocol.cpython-313.pyc": {
+      "sha256": "f5cdb8c970563305afa655cee70025e078448f9e564d572a61af18d828077462",
+      "size": 7315
+    },
+    "src/runtime/__pycache__/thematic_analysis_protocol.cpython-313.pyc": {
+      "sha256": "8fb6f33082ebe9a9f2cbee5242c906a5e17f7da28616d679035ec8db56d4e944",
+      "size": 7481
+    },
+    "src/runtime/extraction_protocol.py": {
+      "sha256": "dcedfc152b3970d95ecfc7c674d41dd63d358dd2246077b85652fd2687fb1e3f",
+      "size": 10231
+    },
+    "src/runtime/quantitative_extraction_protocol.py": {
+      "sha256": "758f67125cc2f5b585fecc92eb788606a2e94eb24b27ea43b638147389a0952e",
+      "size": 4436
+    },
+    "src/runtime/thematic_analysis_protocol.py": {
+      "sha256": "4862e427df8af9fd67ccd55f811d6835019412c2e57c6a710c403d66f0350eb1",
+      "size": 4725
+    },
+    "src/state/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "src/state/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "406ad587be42e1ab053d79ab5d5ee36757f0b901ef3a04291b93c53d2536b845",
+      "size": 213
+    },
+    "src/state/__pycache__/fingerprints.cpython-313.pyc": {
+      "sha256": "622a0ca32742e7caed5e8fc256e880563c70e2e533698313be7f1da73d3eb78d",
+      "size": 7827
+    },
+    "src/state/__pycache__/pipeline_state.cpython-313.pyc": {
+      "sha256": "8de690ac302b222d48ecf0e6b7784b8ff8e074901dfa6b3e0953d3889c6a5d13",
+      "size": 35862
+    },
+    "src/state/__pycache__/state_store.cpython-313.pyc": {
+      "sha256": "651a466558d05aee16955270a87db61499f93a745189378d3597b1667117b4a2",
+      "size": 16369
+    },
+    "src/state/fingerprints.py": {
+      "sha256": "22530976d8187f39c79e4db6b970061cb0d8d18374f155522294d603b75706c0",
+      "size": 5458
+    },
+    "src/state/pipeline_state.py": {
+      "sha256": "fbe086b5fe36dae55770917d609d1bf5871c52007001bba2f499e573cbe7c82b",
+      "size": 27697
+    },
+    "src/state/state_store.py": {
+      "sha256": "84beb973abb65ff4fe6cc199128961e9fee9d5c67da0a4d618110465b5a1d5c7",
+      "size": 12313
+    },
+    "src/tools/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "src/tools/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "21e72584062e77c2435d9536548a5a16088f7dc36ac1c996636da9c12bc169bf",
+      "size": 213
+    },
+    "src/tools/extraction/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "src/tools/extraction/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "29ed5b7901aa541d74c5798432db321532d3d34436612125a3ebaeb45684c958",
+      "size": 224
+    },
+    "src/tools/extraction/__pycache__/card_extraction.cpython-313.pyc": {
+      "sha256": "614b359f65900d68ea05ce4642e0f792fd6d229819d17c6013e88bd248c9f678",
+      "size": 9804
+    },
+    "src/tools/extraction/__pycache__/card_validation.cpython-313.pyc": {
+      "sha256": "0676eab58f3bfe17fb35f10fa7991408304c4c724652f06f8b95868c4c29b952",
+      "size": 7012
+    },
+    "src/tools/extraction/__pycache__/chunk_validation.cpython-313.pyc": {
+      "sha256": "5f180e5e129ac6f692c5d0a4ce0271f7375cec9d064c96b9f7e708d104a23520",
+      "size": 5297
+    },
+    "src/tools/extraction/__pycache__/knowledge_base.cpython-313.pyc": {
+      "sha256": "9f2e0e55a152a464fafed7112732abb7ce17915353fc3c7f9d2001008494fce0",
+      "size": 4478
+    },
+    "src/tools/extraction/__pycache__/relevance_classification.cpython-313.pyc": {
+      "sha256": "0a8cfece9db09a44cd805afc43711c550cbf5d1ea9862af3b77af4850399141d",
+      "size": 8115
+    },
+    "src/tools/extraction/__pycache__/retrieval.cpython-313.pyc": {
+      "sha256": "7162f56ee920caafe8cd520d1f03651ac0044361a670d404346749e3dc119e5e",
+      "size": 5520
+    },
+    "src/tools/extraction/__pycache__/revision_strategy.cpython-313.pyc": {
+      "sha256": "17d87626f472403c1d56149de86c915719b0b54d23bca8508d980b1f65556a79",
+      "size": 7499
+    },
+    "src/tools/extraction/__pycache__/stage_artifacts.cpython-313.pyc": {
+      "sha256": "05358cd427e8bb34f0a8282100ebeabf9cd6151a1c182a8ce0037cb49c00ada7",
+      "size": 17850
+    },
+    "src/tools/extraction/__pycache__/title_repair.cpython-313.pyc": {
+      "sha256": "52fd1eed21f088b9f450d9d008aec7798e99e7c1d99e2b43e7a31195f2163821",
+      "size": 5269
+    },
+    "src/tools/extraction/card_extraction.py": {
+      "sha256": "800e2d1761771fd5f32e8a71e19776fc413089bee7828d1ab685a9eacf99598b",
+      "size": 12215
+    },
+    "src/tools/extraction/card_validation.py": {
+      "sha256": "795a16465dd4d30c740b3baf999f987747c3e2f69de34e7d5c110794a1716bcc",
+      "size": 7145
+    },
+    "src/tools/extraction/chunk_validation.py": {
+      "sha256": "e1cc66dc283a501e6d887ed07177c763f258c58dd2efaeaa15f9eba20fae6cb2",
+      "size": 3838
+    },
+    "src/tools/extraction/knowledge_base.py": {
+      "sha256": "d5a4523c90b14de6f5ee2e23e30f3a8a86657ba36771f49ffbcda85a019c674e",
+      "size": 5765
+    },
+    "src/tools/extraction/relevance_classification.py": {
+      "sha256": "12462c0eb5206557f27270f19045b5a6498c30fd7273ca7685a71b9c83b44ea6",
+      "size": 6887
+    },
+    "src/tools/extraction/retrieval.py": {
+      "sha256": "8fd0f6d87fd5d0eacb9af458ca5580258bd64daf31c8f2e9aea7dc1b4ff60c03",
+      "size": 6079
+    },
+    "src/tools/extraction/revision_strategy.py": {
+      "sha256": "00b552c7cf6377a731f5a8df9dabcda2e29fe0323876043579b74114efb2b24b",
+      "size": 5782
+    },
+    "src/tools/extraction/stage_artifacts.py": {
+      "sha256": "1f7b70e733af796665aec43a8db5cc5cc801b3dde3ef741bbfcbba703f4e12f3",
+      "size": 20568
+    },
+    "src/tools/extraction/title_repair.py": {
+      "sha256": "b7d170818cd7845f7d183b212549fff409d69b3f8783d291516e633e0bf60762",
+      "size": 5181
+    },
+    "src/tools/quantitative_extraction/__init__.py": {
+      "sha256": "adc3c17df20f0359968683b63ba3a78ed15eac639ffb930a4e0c4999efd1d3b1",
+      "size": 52
+    },
+    "src/tools/quantitative_extraction/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "06ac4780406bb990ecb877d0a4efe817fe95fdb320742ea87eff4b3e0828e6bd",
+      "size": 297
+    },
+    "src/tools/quantitative_extraction/__pycache__/artifacts.cpython-313.pyc": {
+      "sha256": "99252df296c80e70af1ad2dda302a9c19b314f8e610c364ebbe7d1250a55a9df",
+      "size": 7884
+    },
+    "src/tools/quantitative_extraction/__pycache__/evidence_verification.cpython-313.pyc": {
+      "sha256": "aeec37d55ebe1bdeed5d96334b0722109c0db5dce9bf54dcd64c1a8cb98f6939",
+      "size": 2693
+    },
+    "src/tools/quantitative_extraction/__pycache__/extraction.cpython-313.pyc": {
+      "sha256": "128e93db41437662c4a72b9d0c3122cb65e4c0f8c20e784c5b5fb7c82e42cab4",
+      "size": 3297
+    },
+    "src/tools/quantitative_extraction/__pycache__/input_validation.cpython-313.pyc": {
+      "sha256": "8cc2111a1da24a85c6636a39fd5f977383ad2e8f026f7fb91abf7ffa7836eb6c",
+      "size": 8101
+    },
+    "src/tools/quantitative_extraction/__pycache__/normalization.cpython-313.pyc": {
+      "sha256": "fe3189ea8e20f30feea3a313e4deb402cc4bd0ea162e35636c420b06c3fefb2f",
+      "size": 19549
+    },
+    "src/tools/quantitative_extraction/__pycache__/prompting.cpython-313.pyc": {
+      "sha256": "527091e760592cf234ee98075709a05f2a48ccb2c51886ea5a7948c2e6a8e312",
+      "size": 1626
+    },
+    "src/tools/quantitative_extraction/__pycache__/quality.cpython-313.pyc": {
+      "sha256": "188225f541155e37e3d70e8575e2becf4d97ebc79a537b6250d5bccb19d12d50",
+      "size": 4615
+    },
+    "src/tools/quantitative_extraction/__pycache__/source_context.cpython-313.pyc": {
+      "sha256": "87105d92c99165a44d4c4142fc1cb522a1cc60dcc7e62f3c0060f61870bd3740",
+      "size": 1979
+    },
+    "src/tools/quantitative_extraction/artifacts.py": {
+      "sha256": "a4d48ef2711f33a69fc8909777da35682f832537c6d76657be9d980bacb636c5",
+      "size": 6443
+    },
+    "src/tools/quantitative_extraction/evidence_verification.py": {
+      "sha256": "379cb24807d9b9fdf39b1e97ba835c4e9f830e3ff0ef4c91212c85029618bdc1",
+      "size": 1465
+    },
+    "src/tools/quantitative_extraction/extraction.py": {
+      "sha256": "ff020258d00c964db0e8fd4ffe8fd747aac17c2b8cd2f3acd62518fc9d68bd6f",
+      "size": 1937
+    },
+    "src/tools/quantitative_extraction/input_validation.py": {
+      "sha256": "42fef7a71eeb89ddbba508b23c1de7459a963bae37ee269be94c0145323f69df",
+      "size": 4833
+    },
+    "src/tools/quantitative_extraction/normalization.py": {
+      "sha256": "6d485c23c3e2f230b0e828647522d990a3e1d4108673780296f40affdb517734",
+      "size": 16744
+    },
+    "src/tools/quantitative_extraction/prompting.py": {
+      "sha256": "d82f4ecff8ed0d5f1c886cd8da559f14d0ea7c5409923050c1f6635ab210c8c2",
+      "size": 1080
+    },
+    "src/tools/quantitative_extraction/quality.py": {
+      "sha256": "8cac73d2b38947e79f2f584416ab14d2e5244dbbb164a86287a215bba2bdb38e",
+      "size": 3292
+    },
+    "src/tools/quantitative_extraction/source_context.py": {
+      "sha256": "11e24ea25ab809ecc6eab655f9633df56899b156a2d7a555f06c8031123b6af7",
+      "size": 1033
+    },
+    "src/tools/thematic_analysis/__init__.py": {
+      "sha256": "d0f62ff73ce2472aa19d1cca6557ece16c546951403e2a02a13e11c638ba3a38",
+      "size": 375
+    },
+    "src/tools/thematic_analysis/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "22885608ec22be3737f54667fa370cf715b4857564421d1181411fcc5f7f57e7",
+      "size": 601
+    },
+    "src/tools/thematic_analysis/__pycache__/artifacts.cpython-313.pyc": {
+      "sha256": "42204aca77bf63a73b8395162cef9e5269b39189a568269d7995e970bde2fb02",
+      "size": 10285
+    },
+    "src/tools/thematic_analysis/__pycache__/context_builder.cpython-313.pyc": {
+      "sha256": "801a03d51c0b17a0afaeae52e830ed271730f2b4ac3666b87d0548a5210138c2",
+      "size": 1581
+    },
+    "src/tools/thematic_analysis/__pycache__/corpus_filtering.cpython-313.pyc": {
+      "sha256": "f54226b27ce3a7a5087452088b61aec409b41f8365f9f1b61625099c60a87017",
+      "size": 1439
+    },
+    "src/tools/thematic_analysis/__pycache__/coverage_validation.cpython-313.pyc": {
+      "sha256": "d19457f949e334918827c5aa4bad6ac269660de83b5b0f7866ec2f1ffe96a28f",
+      "size": 4641
+    },
+    "src/tools/thematic_analysis/__pycache__/deterministic_repair.cpython-313.pyc": {
+      "sha256": "630f68e58bc53a2ba9c67dd2844ee358cf71cd9337cfe2aafbde9f3a2b7247c1",
+      "size": 7443
+    },
+    "src/tools/thematic_analysis/__pycache__/input_validation.cpython-313.pyc": {
+      "sha256": "bea8f8e374143aaad9f80eeee1acc939a717aec4938bd50321f57a396e48f835",
+      "size": 6903
+    },
+    "src/tools/thematic_analysis/__pycache__/prompting.cpython-313.pyc": {
+      "sha256": "1d6bf8d9cd56fb0884d3bc0978df46c842fd8fc1d5ee183e0ed227b2834a0e56",
+      "size": 1316
+    },
+    "src/tools/thematic_analysis/__pycache__/quality.cpython-313.pyc": {
+      "sha256": "19faed43d5c5837f2fb0b9369b13a6e72d6695b52aecaac07353c144ff283d4d",
+      "size": 2016
+    },
+    "src/tools/thematic_analysis/__pycache__/quantitative_context.cpython-313.pyc": {
+      "sha256": "7c379a12faf98a0e60ce0c0c96a28ccc5b3dee4e5699460e35743dbf168b5cad",
+      "size": 2306
+    },
+    "src/tools/thematic_analysis/__pycache__/reference_validation.cpython-313.pyc": {
+      "sha256": "2d3a3d7e61e722f9d7226d6cde4a7675357540b4f1ee6bb3b54d21f2fece0fc1",
+      "size": 3869
+    },
+    "src/tools/thematic_analysis/__pycache__/repair_strategy.cpython-313.pyc": {
+      "sha256": "a71e48626c201bc13257f8817e83e479d1cc3a89a110d5e0cac842a669f775b1",
+      "size": 2446
+    },
+    "src/tools/thematic_analysis/__pycache__/schema_validation.cpython-313.pyc": {
+      "sha256": "03a73f8610f406fe03ac9d5964745c06fd1b6f5d629951aa87bbcc2892123bfb",
+      "size": 13574
+    },
+    "src/tools/thematic_analysis/artifacts.py": {
+      "sha256": "10c0c7a296e52f243c568e4f58dae63354b281db666926afd97a70a3b21a1c63",
+      "size": 4821
+    },
+    "src/tools/thematic_analysis/context_builder.py": {
+      "sha256": "06202e8527ce32b587ba4ee2a2971ac4582123725fe71caa92880b868dc8a87c",
+      "size": 683
+    },
+    "src/tools/thematic_analysis/corpus_filtering.py": {
+      "sha256": "b037387da59307c5fe077190de8b61fefeff14eaef1292468f75453c5884fa15",
+      "size": 534
+    },
+    "src/tools/thematic_analysis/coverage_validation.py": {
+      "sha256": "ed6c6b20fb7786e897bc477029ed979055386e16891be647c361006ebd7a63c8",
+      "size": 2566
+    },
+    "src/tools/thematic_analysis/deterministic_repair.py": {
+      "sha256": "d1d1ddd8298e9f7619fd369edaecb2cd2aef79d8d7c7463e141d9bd89a35e806",
+      "size": 6287
+    },
+    "src/tools/thematic_analysis/input_validation.py": {
+      "sha256": "7525fce9d573047035fd083734ce32d52413f4ba6aadf4b44f67d78774144d06",
+      "size": 3470
+    },
+    "src/tools/thematic_analysis/prompting.py": {
+      "sha256": "a246dc1b9e859f60cba19310761cba27a2efb2a256fb6c9caa0b4d2dafdaa7f2",
+      "size": 998
+    },
+    "src/tools/thematic_analysis/quality.py": {
+      "sha256": "6b6b3b402f7d6240319d467fc6934228c8414256e70c8b3938f46e86a166e4b2",
+      "size": 1510
+    },
+    "src/tools/thematic_analysis/quantitative_context.py": {
+      "sha256": "c5d75bd19b236cf3389b95f8420d3780fafbc7d953792de4ee3509d52b83083c",
+      "size": 1413
+    },
+    "src/tools/thematic_analysis/reference_validation.py": {
+      "sha256": "fe189dd40e675672d5458a49c52baaac4a90080fd14405e1e528e748664d14c2",
+      "size": 1985
+    },
+    "src/tools/thematic_analysis/repair_strategy.py": {
+      "sha256": "ff9c048965c3222ed71d816580a82472430ab38ddc2de8065c69c018b0b31b6a",
+      "size": 1608
+    },
+    "src/tools/thematic_analysis/schema_validation.py": {
+      "sha256": "b9817aa9555844bab062506f750afbdca7c09fa7f1e422eac2e09ab6fa1f3078",
+      "size": 11643
+    },
+    "test_report.txt": {
+      "sha256": "0d46ac8cfdf0173cf7a34168a11037a9d20b3c74c2ce84ba3dc61e9bc6b08b94",
+      "size": 723
+    },
+    "tests/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "tests/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "059a96e26556da8d4478546d29de389ca2c8ca13d2febeea4ecb6d1a335f80c1",
+      "size": 209
+    },
+    "tests/integration/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "tests/integration/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "1c38bcd6d7d308689ce8bfea12dee9cfcf22a33dc4d95a1fb3a6667fdecfb3d6",
+      "size": 221
+    },
+    "tests/integration/run_03b_controlled.py": {
+      "sha256": "9eb84fa99bc0e853afd6451525ceb92b8cc20613142083e4948aba56ce9d0d39",
+      "size": 942
+    },
+    "tests/integration/run_direct_module_call.py": {
+      "sha256": "b9b83d4e2a0d5d64b00040fc9522c538909531a64f8a94816f41df3a993d3bf2",
+      "size": 1181
+    },
+    "tests/integration/run_notebook_precheck.py": {
+      "sha256": "e9587a814ef15b267aed1fd3e9318d13401840cada23308c8bc7cb0058e9f64b",
+      "size": 3265
+    },
+    "tests/integration/run_notebook_structure_preflight.py": {
+      "sha256": "924fce80ac395b4213d307b7576c7671372fc5c23fe4ab5a22cca425f62f87f6",
+      "size": 1488
+    },
+    "tests/integration/run_real_config_integration.py": {
+      "sha256": "f8936f09964a82e9696fe0e06f973ee0706b1c54e2e5ecb509d0a0248a7e2347",
+      "size": 17520
+    },
+    "tests/integration/run_real_notebook_transaction.py": {
+      "sha256": "a06cee758ad8e139258bf488337138f89330200cf72ef8c2c6dbd3c2966fb80d",
+      "size": 4172
+    },
+    "tests/v16/__init__.py": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    "tests/v16/__pycache__/__init__.cpython-313.pyc": {
+      "sha256": "6545427202492ae3b34778397eebe54bcaf602f870ef1ab2827beabaf16d2150",
+      "size": 213
+    },
+    "tests/v16/__pycache__/agent_environment.cpython-313.pyc": {
+      "sha256": "df70bd89cdc09eea055feea2a6f430c89da52fb30fe38b492bf1f8fbeea1e0e0",
+      "size": 11647
+    },
+    "tests/v16/__pycache__/extraction_agent_doubles.cpython-313.pyc": {
+      "sha256": "8dd92980e815af43fb35a4fafff03195ddeff5053b5d5cbce2a2c9890709c7db",
+      "size": 10151
+    },
+    "tests/v16/__pycache__/test_agent04_behavior_preserving_v16.cpython-313.pyc": {
+      "sha256": "4d1c2d66b5f015913888824e8bfeb7e4bf6ec86df41ef75b1f0d2cfc45963532",
+      "size": 5156
+    },
+    "tests/v16/__pycache__/test_agent04_colab_operational_fix_v16.cpython-313.pyc": {
+      "sha256": "c9e76a5dd98183dffff3f614cd4d33b96536c3585dfd78fb2a87ebeb2d2cacd4",
+      "size": 9472
+    },
+    "tests/v16/__pycache__/test_agent04_deterministic_flattening_repair_v16.cpython-313.pyc": {
+      "sha256": "f13e3d75e1930380e6dd11ad66554847d644acd914cca47879cc88a44b50e55d",
+      "size": 11306
+    },
+    "tests/v16/__pycache__/test_agent04_v16.cpython-313.pyc": {
+      "sha256": "dd9cd7268be12996a5dc0a90e5b4fe94ebd947290bdb981baa458028507dd353",
+      "size": 28582
+    },
+    "tests/v16/__pycache__/test_alignment_v16.cpython-313.pyc": {
+      "sha256": "067098688a7dad6e5a0c559e37e920c1e6763fe4c2710cdffd9884cdafdfda88",
+      "size": 23119
+    },
+    "tests/v16/__pycache__/test_attempt2_directed.cpython-313.pyc": {
+      "sha256": "bfbb48a71c8f364ce1faac1136d83eb8f6fc31052e0dc86644814d184adc4783",
+      "size": 11504
+    },
+    "tests/v16/__pycache__/test_dataset_normalization_repair_v16.cpython-313.pyc": {
+      "sha256": "2230f3243cacddee725fa92abd2d6e903c57562f54003f5fff217770650d19cc",
+      "size": 10768
+    },
+    "tests/v16/__pycache__/test_flattening_repair_v16.cpython-313.pyc": {
+      "sha256": "7986d7f6ee6bcf9d1a1f8e92e641b66fe00a66df84e984ed51b97e41fd05df8f",
+      "size": 12145
+    },
+    "tests/v16/__pycache__/test_notebook_03b_v16.cpython-313.pyc": {
+      "sha256": "723848e032445a0c58e0be42fd6137500db73a9ede30dc05e1d859189b2f5e50",
+      "size": 3423
+    },
+    "tests/v16/__pycache__/test_quantitative_capability_v16.cpython-313.pyc": {
+      "sha256": "61d51a2b20e628280fa793fe3467530bdc973db95f85a281807c17ac8332c6b2",
+      "size": 24936
+    },
+    "tests/v16/agent_environment.py": {
+      "sha256": "7207d4a70e3b0794a884e02ae47e1193dfd36a6cb38b84c7fd3ea0678caf8f40",
+      "size": 14333
+    },
+    "tests/v16/extraction_agent_doubles.py": {
+      "sha256": "3e75b8c9371acf0e95f760ccb15ef36bd67587575d864ff153d44277b493cbe6",
+      "size": 8812
+    },
+    "tests/v16/test_agent04_behavior_preserving_v16.py": {
+      "sha256": "50940dc2ae02fa9938f5fb123d302420cecfb217ecbe66f676048ff57c99c784",
+      "size": 3156
+    },
+    "tests/v16/test_agent04_colab_operational_fix_v16.py": {
+      "sha256": "e70a53022072169b7428499d4aaa85750ff678e9302ace8050652255a909f1a2",
+      "size": 5671
+    },
+    "tests/v16/test_agent04_deterministic_flattening_repair_v16.py": {
+      "sha256": "dd4c8b472525ff8107015ae005f95ff4e286c5ea0d1e4f033b79a8367b66101b",
+      "size": 5479
+    },
+    "tests/v16/test_agent04_v16.py": {
+      "sha256": "b01d5f3e40ab64fc2ec2faaaaadbef5ce7ce488417cd17fac3ff3dda73833f45",
+      "size": 10886
+    },
+    "tests/v16/test_alignment_v16.py": {
+      "sha256": "42c892409df7370e60989d7987342635a3d51c039b183667456774da2a8ea42d",
+      "size": 15601
+    },
+    "tests/v16/test_attempt2_directed.py": {
+      "sha256": "7e241b9e0b4dd0aba32ad085febe6760c49b0aaa0829e721d090b45982ad9cb0",
+      "size": 7259
+    },
+    "tests/v16/test_dataset_normalization_repair_v16.py": {
+      "sha256": "9d9023b89ccd1e58564b209ec9a2c10325c16938945f31cf54858ebb1455b1c8",
+      "size": 6329
+    },
+    "tests/v16/test_flattening_repair_v16.py": {
+      "sha256": "492f9b1c2cf42c8aa89f5cdfbb7b72b59a0df095fdfb4168b74e85029b29846b",
+      "size": 7013
+    },
+    "tests/v16/test_notebook_03b_v16.py": {
+      "sha256": "79564fc9f74e88535d429e1a3b4366340df1193e4f8f8130b82286ac317090f2",
+      "size": 1141
+    },
+    "tests/v16/test_quantitative_capability_v16.py": {
+      "sha256": "8aedd65fc19bf58e3f9e364c88500b2096a4e67789a31dfe5d83fcf1a1a8f789",
+      "size": 12911
+    }
+  },
+  "test_command": "python -m unittest discover -s tests -p \"test_*.py\"",
+  "test_result": "OK",
+  "preserved_manifest_status_validation": true,
+  "final_test_duration_seconds": 2.932
 }

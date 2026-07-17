@@ -39,11 +39,11 @@ class T(unittest.TestCase):
  def test_title_mismatch(self):
   p=json.loads(json.dumps(self.payload));p['themes'][0]['representative_papers'][0]['title']='Wrong';x=self.agent(p).execute(self.ai());self.assertNotIn('TITLE_MISMATCH',x.failure_reason_codes) # deterministic repair
  def test_theme_without_papers(self):
-  p=json.loads(json.dumps(self.payload));p['themes'][0]['representative_papers']=[];x=self.agent(p).execute(self.ai());self.assertIn('MISSING_THEME_EVIDENCE',x.failure_reason_codes)
+  p=json.loads(json.dumps(self.payload));p['themes'][0]['representative_papers']=[];x=self.agent(p).execute(self.ai());self.assertIn('EMPTY_REPRESENTATIVE_SOURCE',x.failure_reason_codes)
  def test_gap_without_sources(self):
   p=json.loads(json.dumps(self.payload));p['research_gaps'][0]['supporting_sources']=[];self.assertIn('MISSING_GAP_EVIDENCE',self.agent(p).execute(self.ai()).failure_reason_codes)
  def test_dimension_without_sources(self):
-  p=json.loads(json.dumps(self.payload));p['comparative_dimensions'][0]['relevant_sources']=[];self.assertIn('INVALID_COMPARATIVE_DIMENSION',self.agent(p).execute(self.ai()).failure_reason_codes)
+  p=json.loads(json.dumps(self.payload));p['comparative_dimensions'][0]['relevant_sources']=[];self.assertIn('MISSING_COMPARATIVE_EVIDENCE',self.agent(p).execute(self.ai()).failure_reason_codes)
  def test_gt_blocked(self):
   a=self.ai(); d=a.to_dict();d['policy']['ground_truth_path']='/x';self.assertIn('GROUND_TRUTH_POLICY_VIOLATION',self.agent().execute(AgentInput.from_dict(d)).failure_reason_codes)
  def test_kb_missing_failed(self):

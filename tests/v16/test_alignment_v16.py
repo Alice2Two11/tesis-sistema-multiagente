@@ -29,7 +29,12 @@ from tests.v16.agent_environment import ExtractionAgentEnvironment
 from tests.v16.extraction_agent_doubles import complete_card
 
 ROOT = Path(__file__).resolve().parents[2]
-PRESERVED = json.loads((ROOT / "preserved_sha256.json").read_text())
+payload = json.loads((ROOT / "preserved_sha256.json").read_text())
+if payload.get("status") != "ALL_PROTECTED_FILES_PRESERVED":
+    raise AssertionError(
+        "preserved_sha256.json status must be ALL_PROTECTED_FILES_PRESERVED"
+    )
+PRESERVED = payload["files"]
 
 
 def clone_input(

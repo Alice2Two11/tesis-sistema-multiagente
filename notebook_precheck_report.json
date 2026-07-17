@@ -1,9 +1,11 @@
 {
   "status": "OK",
-  "notebook": "04_agente_analisis_tematico_migrado_v16.ipynb",
   "mode": "PRECHECK",
   "clean_kernel": true,
+  "bootstrap_imports_ok": true,
+  "pipeline_state_path": "PROJECT_DIR/experiment_id/05_outputs/00_orchestrator_planner/pipeline_state.json",
   "transaction_executed": false,
-  "real_services_called": false,
-  "executed_code_cells": 3
+  "credentials_resolved": false,
+  "openai_called": false,
+  "module_not_found_error": false
 }

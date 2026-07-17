@@ -1,65 +1,19 @@
 {
-  "threshold_status": "PROVISIONAL_NOT_SCIENTIFICALLY_VALIDATED",
-  "metrics": {
-    "paper_coverage": {
-      "type": "ratio",
-      "threshold": null
-    },
-    "theme_coverage": {
-      "type": "ratio",
-      "threshold": null
-    },
-    "papers_assigned_to_theme_rate": {
-      "type": "ratio",
-      "threshold": null
-    },
-    "supported_theme_rate": {
-      "type": "ratio",
-      "threshold": null
-    },
-    "supported_gap_rate": {
-      "type": "ratio",
-      "threshold": null
-    },
-    "valid_reference_rate": {
-      "type": "ratio",
-      "threshold": null
-    },
-    "title_match_rate": {
-      "type": "ratio",
-      "threshold": null
-    },
-    "comparative_dimension_support_rate": {
-      "type": "ratio",
-      "threshold": null
-    },
-    "unassigned_paper_rate": {
-      "type": "ratio",
-      "threshold": null
-    },
-    "duplicate_assignment_rate": {
-      "type": "ratio",
-      "threshold": null
-    },
-    "structure_source_validity_rate": {
-      "type": "ratio",
-      "threshold": null
-    },
-    "gap_source_validity_rate": {
-      "type": "ratio",
-      "threshold": null
-    },
-    "representative_source_validity_rate": {
-      "type": "ratio",
-      "threshold": null
-    },
-    "invalid_record_rate": {
-      "type": "ratio",
-      "threshold": null
-    },
-    "section_count": {
-      "type": "integer",
-      "threshold": null
-    }
-  }
+  "schema_version": "agent04_behavior_preserving_v16",
+  "scientific_metrics": {
+    "theme_coverage": "Proporción de registros temáticos con nombre válido; no representa cobertura exhaustiva de papers.",
+    "supported_theme_rate": "Proporción de temas estructuralmente válidos.",
+    "supported_gap_rate": "Proporción de gaps con descripción válida.",
+    "comparative_dimension_support_rate": "Proporción de dimensiones con nombre válido.",
+    "valid_reference_rate": "Referencias existentes sobre referencias declaradas.",
+    "title_match_rate": "Títulos coincidentes sobre pares título-fuente validados.",
+    "representative_source_validity_rate": "Validez de referencias usadas como representative_papers.",
+    "section_count": "Número de secciones sugeridas.",
+    "paper_coverage": null,
+    "papers_assigned_to_theme_rate": null,
+    "unassigned_paper_rate": null,
+    "duplicate_assignment_rate": null,
+    "coverage_semantics": "NOT_APPLICABLE_REPRESENTATIVE_PAPERS_ARE_NON_EXHAUSTIVE"
+  },
+  "threshold_status": "PROVISIONAL_NOT_SCIENTIFICALLY_VALIDATED"
 }
