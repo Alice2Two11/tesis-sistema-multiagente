@@ -35,7 +35,7 @@ class DraftWritingAgent:
             policy['section_budgets']=assign_section_budgets(sections,policy.get('target_total_words',1000))
             generated=[];all_evidence=[];attempt_logs={}
             for section in sections:
-                sid=str(section.get('section_id','')).strip();evidence=retrieve_section_evidence(section,self.runtime.collection,bundle['chunks'],int(policy.get('top_k_evidence_per_section',8)));retrieval_rounds += 1 if section.get('papers_to_use') else 0
+                sid=str(section.get('section_id','')).strip();section_query=build_section_query(section);evidence=retrieve_section_evidence(section,self.runtime.collection,bundle['chunks'],int(policy.get('top_k_evidence_per_section',8)),int(policy.get('max_evidence_chars',18000)));retrieval_rounds += 1 if section.get('papers_to_use') else 0
                 all_evidence.extend([{'section_id':sid,**r} for r in evidence])
                 if not evidence:
                     if not section_allows_no_sources(section):raise ValueError(f'MISSING_SECTION_EVIDENCE:{sid}')
@@ -68,7 +68,28 @@ class DraftWritingAgent:
                         'raw_output_path':str(raw_path),
                     }
                     validation_path=write_raw_section_validation(raw_dir,sid,generation_attempt,attempt_validation)
-                    logs.append({'attempt':generation_attempt,'validation':val,'attempt_validation_path':str(validation_path)})
+                    raw_draft_text=str(parsed.get('draft_text','')) if isinstance(parsed,dict) else ''
+                    normalized_draft_text=str(norm.get('draft_text',''))
+                    rag_trace={
+                        'section_id':sid,
+                        'generation_attempt':generation_attempt,
+                        'query':section_query,
+                        'retrieved_chunks':[
+                            {
+                                'source_filename':str(row.get('source_filename','')),
+                                'chunk_id':str(row.get('chunk_id','')),
+                                'score':float(row.get('score',0.0) or 0.0),
+                                'retrieval_method':str(row.get('retrieval_method','')),
+                                'text':str(row.get('text','')),
+                            }
+                            for row in evidence
+                        ],
+                        'allowed_citations':[f"[{row.get('source_filename','')} | {row.get('chunk_id','')}]" for row in evidence],
+                        'llm_citations':CITATION_RE.findall(raw_draft_text),
+                        'normalized_citations':CITATION_RE.findall(normalized_draft_text),
+                    }
+                    rag_trace_path=write_raw_section_rag_trace(raw_dir,sid,generation_attempt,rag_trace)
+                    logs.append({'attempt':generation_attempt,'validation':val,'attempt_validation_path':str(validation_path),'rag_trace_path':str(rag_trace_path)})
                     if val['validation_ok']:accepted=norm;break
                     previous=list(val.get('errors') or [])+citation_errors+claim_errors+numeric_errors
                 attempt_logs[sid]=logs
