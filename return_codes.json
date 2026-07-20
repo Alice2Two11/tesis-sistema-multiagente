@@ -1,10 +1,9 @@
 {
-  "UNITTEST_RETURN_CODE": 0,
-  "UNITTEST_DISCOVERED_TESTS": 181,
-  "PY_COMPILE_RETURN_CODE": 0,
-  "NOTEBOOK_PREFLIGHT_RETURN_CODE": 0,
-  "SECTION_FAILURE_TRACE_TEST_RETURN_CODE": 0,
-  "REAL_EXTERNAL_COLAB_AGENT06_RETURN_CODE": "NOT_EXECUTED_IN_CONTAINER",
-  "OPENAI_CALLED_IN_CONTAINER": false,
-  "CHROMA_REAL_CALLED_IN_CONTAINER": false
+  "unittest_return_code": 0,
+  "tests_run": 188,
+  "py_compile_return_code": 0,
+  "notebook_preflight_return_code": 0,
+  "openai_called": false,
+  "real_chroma_called": false,
+  "real_diagnostic_run_in_container": false
 }

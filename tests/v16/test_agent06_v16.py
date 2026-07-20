@@ -16,7 +16,7 @@ class Collection:
  def query(self,**kw):
   self.wheres.append(kw.get('where'))
   if self.empty:return {'documents':[[]],'metadatas':[[]],'distances':[[]]}
-  src=kw['where']['source_filename'];return {'documents':[[f'Method accuracy 95 percent from {src}.']],'metadatas':[[{'chunk_id':'c1'}]],'distances':[[0.1]]}
+  src=kw['where']['source_filename'];return {'documents':[[f'Method accuracy 95 percent from {src}.']],'metadatas':[[{'chunk_id':'c1','source_filename':src}]],'distances':[[0.1]]}
 class Runtime(DraftWritingRuntime):
  pass
 class Env:

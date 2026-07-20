@@ -1,36 +1,21 @@
 {
-  "candidate_name": "phase6_agent06_behavior_preserving_agentic_v16_section_failure_trace_candidate",
-  "status": "CANDIDATA AGENTE 06 V1.6 CON TRAZABILIDAD DE FALLO POR SECCION",
   "stage": "06_agente_redactor",
-  "agent": "DraftWritingAgent",
-  "behavior_preserving": true,
-  "root_cause": "SECTION_VALIDATION_FAILED was raised before a partial draft_validation_report.json and per-attempt validation traces were persisted.",
-  "productive_files_modified": [
+  "candidate": "phase6_agent06_behavior_preserving_agentic_v16_retrieval_restored_candidate",
+  "scope": "literal restoration of legacy retrieval behavior only",
+  "scientific_behavior_changed": false,
+  "retrieval_behavior_restored": true,
+  "tests_run": 188,
+  "tests_status": "OK",
+  "modified_files": [
     "src/agents/draft_writing_agent.py",
-    "src/tools/draft_writing/artifacts.py"
-  ],
-  "tests_added": [
-    "tests/v16/test_agent06_section_failure_trace_v16.py"
-  ],
-  "failure_translation": {
-    "attempt_1": "COMPLETED -> NEEDS_REVISION -> RETRY",
-    "attempt_2": "COMPLETED -> NEEDS_REVISION -> HALT_STAGE"
-  },
-  "partial_artifacts_on_section_failure": [
-    "draft_validation_report.json",
-    "raw_section_outputs/<section_id>_attempt_<n>.txt",
-    "raw_section_outputs/<section_id>_attempt_<n>_validation.json"
-  ],
-  "published_draft_on_failure": false,
-  "main_artifact_count_on_success": 12,
-  "suite": {
-    "command": "python -m unittest discover -s tests -p \"test_*.py\"",
-    "tests": 181,
-    "result": "OK"
-  },
-  "real_external_colab": "NOT_EXECUTED_IN_CONTAINER",
-  "openai_called_in_container": false,
-  "chroma_real_called_in_container": false,
-  "agent07_executed": false,
-  "protected_stages_modified": false
+    "src/tools/draft_writing/retrieval.py",
+    "tests/v16/test_agent06_v16.py",
+    "tests/v16/test_agent06_retrieval_restored_v16.py",
+    "run_agent06_diagnostic_rag_trace.py",
+    "AUDIT_IMPLEMENTATION_AGENT06_RETRIEVAL_RESTORED_V16.md",
+    "test_report.txt",
+    "return_codes.json",
+    "delivery_manifest.json",
+    "modified_files.txt"
+  ]
 }
