@@ -257,22 +257,36 @@ class DraftWritingAgent:
         original_validation: Mapping[str, Any],
         normalized_validation: Mapping[str, Any],
     ) -> dict[str, Any]:
-        """Require both original and canonical V17 outputs to be valid."""
+        """Use the canonical V17 validation as the effective decision.
+
+        The raw LLM response is still validated and preserved for auditability,
+        but it must not reject a section after ``normalize_generated_section``
+        has produced the canonical representation that passes every validation.
+        """
         combined: dict[str, Any] = dict(normalized_validation)
+
+        # The effective blocking errors belong to the canonical representation.
+        # Raw-response errors are retained separately for diagnosis and tracing.
         for field in ("errors", "citation_errors", "claim_errors", "numeric_errors"):
             combined[field] = cls._unique_validation_items(
-                list(original_validation.get(field) or [])
-                + list(normalized_validation.get(field) or [])
+                list(normalized_validation.get(field) or [])
             )
+            combined[f"original_{field}"] = cls._unique_validation_items(
+                list(original_validation.get(field) or [])
+            )
+
         combined["validation_ok"] = bool(
-            original_validation.get("validation_ok")
-            and normalized_validation.get("validation_ok")
+            normalized_validation.get("validation_ok")
         )
         combined["original_validation_ok"] = bool(
             original_validation.get("validation_ok")
         )
         combined["normalized_validation_ok"] = bool(
             normalized_validation.get("validation_ok")
+        )
+        combined["normalization_repaired_output"] = bool(
+            not original_validation.get("validation_ok")
+            and normalized_validation.get("validation_ok")
         )
         return combined
 
