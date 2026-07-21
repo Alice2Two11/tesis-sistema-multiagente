@@ -1,0 +1,46 @@
+{
+  "section_id": "S5",
+  "section_title": "Técnicas de preprocesamiento y clasificación para mejorar el pronóstico de irradiancia solar",
+  "draft_text": "El preprocesamiento con lógica difusa permite manejar la incertidumbre y la rápida variabilidad en variables meteorológicas, mejorando la precisión en pronósticos a muy corto plazo mediante un análisis en tiempo real que alimenta una red neuronal artificial feed-forward optimizada con Levenberg-Marquardt. La integración de un factor de corrección basado en pronósticos previos y un modelo de cielo despejado como referencia contribuye a reducir el error absoluto medio porcentual (MAPE) de 46.3% a 29.6%. La clasificación de datos meteorológicos mediante k-means clustering facilita la segmentación en tres grupos climáticos (días soleados, parcialmente nublados y nublados/lluviosos), lo que permite entrenar modelos específicos para cada condición y mejorar la exactitud del pronóstico. En particular, el uso de SVM con datos clusterizados mostró mejoras significativas en RMSE, MRE y coeficiente de determinación R2 frente a modelos NAR y ANN sin clustering. La clasificación de píxeles solares y nubosos alrededor del sol mediante k-means y la corrección de clasificaciones erróneas por brillo permiten una mejor identificación de condiciones atmosféricas locales, lo que es crucial para la predicción de movimiento de nubes y la irradiancia solar. Estas técnicas son especialmente útiles para manejar la intermitencia y variabilidad de la irradiancia en regiones con alta nubosidad o condiciones atmosféricas complejas, evidenciando mejoras cuantificables en métricas de error y reducción de costos asociados a sistemas de almacenamiento energético.",
+  "claims": [
+    {
+      "claim": "El preprocesamiento con lógica difusa permite manejar la incertidumbre y la rápida variabilidad en variables meteorológicas, mejorando la precisión en pronósticos a muy corto plazo mediante un análisis en tiempo real que alimenta una red neuronal artificial feed-forward optimizada con Levenberg-Marquardt.",
+      "supporting_citations": [
+        "[1/37.Solar_Forecasting_using_ANN_with_Fuzzy_Logic_Pre-p.pdf | d3d05d271be6db98_chunk_0001]",
+        "[1/37.Solar_Forecasting_using_ANN_with_Fuzzy_Logic_Pre-p.pdf | d3d05d271be6db98_chunk_0003]"
+      ]
+    },
+    {
+      "claim": "La integración de un factor de corrección basado en pronósticos previos y un modelo de cielo despejado como referencia contribuye a reducir el error absoluto medio porcentual (MAPE) de 46.3% a 29.6%.",
+      "supporting_citations": [
+        "[1/37.Solar_Forecasting_using_ANN_with_Fuzzy_Logic_Pre-p.pdf | d3d05d271be6db98_chunk_0009]"
+      ]
+    },
+    {
+      "claim": "La clasificación de datos meteorológicos mediante k-means clustering facilita la segmentación en tres grupos climáticos (días soleados, parcialmente nublados y nublados/lluviosos), lo que permite entrenar modelos específicos para cada condición y mejorar la exactitud del pronóstico.",
+      "supporting_citations": [
+        "[1/49.bae2016.pdf | f8b0f0723b47dd54_chunk_0033]",
+        "[1/49.bae2016.pdf | f8b0f0723b47dd54_chunk_0030]"
+      ]
+    },
+    {
+      "claim": "En particular, el uso de SVM con datos clusterizados mostró mejoras significativas en RMSE, MRE y coeficiente de determinación R2 frente a modelos NAR y ANN sin clustering.",
+      "supporting_citations": [
+        "[1/49.bae2016.pdf | f8b0f0723b47dd54_chunk_0045]",
+        "[1/49.bae2016.pdf | f8b0f0723b47dd54_chunk_0068]"
+      ]
+    },
+    {
+      "claim": "La clasificación de píxeles solares y nubosos alrededor del sol mediante k-means y la corrección de clasificaciones erróneas por brillo permiten una mejor identificación de condiciones atmosféricas locales, lo que es crucial para la predicción de movimiento de nubes y la irradiancia solar.",
+      "supporting_citations": [
+        "[1/48.1-s2.0-S0960148122015567-main.pdf | fa4c26901738dbee_chunk_0056]"
+      ]
+    },
+    {
+      "claim": "Estas técnicas son especialmente útiles para manejar la intermitencia y variabilidad de la irradiancia en regiones con alta nubosidad o condiciones atmosféricas complejas, evidenciando mejoras cuantificables en métricas de error y reducción de costos asociados a sistemas de almacenamiento energético.",
+      "supporting_citations": [
+        "[1/49.bae2016.pdf | f8b0f0723b47dd54_chunk_0068]"
+      ]
+    }
+  ]
+}

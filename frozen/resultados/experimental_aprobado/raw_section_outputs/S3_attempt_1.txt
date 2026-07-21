@@ -1,0 +1,33 @@
+{
+  "section_id": "S3",
+  "section_title": "Deep Learning Temporal y Modelos Híbridos para pronóstico de irradiancia solar y potencia fotovoltaica",
+  "draft_text": "Las arquitecturas de deep learning temporal, como LSTM y GRU, capturan eficazmente las dinámicas temporales y patrones complejos en datos meteorológicos y de irradiancia, superando a modelos tradicionales y redes neuronales feedforward en precisión de pronóstico. Por ejemplo, un modelo DRNN con LSTM reporta un RMSE de 0.068, inferior al de SVR y FNN, evidenciando su capacidad para preservar dependencias a largo plazo en series temporales [1/43.1-s2.0-S1877050917318392-main.pdf | a6d33f85b06e45e7_chunk_0031]. Los modelos híbridos que combinan CNN y LSTM integran características espaciales y temporales, mejorando la precisión en diferentes condiciones climáticas y geográficas. El modelo híbrido LSTM–CNN extrae características temporales mediante LSTM y espaciales mediante CNN a partir de matrices de correlación meteorológica, mostrando una mejora en la precisión de pronóstico de irradiancia global horizontal (GHI) con un aumento del 37%–45% en la habilidad de pronóstico respecto a modelos individuales, y estabilidad frente a variaciones estacionales y condiciones de cielo [1/58.1-s2.0-S0306261921005158-main.pdf | e1bf718cbfa6854b_chunk_0002, e1bf718cbfa6854b_chunk_0104]. La optimización de hiperparámetros mediante técnicas como búsqueda en cuadrícula y optimización bayesiana contribuye a superar problemas comunes como el desvanecimiento del gradiente y el sobreajuste, mejorando la generalización del modelo [1/59.1-s2.0-S0960148120315652-main.pdf | 4237f959d87fe007_chunk_0036, 1/47.1-s2.0-S0306261922010170-main.pdf | fe601d3747bcbeae_chunk_0013]. Sin embargo, estos modelos presentan mayor complejidad computacional y requieren tiempos de entrenamiento más prolongados, lo que puede limitar su aplicabilidad en contextos con restricciones de recursos computacionales [1/36.1-s2.0-S0960148122011387-main.pdf | 553aa823184fcd93_chunk_0047]. En síntesis, los modelos híbridos de deep learning temporal y espacial representan un avance significativo en la predicción de irradiancia solar y potencia fotovoltaica, aunque su implementación práctica debe considerar el balance entre precisión y costo computacional.",
+  "claims": [
+    {
+      "claim": "Las arquitecturas de deep learning temporal, como LSTM y GRU, capturan eficazmente las dinámicas temporales y patrones complejos en datos meteorológicos y de irradiancia, superando a modelos tradicionales y redes neuronales feedforward en precisión de pronóstico.",
+      "supporting_citations": [
+        "[1/43.1-s2.0-S1877050917318392-main.pdf | a6d33f85b06e45e7_chunk_0031]"
+      ]
+    },
+    {
+      "claim": "Los modelos híbridos que combinan CNN y LSTM integran características espaciales y temporales, mejorando la precisión en diferentes condiciones climáticas y geográficas.",
+      "supporting_citations": [
+        "[1/58.1-s2.0-S0306261921005158-main.pdf | e1bf718cbfa6854b_chunk_0002]",
+        "[1/58.1-s2.0-S0306261921005158-main.pdf | e1bf718cbfa6854b_chunk_0104]"
+      ]
+    },
+    {
+      "claim": "La optimización de hiperparámetros mediante técnicas como búsqueda en cuadrícula y optimización bayesiana contribuye a superar problemas comunes como el desvanecimiento del gradiente y el sobreajuste, mejorando la generalización del modelo.",
+      "supporting_citations": [
+        "[1/59.1-s2.0-S0960148120315652-main.pdf | 4237f959d87fe007_chunk_0036]",
+        "[1/47.1-s2.0-S0306261922010170-main.pdf | fe601d3747bcbeae_chunk_0013]"
+      ]
+    },
+    {
+      "claim": "Estos modelos presentan mayor complejidad computacional y requieren tiempos de entrenamiento más prolongados, lo que puede limitar su aplicabilidad en contextos con restricciones de recursos computacionales.",
+      "supporting_citations": [
+        "[1/36.1-s2.0-S0960148122011387-main.pdf | 553aa823184fcd93_chunk_0047]"
+      ]
+    }
+  ]
+}

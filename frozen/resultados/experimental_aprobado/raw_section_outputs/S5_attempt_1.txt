@@ -1,0 +1,31 @@
+{
+  "section_id": "S5",
+  "section_title": "Técnicas de preprocesamiento y clasificación para mejorar el pronóstico de irradiancia solar",
+  "draft_text": "El preprocesamiento con lógica difusa permite manejar la incertidumbre y variabilidad rápida en variables meteorológicas, mejorando la precisión en pronósticos a muy corto plazo, como se evidencia en la reducción del MAPE de 46.3% a 43.1% al incluir lógica difusa en un modelo ANN, y hasta 29.6% al incorporar un factor de corrección adicional [1/37.Solar_Forecasting_using_ANN_with_Fuzzy_Logic_Pre-p.pdf | d3d05d271be6db98_chunk_0024]. La clasificación y clustering de datos meteorológicos según condiciones climáticas facilita la adaptación de modelos a diferentes escenarios, incrementando la exactitud del pronóstico, como se observa en la mejora de la precisión de modelos SVM, ANN y NAR al aplicar k-means clustering para segmentar datos en días soleados, parcialmente nublados y nublados [1/49.bae2016.pdf | f8b0f0723b47dd54_chunk_0045]. El uso de modelos híbridos que integran preprocesamiento avanzado con redes neuronales y machine learning tradicional ha demostrado mejoras cuantificables en métricas de error, evidenciado en métodos que combinan detección de posición solar, clasificación de píxeles mediante k-means y predicción de movimiento de nubes con técnicas de flujo óptico, logrando mejores resultados en RMSE para predicciones a 5 minutos en comparación con métodos tradicionales [1/48.1-s2.0-S0960148122015567-main.pdf | fa4c26901738dbee_chunk_0049]. Estas técnicas son especialmente útiles para manejar la intermitencia y variabilidad de la irradiancia solar en regiones con alta nubosidad o condiciones atmosféricas complejas, dado que permiten una clasificación más precisa de nubes y cielo, corrigiendo errores de clasificación por brillo y mejorando la determinación de clases solares, nubosas y de cielo [1/48.1-s2.0-S0960148122015567-main.pdf | fa4c26901738dbee_chunk_0056].",
+  "claims": [
+    {
+      "claim": "El preprocesamiento con lógica difusa permite manejar la incertidumbre y variabilidad rápida en variables meteorológicas, mejorando la precisión en pronósticos a muy corto plazo, como se evidencia en la reducción del MAPE de 46.3% a 43.1% al incluir lógica difusa en un modelo ANN, y hasta 29.6% al incorporar un factor de corrección adicional",
+      "supporting_citations": [
+        "[1/37.Solar_Forecasting_using_ANN_with_Fuzzy_Logic_Pre-p.pdf | d3d05d271be6db98_chunk_0024]"
+      ]
+    },
+    {
+      "claim": "La clasificación y clustering de datos meteorológicos según condiciones climáticas facilita la adaptación de modelos a diferentes escenarios, incrementando la exactitud del pronóstico, como se observa en la mejora de la precisión de modelos SVM, ANN y NAR al aplicar k-means clustering para segmentar datos en días soleados, parcialmente nublados y nublados",
+      "supporting_citations": [
+        "[1/49.bae2016.pdf | f8b0f0723b47dd54_chunk_0045]"
+      ]
+    },
+    {
+      "claim": "El uso de modelos híbridos que integran preprocesamiento avanzado con redes neuronales y machine learning tradicional ha demostrado mejoras cuantificables en métricas de error, evidenciado en métodos que combinan detección de posición solar, clasificación de píxeles mediante k-means y predicción de movimiento de nubes con técnicas de flujo óptico, logrando mejores resultados en RMSE para predicciones a 5 minutos en comparación con métodos tradicionales",
+      "supporting_citations": [
+        "[1/48.1-s2.0-S0960148122015567-main.pdf | fa4c26901738dbee_chunk_0049]"
+      ]
+    },
+    {
+      "claim": "Estas técnicas son especialmente útiles para manejar la intermitencia y variabilidad de la irradiancia solar en regiones con alta nubosidad o condiciones atmosféricas complejas, dado que permiten una clasificación más precisa de nubes y cielo, corrigiendo errores de clasificación por brillo y mejorando la determinación de clases solares, nubosas y de cielo",
+      "supporting_citations": [
+        "[1/48.1-s2.0-S0960148122015567-main.pdf | fa4c26901738dbee_chunk_0056]"
+      ]
+    }
+  ]
+}

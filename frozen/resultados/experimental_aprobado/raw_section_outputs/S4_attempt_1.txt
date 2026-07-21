@@ -1,0 +1,44 @@
+{
+  "section_id": "S4",
+  "section_title": "Modelos estadísticos y técnicas de descomposición de señales para estimación y pronóstico de irradiancia solar",
+  "draft_text": "Los modelos estadísticos tradicionales para el pronóstico de radiación solar se basan en relaciones matemáticas derivadas de leyes físicas fundamentales y variables meteorológicas, pero presentan limitaciones en la disponibilidad y calidad de datos, así como en la captura de dinámicas no lineales complejas de la irradiancia solar [1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0005]. Las técnicas de descomposición de señales, como la Variational Mode Decomposition (VMD) y Sliding Window Decomposition (SWD), permiten fragmentar series temporales complejas en componentes más simples, facilitando la modelación y mejorando la precisión del pronóstico [1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0069]. La integración de estas técnicas con modelos de deep learning, específicamente redes neuronales convolucionales profundas (DCNN), ha demostrado superar a modelos tradicionales y de machine learning en la predicción de irradiancia directa normal (DNI), incluso bajo condiciones meteorológicas adversas [1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0078, 1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0077]. Estos modelos híbridos requieren una cuidadosa selección de variables y preprocesamiento, como la selección de características mediante Random Forest Feature selection (RFF), para maximizar su efectividad y evitar sobreajuste [1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0069]. Por otro lado, modelos híbridos adaptativos que combinan características lineales, temporales y no lineales, y que incorporan aprendizaje en línea, han mostrado un desempeño aceptable en la predicción de intensidad solar, aunque con limitaciones para representar no linealidades complejas [1/56.153_Adaptive.pdf | bc3737df4f9e08a2_chunk_0005]. En conjunto, la evidencia sugiere que la complementariedad entre técnicas de descomposición y modelos de inteligencia artificial es clave para mejorar la precisión del pronóstico solar en aplicaciones prácticas, como plantas termosolares, especialmente en regiones con limitaciones de datos y condiciones climáticas variables [1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0078].",
+  "claims": [
+    {
+      "claim": "Los modelos estadísticos tradicionales para el pronóstico de radiación solar se basan en relaciones matemáticas derivadas de leyes físicas fundamentales y variables meteorológicas, pero presentan limitaciones en la disponibilidad y calidad de datos, así como en la captura de dinámicas no lineales complejas de la irradiancia solar",
+      "supporting_citations": [
+        "[1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0005]"
+      ]
+    },
+    {
+      "claim": "Las técnicas de descomposición de señales, como la Variational Mode Decomposition (VMD) y Sliding Window Decomposition (SWD), permiten fragmentar series temporales complejas en componentes más simples, facilitando la modelación y mejorando la precisión del pronóstico",
+      "supporting_citations": [
+        "[1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0069]"
+      ]
+    },
+    {
+      "claim": "La integración de estas técnicas con modelos de deep learning, específicamente redes neuronales convolucionales profundas (DCNN), ha demostrado superar a modelos tradicionales y de machine learning en la predicción de irradiancia directa normal (DNI), incluso bajo condiciones meteorológicas adversas",
+      "supporting_citations": [
+        "[1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0078]",
+        "[1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0077]"
+      ]
+    },
+    {
+      "claim": "Estos modelos híbridos requieren una cuidadosa selección de variables y preprocesamiento, como la selección de características mediante Random Forest Feature selection (RFF), para maximizar su efectividad y evitar sobreajuste",
+      "supporting_citations": [
+        "[1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0069]"
+      ]
+    },
+    {
+      "claim": "Modelos híbridos adaptativos que combinan características lineales, temporales y no lineales, y que incorporan aprendizaje en línea, han mostrado un desempeño aceptable en la predicción de intensidad solar, aunque con limitaciones para representar no linealidades complejas",
+      "supporting_citations": [
+        "[1/56.153_Adaptive.pdf | bc3737df4f9e08a2_chunk_0005]"
+      ]
+    },
+    {
+      "claim": "La complementariedad entre técnicas de descomposición y modelos de inteligencia artificial es clave para mejorar la precisión del pronóstico solar en aplicaciones prácticas, como plantas termosolares, especialmente en regiones con limitaciones de datos y condiciones climáticas variables",
+      "supporting_citations": [
+        "[1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0078]"
+      ]
+    }
+  ]
+}

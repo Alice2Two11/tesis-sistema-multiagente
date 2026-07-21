@@ -1,0 +1,45 @@
+{
+  "section_id": "S4",
+  "section_title": "Modelos estadísticos y técnicas de descomposición de señales para estimación y pronóstico de irradiancia solar",
+  "draft_text": "Los modelos estadísticos tradicionales para la predicción de irradiancia solar se basan en relaciones matemáticas derivadas de leyes físicas fundamentales, utilizando parámetros meteorológicos como el ángulo solar, el índice de claridad y la turbidez atmosférica, aunque presentan limitaciones debido a la disponibilidad y calidad de los datos atmosféricos y de radiación solar [1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0005]. El modelo Boland–Ridley–Lauret (BRL) ajustado ha sido aplicado para estimar componentes directo y difuso de radiación solar en climas semiáridos, mostrando una concordancia favorable con datos medidos a escalas diarias y horarias, lo que evidencia su utilidad en regiones con limitaciones de datos [1/63.10.1140epjps13360-019-00085-0_page1-1.pdf | d9c8559d984b52b7_chunk_0002]. Las técnicas de descomposición de señales, como la Variational Mode Decomposition (VMD) y Sliding Window Decomposition (SWD), permiten fragmentar series temporales complejas en componentes intrínsecos de frecuencia múltiple, facilitando la captura de fluctuaciones rápidas, diarias y estacionales en la irradiancia solar [1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0068]. La integración de estas técnicas con modelos de deep learning, específicamente redes neuronales convolucionales profundas (DCNN), ha demostrado superar a modelos de machine learning convencionales en precisión predictiva, al descomponer la señal en componentes más analizables y representativos [1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0078, 1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0073]. Sin embargo, estos enfoques híbridos requieren una cuidadosa selección de variables y un preprocesamiento consistente para maximizar su efectividad, dado que la cantidad y tipo de componentes descompuestos influyen directamente en la calidad del pronóstico [1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0069]. En conjunto, los modelos estadísticos aportan una base sólida pero limitada para capturar dinámicas no lineales complejas, mientras que las técnicas de descomposición combinadas con aprendizaje profundo ofrecen una mejora sustancial en la predicción multi-step y en condiciones meteorológicas variables, siendo especialmente relevantes para la optimización de plantas termosolares en diversas regiones geográficas [1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0005, 1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0078].",
+  "claims": [
+    {
+      "claim": "Los modelos estadísticos tradicionales para la predicción de irradiancia solar se basan en relaciones matemáticas derivadas de leyes físicas fundamentales, utilizando parámetros meteorológicos como el ángulo solar, el índice de claridad y la turbidez atmosférica, aunque presentan limitaciones debido a la disponibilidad y calidad de los datos atmosféricos y de radiación solar",
+      "supporting_citations": [
+        "[1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0005]"
+      ]
+    },
+    {
+      "claim": "El modelo Boland–Ridley–Lauret (BRL) ajustado ha sido aplicado para estimar componentes directo y difuso de radiación solar en climas semiáridos, mostrando una concordancia favorable con datos medidos a escalas diarias y horarias, lo que evidencia su utilidad en regiones con limitaciones de datos",
+      "supporting_citations": [
+        "[1/63.10.1140epjps13360-019-00085-0_page1-1.pdf | d9c8559d984b52b7_chunk_0002]"
+      ]
+    },
+    {
+      "claim": "Las técnicas de descomposición de señales, como la Variational Mode Decomposition (VMD) y Sliding Window Decomposition (SWD), permiten fragmentar series temporales complejas en componentes intrínsecos de frecuencia múltiple, facilitando la captura de fluctuaciones rápidas, diarias y estacionales en la irradiancia solar",
+      "supporting_citations": [
+        "[1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0068]"
+      ]
+    },
+    {
+      "claim": "La integración de estas técnicas con modelos de deep learning, específicamente redes neuronales convolucionales profundas (DCNN), ha demostrado superar a modelos de machine learning convencionales en precisión predictiva, al descomponer la señal en componentes más analizables y representativos",
+      "supporting_citations": [
+        "[1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0078]",
+        "[1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0073]"
+      ]
+    },
+    {
+      "claim": "Estos enfoques híbridos requieren una cuidadosa selección de variables y un preprocesamiento consistente para maximizar su efectividad, dado que la cantidad y tipo de componentes descompuestos influyen directamente en la calidad del pronóstico",
+      "supporting_citations": [
+        "[1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0069]"
+      ]
+    },
+    {
+      "claim": "Los modelos estadísticos aportan una base sólida pero limitada para capturar dinámicas no lineales complejas, mientras que las técnicas de descomposición combinadas con aprendizaje profundo ofrecen una mejora sustancial en la predicción multi-step y en condiciones meteorológicas variables, siendo especialmente relevantes para la optimización de plantas termosolares en diversas regiones geográficas",
+      "supporting_citations": [
+        "[1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0005]",
+        "[1/62.1-s2.0-S0196890424001304-main.pdf | edc1bca565f3704c_chunk_0078]"
+      ]
+    }
+  ]
+}

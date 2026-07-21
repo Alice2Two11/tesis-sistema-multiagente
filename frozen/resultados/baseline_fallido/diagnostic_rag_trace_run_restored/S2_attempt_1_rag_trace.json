@@ -1,0 +1,105 @@
+{
+  "allowed_citations": [
+    "[1/33.An-LM-BP-Neural-Network-Approach-to-Estimate-Monthly-Mean-Daily-Global-Solar-Radiation-Using-MODIS-Atmospheric-Products.pdf | 42891eb1891ec233_chunk_0006]",
+    "[1/33.An-LM-BP-Neural-Network-Approach-to-Estimate-Monthly-Mean-Daily-Global-Solar-Radiation-Using-MODIS-Atmospheric-Products.pdf | 42891eb1891ec233_chunk_0008]",
+    "[1/33.An-LM-BP-Neural-Network-Approach-to-Estimate-Monthly-Mean-Daily-Global-Solar-Radiation-Using-MODIS-Atmospheric-Products.pdf | 42891eb1891ec233_chunk_0026]",
+    "[1/34.praynlin2017.pdf | 12ed2391bde9cd16_chunk_0004]",
+    "[1/34.praynlin2017.pdf | 12ed2391bde9cd16_chunk_0018]",
+    "[1/39.MLP_Back_Propagation_Artificial_Neural_Network_for.pdf | 696fb1df0f31a0b4_chunk_0014]",
+    "[1/39.MLP_Back_Propagation_Artificial_Neural_Network_for.pdf | 696fb1df0f31a0b4_chunk_0015]",
+    "[1/39.MLP_Back_Propagation_Artificial_Neural_Network_for.pdf | 696fb1df0f31a0b4_chunk_0016]"
+  ],
+  "contractual_attempt_created": false,
+  "diagnostic_only": true,
+  "generation_attempt": 1,
+  "llm_citations": [
+    "[1/39.MLP_Back_Propagation_Artificial_Neural_Network_for.pdf | 696fb1df0f31a0b4_chunk_0017, 696fb1df0f31a0b4_chunk_0019, 696fb1df0f31a0b4_chunk_0014]",
+    "[1/39.MLP_Back_Propagation_Artificial_Neural_Network_for.pdf | 696fb1df0f31a0b4_chunk_0014, 696fb1df0f31a0b4_chunk_0017]",
+    "[1/33.An-LM-BP-Neural-Network-Approach-to-Estimate-Monthly-Mean-Daily-Global-Solar-Radiation-Using-MODIS-Atmospheric-Products.pdf | 42891eb1891ec233_chunk_0008]",
+    "[1/39.MLP_Back_Propagation_Artificial_Neural_Network_for.pdf | 696fb1df0f31a0b4_chunk_0015, 696fb1df0f31a0b4_chunk_0016]"
+  ],
+  "pipeline_state_modified": false,
+  "query": "Modelos basados en Redes Neuronales Artificiales (ANN) para pronóstico de irradiancia solar Describir y analizar los modelos ANN clásicos aplicados al pronóstico de irradiancia solar y generación fotovoltaica, destacando sus arquitecturas, variables de entrada, desempeño y limitaciones. Los modelos ANN tradicionales, como Back Propagation y MLP, han demostrado alta precisión en predicciones a corto plazo utilizando variables meteorológicas y datos históricos. Estos modelos superan en muchos casos a métodos estadísticos clásicos, pero presentan limitaciones en escenarios con alta variabilidad climática y terrenos heterogéneos. La selección adecuada de variables y preprocesamiento es fundamental para mejorar la precisión de las ANN. Detalles de arquitecturas ANN y algoritmos de entrenamiento. Variables meteorológicas utilizadas y su impacto. Métricas de evaluación y resultados cuantitativos. Limitaciones reportadas en escenarios complejos.",
+  "retrieved_chunks": [
+    {
+      "chunk_id": "696fb1df0f31a0b4_chunk_0015",
+      "retrieval_method": "chroma_restricted",
+      "score": 0.6259012222290039,
+      "source_filename": "1/39.MLP_Back_Propagation_Artificial_Neural_Network_for.pdf",
+      "text": "daily solar irradiation measurements in 2004. Fig. 2. Daily solar irradiation (2004). The weather in Fortaleza is characterized by a rainy and dry season, due to the presence of the Intertropical Convergence Zone. Dry period occurs in the second half of the year. Consequently, during this period there is a higher incidence of solar irradiation on the surface due to the absence of cloud cover. Rainy season, characterized by a lower solar irradiation, occurs in the first half of the year. For validation of the ANN results, the rest of the data (30% of the collected data) of solar irradiance and temperature (219 days, 18,421 measurements) are used in order to verify the network operation for hitherto unknown inputs (generalization step). It is worth mentioning that, in the region of the study, the climate is well defined throughout the year, therefore, this climatic characteristic causes the neural network to be able to carry out predictions of later years. With these results, weighted errors are calculated. Solar prediction errors are found at different times of the day, with different levels of solar resource availability [5]. If a"
+    },
+    {
+      "chunk_id": "696fb1df0f31a0b4_chunk_0014",
+      "retrieval_method": "chroma_restricted",
+      "score": 0.6024516820907593,
+      "source_filename": "1/39.MLP_Back_Propagation_Artificial_Neural_Network_for.pdf",
+      "text": "considered in the present analysis. Irradiance Data collection was performed using a pyranometer (NRG Systems, LI-200SZ). Temperature data were obtained from a temperature sensor (NRG Systems, # 110S), with an accuracy of ± 1.11°C and operating between -40°C and 52.5°C. Data were collected and stored by means of spreadsheets at intervals of 10 min, obtained by means of arithmetic means from data processed every 2 s. Solar irradiance and temperature data were collected from May 2003 to April 2005, totaling 24 months of data, resulting in 61,404 measurements for solar irradiance and the same for temperature, since measurements were from 05:00 hours to 18:00 hours. For MLP Backpropagation ANN training, 70% of the collected irradiance and temperature data (512 days, 43,008 measurements) were used. Figure 2 shows daily solar irradiation measurements in 2004. Fig. 2. Daily solar irradiation (2004). The weather in Fortaleza is characterized by a rainy and dry season, due to the presence of the Intertropical Convergence Zone. Dry period occurs in the second half of the year. Consequently, during this period there is a"
+    },
+    {
+      "chunk_id": "42891eb1891ec233_chunk_0008",
+      "retrieval_method": "chroma_restricted",
+      "score": 0.5679153203964233,
+      "source_filename": "1/33.An-LM-BP-Neural-Network-Approach-to-Estimate-Monthly-Mean-Daily-Global-Solar-Radiation-Using-MODIS-Atmospheric-Products.pdf",
+      "text": "past ten years, many scholars [15–20] have begun to use ANN models to simulate solar radiation. These research can be divided into several categories, including: (1) Comparing the simulation accuracy of ANNs with different input parameters. Rao et al. [21] used different combinations of daily minimum temperature (Tmin), daily maximum temperature (Tmax), the difference of daily maximum and minimum temperature (DT), sunshine duration (S0), theoretical sunshine duration (S) and extraterrestrial radiation (H0) to train an ANN; six ANN models were developed to estimate mean daily global solar radiation. The results that the showed a combination of DT and H0 gave the best prediction of the Relative Root Mean Square Error (RRMSE), being as little as 3.96%; (2) Comparing neural network models with other models. Teket et al. [22] compared 91 models for simulating solar radiation; these models can be summarized as linear models, nonlinear models, mixed models, and neural network models. The percentage errors were 3.62%, 2.50% to 6.93%, 0.14 to 6.93%, and 0.30%, respectively; (3) comparing the neural network models with different algorithms. For example, based"
+    },
+    {
+      "chunk_id": "696fb1df0f31a0b4_chunk_0016",
+      "retrieval_method": "chroma_restricted",
+      "score": 0.5636776685714722,
+      "source_filename": "1/39.MLP_Back_Propagation_Artificial_Neural_Network_for.pdf",
+      "text": "well defined throughout the year, therefore, this climatic characteristic causes the neural network to be able to carry out predictions of later years. With these results, weighted errors are calculated. Solar prediction errors are found at different times of the day, with different levels of solar resource availability [5]. If a solar prediction error happens at the end of the day, between 5 and 6 pm in Fortaleza, the impacts of these errors on the PV electricity generation are lower than errors at 12 am, period with greater solar potential. Aiming to adjust the prediction errors taking into account the solar resource availability, a filter called Impact Factor, according to equations (5) and (6) [6], is applied. ( ) 100 p m pp i m D D E F D − × = × (5) m i r D F M = (6) Epp is the weighted prediction error, Dp and Dm are the predicted and measured data, respectively, Mr is the resource highest value and Fi the impact factor. Solar irradiance prediction using data collected in Fortaleza was performed using an MLP ANN with backpropagation training algorithm. The developed algorithm provides solar irradiance data one hour in"
+    },
+    {
+      "chunk_id": "42891eb1891ec233_chunk_0006",
+      "retrieval_method": "chroma_restricted",
+      "score": 0.5412423014640808,
+      "source_filename": "1/33.An-LM-BP-Neural-Network-Approach-to-Estimate-Monthly-Mean-Daily-Global-Solar-Radiation-Using-MODIS-Atmospheric-Products.pdf",
+      "text": "Energies 2018, 11, 3510 2 of 14 and the basic driving force on Earth, providing necessary energy for the water cycle, atmospheric motions, and biological activities [2]. Meanwhile, it is one of the necessary input parameters in the crop evapotranspiration model, ecosystem carbon and nitrogen cycle, hydrology, and climate-change models [3]. Therefore, making full use of solar energy resources has a signiﬁcant impact on the strategy of sustainable development [4]. However, worldwide solar radiation observation sites are sparse and distributed unevenly. Lack of solar radiation data limits research works in relevant ﬁelds; thus, it is important to perform the simulation of solar radiation. Many efforts have been made to simulate solar radiation in different geographical and climatic regions of the Earth. Some traditional simulation models such as Angstrom [5], Hargreaves-Samani [6], Meteorological Radiation Model (MRM V 6.1) [7], Bristow and Campbell [8], Akinoglu and Ecevit [9], Louche et al. [10] and the radiative transfer model [11] have been used; but these models have many limitations. First, these models rely on speciﬁc input parameters; the Angstrom model and MRM V 6.1"
+    },
+    {
+      "chunk_id": "42891eb1891ec233_chunk_0026",
+      "retrieval_method": "chroma_restricted",
+      "score": 0.5180349946022034,
+      "source_filename": "1/33.An-LM-BP-Neural-Network-Approach-to-Estimate-Monthly-Mean-Daily-Global-Solar-Radiation-Using-MODIS-Atmospheric-Products.pdf",
+      "text": "by AOT, PWV. Other variables have less inﬂuence on solar radiation. Peng et al. [42] analyzed the variation of solar radiation and its impact factors of Xi’an city, Shaanxi province in recent 50 years, they pointed out that clouds and aerosols play a major role in reducing solar radiation reaching the surface. In this study, clouds, aerosols and predictable water vapor were considered ﬁrst. Then, the meteorological variables (P, T, Pw, RH and S0) as the ﬁrst group (hereafter ‘ANN1’); at the same time, CF, AOT, PWV and PWV along with the meteorological variables as the second group of input parameters to simulate solar radiation (hereafter ‘ANN2’). From results, the estimated value of ANN2 was found to be closer to the observations (Figure 4). Table 2 gives out different statistics for ANN1 and ANN2. The statistical results show that the ANN2 model outperforms signiﬁcantly ANN1 (Table 2). It demonstrates that clouds, aerosols, and precipitation water vapor are the most important factors affecting solar radiation changes in Shaanxi and its surrounding areas. Table 2. Comparison of ANN1 and ANN2. ANN with Different Inputs RMSE/MJ·m−2 MBE/MJ·m−2 R ANN1 2.31 −1.13 0.89 ANN2 1.34 0.15"
+    },
+    {
+      "chunk_id": "12ed2391bde9cd16_chunk_0004",
+      "retrieval_method": "chroma_restricted",
+      "score": 0.5120189785957336,
+      "source_filename": "1/34.praynlin2017.pdf",
+      "text": "majority of the enterprises may totally rely on the electric power generated from the photovoltaic plant gets extraordinarily influenced. So forecasting of solar radiation is a fundamental one. Global solar radiation (GSR) is a basic parameter for the outline and operation of solar energy systems. Long-standing records of global solar radiation data are not accessible in many places on account of the cost and upkeep of the measuring instruments [4]. To survey the accessibility of solar radiation at various areas, estimations of global radiation, diffuse radiation, beam radiation, sun shine hours, bright sun shine hours, extreme and least temperature, humidity, pressure, visibility, wind speed and direction, gust speed, water precipitation, and air mass are essential parameters [5]. Solar radiation can be anticipated hourly premise [6] utilizing several forecasting methods. One of the prediction or forecasting methodologies being followed in recent times is the artificial intelligent techniques to predict the solar radiation [7] since it eliminates the constraints of classical approaches by extracting the desired data using input information [8]."
+    },
+    {
+      "chunk_id": "12ed2391bde9cd16_chunk_0018",
+      "retrieval_method": "chroma_restricted",
+      "score": 0.5104830265045166,
+      "source_filename": "1/34.praynlin2017.pdf",
+      "text": "International Conference on Innovations in Power and Advanced Computing Technologies [i-PACT2017] 4 utilized just to survey the performance of a developed ANN model. A. NCEP (National Centers for Environmental Prediction) This dataset was gathered from the weather station which is situated at Bangalore. The dataset was gathered in daily basis for a period of four years (2001-2004). It consists of 1461 data. The dataset contains six parameters: • Maximum temperature • Minimum temperature • Precipitation • Wind speed • Relative humidity • Solar radiation For training purpose, the data in the year 2001-2003 is used i.e. 1095 data are used. Testing was done on the remaining 366 data which was obtained in the year 2004. B. SoDa (Solar Radiation Data) This dataset was gathered from the weather station which is situated at Saudi Arabia. The dataset was gathered for every 15 minutes time interval during the February month of 2004. It consists of 2784 data. The dataset contains six parameters: • Irradiance. • Lower bound • Upper bound • Top of atmosphere • Clear sky • Solar radiation"
+    }
+  ],
+  "section_id": "S2",
+  "source_raw_output": "/content/proyecto_estado_arte/experimento_paper_02/05_outputs/05_draft/raw_section_outputs/S2_attempt_1.txt",
+  "top_k_evidence_per_section": 8,
+  "validation": {
+    "citation_count": 7,
+    "claim_sentence_mismatches": [],
+    "generation_attempt": 1,
+    "invalid_citations": [],
+    "numeric_support_errors": [
+      "UNSUPPORTED_NUMERIC_VALUE:0.96",
+      "UNSUPPORTED_NUMERIC_VALUE:1.34"
+    ],
+    "raw_output_path": "/content/proyecto_estado_arte/experimento_paper_02/05_outputs/05_draft/raw_section_outputs/S2_attempt_1.txt",
+    "section_id": "S2",
+    "substantive_sentences_without_citation": [],
+    "substantive_sentences_without_claim": [],
+    "unsupported_claims": [],
+    "validation_errors": [
+      "UNSUPPORTED_NUMERIC_VALUE:0.96",
+      "UNSUPPORTED_NUMERIC_VALUE:1.34"
+    ],
+    "validation_ok": false,
+    "word_count": 222
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "section_id": "S3",
+  "generation_attempt": 1,
+  "query": "Deep Learning Temporal y Modelos Híbridos para pronóstico de irradiancia solar y potencia fotovoltaica Revisar y comparar modelos avanzados de deep learning temporal (LSTM, CNN, GRU) y modelos híbridos (CNN-LSTM, BiLSTM/LSTM), enfatizando mejoras en precisión, optimización y manejo de correlaciones espaciotemporales. Las arquitecturas de deep learning temporal capturan mejor las dinámicas temporales y patrones complejos en datos meteorológicos y de irradiancia. Los modelos híbridos que combinan CNN y LSTM integran características espaciales y temporales, mejorando la precisión en diferentes condiciones climáticas y geográficas. La optimización de hiperparámetros y mecanismos de atención contribuyen a superar problemas comunes como el desvanecimiento del gradiente y el sobreajuste. Estos modelos presentan mayor complejidad computacional y requieren mayor tiempo de entrenamiento, lo que limita su aplicabilidad en algunos contextos. Descripción de arquitecturas y mecanismos de optimización. Comparación de métricas de desempeño entre modelos. Análisis de complejidad computacional y tiempo de entrenamiento. Evaluación en diferentes condiciones climáticas y geográficas.",
+  "retrieved_chunks": [
+    {
+      "source_filename": "1/58.1-s2.0-S0306261921005158-main.pdf",
+      "chunk_id": "e1bf718cbfa6854b_chunk_0104",
+      "score": 0.6751204133033752,
+      "retrieval_method": "chroma_restricted",
+      "text": "summer, autumn and winter) for all locations. However, it has been observed that the seasonal error distribution of developed is highly influenced by the climate of the location. For instance, the proposed LSTM–CNN model has shown highly improved prediction results in those seasons when prediction errors of other considered models are relatively high. • Finally, the proposed hybrid LSTM–CNN model has shown highly improved prediction accuracy in different sky conditions (cloudy, mixed and sunny) for different climatic locations. Conclusively, the proposed LSTM–CNN model digs out the potential of deep learning and their hybrid models for GHI prediction. LSTM– CNN efficiently extracts the intrinsic and hidden tempo-spatial features from the multivariate time-series meteorological and GHI data that highly influence the GHI prediction. Moreover, the proposed LSTM– CNN model is highly stable, which effectively predicts GHI irrespective of the seasonal variations and sky conditions. The simulation results obtained in the present study illustrate that the proposed deep hybrid LSTM–CNN model exhibits excellent performance in predicting hourly global horizontal irradiance under different"
+    },
+    {
+      "source_filename": "1/58.1-s2.0-S0306261921005158-main.pdf",
+      "chunk_id": "e1bf718cbfa6854b_chunk_0002",
+      "score": 0.6570838093757629,
+      "retrieval_method": "chroma_restricted",
+      "text": "effective participation in the energy market. This study proposes a new hybrid deep learning model, namely long short term memory–convolutional neural network (LSTM–CNN), for hourly GHI forecasting, which models the spatio-temporal features by integrating the long short term memory (LSTM) and convolutional neural network (CNN) model. The proposed model is trained with the meteorological data of 23 locations of California State, USA, which includes temperature, precipitation, relative humidity, cloud cover, etc., as input parameters. The proposed hybrid LSTM–CNN model firstly uses LSTM to extract the temporal features from time-series solar irradiance data, followed by CNN, which extracts the spatial features from the correlation matrix of several meteorological variables of target and its neighbor location. The prediction accuracy of the developed model is analyzed rigorously by examining the performance for a year, for four seasons and under three sky conditions. Besides, the proposed LSTM–CNN model shows a forecast skill score in a range of about 37%–45% over few standalone models, including smart persistence, support vector machine, artificial neural network, LSTM, CNN"
+    },
+    {
+      "source_filename": "1/59.1-s2.0-S0960148120315652-main.pdf",
+      "chunk_id": "4237f959d87fe007_chunk_0036",
+      "score": 0.6521222591400146,
+      "retrieval_method": "chroma_restricted",
+      "text": "2.5.2. Model selection (4). Before training, the whole hyper-parameters of the network are initialized. The reconstructed training dataset is used to train ﬁve different hybrid CNN-LSTM networks to understand how to apply the concept, to learn and produce results. (5). During tuning model hyper-parameters, the validation dataset is used to provide an unbiased evaluation of CNNLSTM ﬁt on the training dataset. (6). Finally, the optimal hyper-parameter models of CNN-LSTM networks found by the grid-search are saved. 2.5.3. Performance evaluation (7). The test dataset is employed to provide forecasting results for optimal model. And then the forecast results are visualized and evaluated. 3. Solar irradiance data description In this work, measured irradiance taken from meteorological ground stations is used to forecast irradiance for the next hour. There are four real-world datasets applied to evaluate the performance of the proposed model in hourly-ahead forecasts of the irradiance. The locations of these collected datasets are displayed in Fig. 9. The ﬁrst three datasets from Los Angeles (19\u0006730N 156\u0006060W, California, USA), Denver (39\u0006440N, 105\u0006110W, Colorado, USA) and"
+    },
+    {
+      "source_filename": "1/47.1-s2.0-S0306261922010170-main.pdf",
+      "chunk_id": "fe601d3747bcbeae_chunk_0013",
+      "score": 0.09090909090909091,
+      "retrieval_method": "csv_lexical_ranked_experimental",
+      "text": "temperature increases, due to open-circuit voltage, the power output decreases. These parameters play an important role in simulating the stochastic and complex behavior of incident solar radiation in gener­ ating future values. Hence the proposed model utilizes both univariate, and multivariate data to use the previously observed solar data sequence and other meteorological variables to forecast future solar irradiation. Abbreviations AI Artificial Intelligence ANN Artificial Neural network BiLSTM Bi-directional Long Short-Term Memory R2 Coefficient of Determination CNN Convolutional Neural Network DL Deep Learning GRU Gated Recurrent Units GHI Global Horizontal Irradiance LSTM Long Short-Term Memory ML Machine Learning MAE Mean absolute error MAPE Mean absolute percentage error MSE Mean squared error NRMSE Normalized Root Mean Squared Error POA Plane of Array PV Photovoltaic RMSE Root Mean Square Error RNN Recurrent Neural Network SVM Support Vector Machine N. Elizabeth Michael et al."
+    },
+    {
+      "source_filename": "1/55.1-s2.0-S0960148123001179-main.pdf",
+      "chunk_id": "97a519d416f69b74_chunk_0001",
+      "score": 0.07792207792207792,
+      "retrieval_method": "csv_lexical_ranked_experimental",
+      "text": "Renewable Energy 206 (2023) 135–147 Available online 7 February 2023 0960-1481/© 2023 Elsevier Ltd. All rights reserved. Deep learning based long-term global solar irradiance and temperature forecasting using time series with multi-step multivariate output Narjes Azizi , Maryam Yaghoubirad , Meisam Farajollahi *, Abolfzl Ahmadi Department of Energy Systems, School of Advanced Technologies, Iran University of Science and Technology, Narmak, Tehran, Iran A R T I C L E I N F O Keywords: Solar irradiance forecasting Deep learning Time series Long-term prediction Multi-step multivariate output A B S T R A C T Solar radiation’s intermittent and fluctuating nature poses severe limitations for most applications. Accurate prediction of solar radiation is an essential factor in predicting the output power of a photovoltaic power system. For this purpose, the potential of the 20 MW solar photovoltaic power plant in Zahedan city has been evaluated in this article. With the help of monthly data (1984–2021) and MLP, LSTM, GRU, CNN, and CNN-LSTM models, solar radiation and temperature are predicted for the next ten years. CNN exhibits the best performance"
+    },
+    {
+      "source_filename": "1/55.1-s2.0-S0960148123001179-main.pdf",
+      "chunk_id": "97a519d416f69b74_chunk_0009",
+      "score": 0.07792207792207792,
+      "retrieval_method": "csv_lexical_ranked_experimental",
+      "text": "GRU-based model had the best performance in terms of MAPE [25]. Deep learning techniques, including RNN, LSTM, and GRU, were pro­ posed for the prediction of solar energy, and it was observed that LSTM and RNN are slightly better than the GRU model due to their capability to preserve long-term dependencies [26]. Also, it was shown that GRU and LSTM significantly improve forecasting accuracy when using multivariate data compared to univariate data [27]. CNNs are also efficient in time-series problems [28]. In another study, CNN was implemented for short-term load forecasting. The model was observed to be very flexible and capable of handling forecasting Nomenclature Symbol Evap Evaporation ISC Short circuit current PO Output power RHMAX Relative Humidity at maximum temperature RHMIN Relative Humidity at minimum temperature TMAX maximum temperature TMIN minimum temperature VOC Open circuit voltage Greek symbols α Temperature Coefficients of ISC β Temperature Coefficients of VOC acronyms ANN Artificial Neural Network ARMA Autoregressive Moving Average ARIMA Autoregressive Integrated Moving Average CLSTM Convolutional Long Short-Term Memory"
+    },
+    {
+      "source_filename": "1/36.1-s2.0-S0960148122011387-main.pdf",
+      "chunk_id": "553aa823184fcd93_chunk_0047",
+      "score": 3.0,
+      "retrieval_method": "quantitative_confirmed_chunk",
+      "text": "having R2 score below 0.50. The methods used in this study can be used \nby organizations as baseline implementations to analyze and understand \nthe solar energy prospects of the region, availing the opportunities and \ntackling the challenges that come with solar irradiance forecasting. \nDataset availability \nThe data used in this study can be accessed at the following link: \nhttps://drive.google.com/file/d/1It672Fxb2T4te4rPCpl9m5GTkk3 \nFig. 8. Actual data against SARIMAX and Prophet Forecasted values. \nTable 5 \nError metrics of statistical models. \nModel \nMSE \nRMSE \nMAE \nR2 Score \nSARIMAX \n4037.75 \n63.54 \n35.23 \n0.948 \nProphet \n5931.51 \n77.01 \n44.13 \n0.924 \nTable 6 \nComparison of DL models based on error metrics. \nArchitecture \nWindow Size \nMSE \nRMSE \nMAE \nR2 \nANN \n(4,1) \n1348.39 \n36.72 \n20.74 \n0.987 \n(12,3) \n5816.27 \n76.26 \n40.28 \n0.944 \n(24,6) \n7854.31 \n88.62 \n48.48 \n0.924 \n(48,24) \n13329.96 \n115.45 \n70.44 \n0.872 \nCNN \n(4,1) \n2309.05 \n48.05 \n28.42 \n0.977 \n(12,3) \n6363.76 \n79.77 \n51.19 \n0.938 \n(24,6) \n8082.32 \n89.90 \n57.72 \n0.922 \n(48,24) \n19044.42 \n138.00 \n87.94 \n0.817 \nLSTM \n(4,1) \n1653.34 \n40.66 \n23.84 \n0.984 \n(12,3) \n8950.51 \n94.60 \n56.77 \n0.913 \n(12,6) \n56595.03 \n237.89"
+    },
+    {
+      "source_filename": "1/43.1-s2.0-S1877050917318392-main.pdf",
+      "chunk_id": "a6d33f85b06e45e7_chunk_0031",
+      "score": 3.0,
+      "retrieval_method": "quantitative_confirmed_chunk",
+      "text": "Figure 12 shows a sample of training data in four different weather conditions: few clouds, scattered, overcast, \nand clear-sky. The results of the predictive model are shown in Fig. 13. The actual data plotted with the standard \ndeviation of the predictive model is plotted as well because the experiments had different random initializations. The \naverage RMSE of the DRNN is 0.0513 in training and 0.068 in testing. On the other hand, the average RMSE of the \nDRNN is 0.0746 in training and 0.086 in testing. This method gives promising results, as the RMSE is the lowest. \nTable 1 shows a comparison of different prediction methods. The comparison was made on the test dataset. A \nfeedforward neural network was implemented using one hidden layer with 21 neurons. It was trained using the \nLevenberg–Marquardt algorithm. The training was stopped early to avoid the overfitting issues. FNN has the \npoorest performance among the other methods. The support vector machine has better performance than FNN. \nHowever, the deep learning LSTM outperforms other methods. \nTable 1: Performance test \nMethod \nRMSE \nMBE \nFNN \n0.16 \n0.005 \nSVR \n0.11 \n0.0042 \nDeep Learning (LSTM) \n0.086 \n0.004"
+    }
+  ],
+  "allowed_citations": [
+    "[1/58.1-s2.0-S0306261921005158-main.pdf | e1bf718cbfa6854b_chunk_0104]",
+    "[1/58.1-s2.0-S0306261921005158-main.pdf | e1bf718cbfa6854b_chunk_0002]",
+    "[1/59.1-s2.0-S0960148120315652-main.pdf | 4237f959d87fe007_chunk_0036]",
+    "[1/47.1-s2.0-S0306261922010170-main.pdf | fe601d3747bcbeae_chunk_0013]",
+    "[1/55.1-s2.0-S0960148123001179-main.pdf | 97a519d416f69b74_chunk_0001]",
+    "[1/55.1-s2.0-S0960148123001179-main.pdf | 97a519d416f69b74_chunk_0009]",
+    "[1/36.1-s2.0-S0960148122011387-main.pdf | 553aa823184fcd93_chunk_0047]",
+    "[1/43.1-s2.0-S1877050917318392-main.pdf | a6d33f85b06e45e7_chunk_0031]"
+  ],
+  "llm_citations": [
+    [
+      "1/43.1-s2.0-S1877050917318392-main.pdf",
+      "a6d33f85b06e45e7_chunk_0031"
+    ],
+    [
+      "1/58.1-s2.0-S0306261921005158-main.pdf",
+      "e1bf718cbfa6854b_chunk_0002, e1bf718cbfa6854b_chunk_0104"
+    ],
+    [
+      "1/59.1-s2.0-S0960148120315652-main.pdf",
+      "4237f959d87fe007_chunk_0036, 1/47.1-s2.0-S0306261922010170-main.pdf | fe601d3747bcbeae_chunk_0013"
+    ],
+    [
+      "1/36.1-s2.0-S0960148122011387-main.pdf",
+      "553aa823184fcd93_chunk_0047"
+    ]
+  ],
+  "normalized_citations": [
+    [
+      "1/43.1-s2.0-S1877050917318392-main.pdf",
+      "a6d33f85b06e45e7_chunk_0031"
+    ],
+    [
+      "1/43.1-s2.0-S1877050917318392-main.pdf",
+      "a6d33f85b06e45e7_chunk_0031"
+    ],
+    [
+      "1/58.1-s2.0-S0306261921005158-main.pdf",
+      "e1bf718cbfa6854b_chunk_0002"
+    ],
+    [
+      "1/58.1-s2.0-S0306261921005158-main.pdf",
+      "e1bf718cbfa6854b_chunk_0104"
+    ],
+    [
+      "1/59.1-s2.0-S0960148120315652-main.pdf",
+      "4237f959d87fe007_chunk_0036"
+    ],
+    [
+      "1/47.1-s2.0-S0306261922010170-main.pdf",
+      "fe601d3747bcbeae_chunk_0013"
+    ],
+    [
+      "1/36.1-s2.0-S0960148122011387-main.pdf",
+      "553aa823184fcd93_chunk_0047"
+    ]
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "section_id": "S5",
+  "generation_attempt": 1,
+  "query": "Técnicas de preprocesamiento y clasificación para mejorar el pronóstico de irradiancia solar Explorar métodos de preprocesamiento como lógica difusa, clustering y clasificación de datos que contribuyen a mejorar la calidad de los datos de entrada y la precisión de los modelos de pronóstico. El preprocesamiento con lógica difusa permite manejar la incertidumbre y variabilidad rápida en variables meteorológicas, mejorando la precisión en pronósticos a muy corto plazo. La clasificación y clustering de datos meteorológicos según condiciones climáticas facilita la adaptación de modelos a diferentes escenarios, incrementando la exactitud del pronóstico. El uso de modelos híbridos que integran preprocesamiento avanzado con redes neuronales y machine learning tradicional ha demostrado mejoras cuantificables en métricas de error. Estas técnicas son especialmente útiles para manejar la intermitencia y variabilidad de la irradiancia solar en regiones con alta nubosidad o condiciones atmosféricas complejas. Descripción de técnicas de preprocesamiento y clasificación. Resultados cuantitativos que evidencien mejoras en precisión. Análisis de casos con alta variabilidad atmosférica. Limitaciones y propuestas de mejora en preprocesamiento.",
+  "retrieved_chunks": [
+    {
+      "source_filename": "1/48.1-s2.0-S0960148122015567-main.pdf",
+      "chunk_id": "fa4c26901738dbee_chunk_0056",
+      "score": 0.5666128993034363,
+      "retrieval_method": "chroma_restricted",
+      "text": "Renewable Energy 200 (2022) 1490–1505 1498 is decided that the front of the sun is entirely closed, all pixels in the created mask are classified as clouds. On the other hand, the sun front is evaluated as entirely or partially open, the K-means clustering method is used to perform the classifications. This method is aimed to correctly classify the sky and actual cloud pixels in the vicinity of the sun. As a result of the classification, pixels with classes different from the K-means class located in the sun center are deleted and labeled as the sky. Thus, the classification of pixels around the sun that are incorrectly classified as clouds due to brightness are corrected as the sky. Pixels located in the center of the sun and having the same class as the K-means class are classified according to whether they are detected as the sun or not. If the relevant pixel is classified as a sun pixel during the sun clas­ sification stage, it remains a sun pixel; if not, it is classified as a cloud pixel. In this way, the sun, cloud, and sky classes around the sun can be determined more accurately. 2.4. Cloud motion forecasting"
+    },
+    {
+      "source_filename": "1/49.bae2016.pdf",
+      "chunk_id": "f8b0f0723b47dd54_chunk_0045",
+      "score": 0.5634496212005615,
+      "retrieval_method": "chroma_restricted",
+      "text": "NAR and ANN schemes in those days. The measured and predicted values are similar for the NAR, ANN, and SVM schemes during the next three sunny days. Table II summarizes the numerical results of the average MRE, average RMSE, and R2 of each prediction scheme with one-hour prediction horizon for non-clustered data. The numerical results show that the RMSE, MRE, and R2 of the SVM scheme for non-clustered data are 58.72 [W/m2], 3.82%, and 0.9562, respectively, which are more accurate than those of the NAR and ANN schemes. C. Prediction Results for Solar Irradiance: Clustered Data In the testing stage for clustered data, three different prediction schemes (NAR, ANN, and the proposed SVM) are compared by using the same clustered data. Fig. 5 compares the predicted solar irradiance of three prediction schemes with the measured solar irradiance for sunny days. Since the overall prediction accuracy is improved by data clustering for sunny days, we can observe that small errors occur between the measured and predicted solar irradiance of each prediction scheme. In particular, the result of the proposed SVM scheme well approaches the measured solar irradiance. In sunny days,"
+    },
+    {
+      "source_filename": "1/48.1-s2.0-S0960148122015567-main.pdf",
+      "chunk_id": "fa4c26901738dbee_chunk_0008",
+      "score": 0.5573521852493286,
+      "retrieval_method": "chroma_restricted",
+      "text": "Renewable Energy 200 (2022) 1490–1505 1491 events. Therefore, the development of successful solar radiation fore­ casting methods has become an essential element for increasing solar energy use and grid integration [5]. Different solar radiation forecasting methodologies have been pro­ posed for various time periods in the literature. Numerical weather prediction (NWP) [6–8] or satellite-based forecast models [9], Aguiar, Pereira [10], Alonso-Montesinos and Batlles [11] are common among these methods and approaches. Using related methods, successful fore­ casting’s are made for large areas and long-time scales. However, esti­ mates on these area and time scales are insufficient to provide information about high-frequency solar radiation fluctuations due to their coverage of large areas and long periods. For example, while the general area of a given region is predicted to have a sunny day, sunlight may be interrupted from time to time by cloud cover. These in­ terruptions may affect the energy production level of any solar power plant installed in that region. Therefore, shorter-term, precise site-specific, and on-site forecasts are needed compared to NWP or"
+    },
+    {
+      "source_filename": "1/37.Solar_Forecasting_using_ANN_with_Fuzzy_Logic_Pre-p.pdf",
+      "chunk_id": "d3d05d271be6db98_chunk_0009",
+      "score": 0.05,
+      "retrieval_method": "csv_lexical_ranked_experimental",
+      "text": "Linear statistical models such as autoregressive (AR) and autoregressive moving average (ARMA) that uses realtime measurement data have been successfully applied for short-term forecasting [8], [9]. Auto-Regressive Integrated Moving Average (ARIMA) model which combines the autoregressive component to a moving average (MA) is also widely researched for application in solar forecasting. In these linear models, the relationship between the input variables and the forecasted variable are derived through statistical analysis. However, non-linear characteristics caused by variation in weather including cloud cover and atmospheric particulates further complicates the short-term forecasting [10]. Artificial intelligence or machine learning techniques are widely researched as an alternative solution for estimating processes associated with non-linear functions. In [11], artificial neural network (ANN) is used for shortterm solar forecasting based on multiple input variable such as temperature, humidity, pressure and wind. A mixed wavelet neural network (WNN) is presented in [12] for short-term solar irradiance forecasting. Autoregressive fuzzy"
+    },
+    {
+      "source_filename": "1/48.1-s2.0-S0960148122015567-main.pdf",
+      "chunk_id": "fa4c26901738dbee_chunk_0014",
+      "score": 0.05,
+      "retrieval_method": "csv_lexical_ranked_experimental",
+      "text": "and the sun from the sky. After the cloud classification, the solar radi­ ation forecasting’s are performed by giving the 17 features extracted from the images to the ANN. The method has achieved quite successful results despite the high fluctuations in solar radiation. Doodkorte [20] used sequential sky images and meteorological data obtained using a sky imager for short-term solar radiation forecasting. With the created deep learning model, solar radiation forecasting’s are made for time horizons in the range of 0–21 min. The method’s success for different sky con­ ditions is compared with other traditional methods in the literature. They revealed that the deep learning model outperformed traditional methods by 24.8%. In these studies, where sky imagers are used, machine learning methods are also frequently used. Recently, researchers have turned to deep learning approaches that can greatly increase their prediction success over traditional methods [21]. Long short-term memory net­ works (LSTM), one of the deep learning approaches that can learn long-term dependencies, are used in many prediction applications,"
+    },
+    {
+      "source_filename": "1/49.bae2016.pdf",
+      "chunk_id": "f8b0f0723b47dd54_chunk_0001",
+      "score": 0.05,
+      "retrieval_method": "csv_lexical_ranked_experimental",
+      "text": "0885-8950 (c) 2016 IEEE. Personal use is permitted, but republication/redistribution requires IEEE permission. See http://www.ieee.org/publications_standards/publications/rights/index.html for more information. This article has been accepted for publication in a future issue of this journal, but has not been fully edited. Content may change prior to final publication. Citation information: DOI 10.1109/TPWRS.2016.2569608, IEEE Transactions on Power Systems 1 Hourly Solar Irradiance Prediction Based on Support Vector Machine and Its Error Analysis Kuk Yeol Bae, Han Seung Jang, Student Member, IEEE, and Dan Keun Sung, Fellow, IEEE Abstract—Due to a variability and uncertainty of photovoltaic (PV) output power, PV operators may be subject to signiﬁcant penalties on forthcoming energy markets. Thus, the accurate prediction of PV output power plays a very important role in energy market. This paper proposes a novel solar prediction scheme for one-hour ahead prediction of solar irradiance based on various meteorological factors including the cloud cover and support vector machine (SVM). A k-means clustering algorithm is applied to collecting meteorological data and the entire data"
+    },
+    {
+      "source_filename": "1/37.Solar_Forecasting_using_ANN_with_Fuzzy_Logic_Pre-p.pdf",
+      "chunk_id": "d3d05d271be6db98_chunk_0024",
+      "score": 6.0,
+      "retrieval_method": "quantitative_confirmed_chunk",
+      "text": "to train the model. However, this is acceptable as the objective of this paper is to prove that the inclusion of the \nfuzzy logic pre-possessing and improved back-propagation algorithm will improve forecast error compared to a pure \nANN model. The MAPEs of Model (i) - pure ANN, \nModel (ii) - ANN with fuzzy logic pre-processing, \nand\nModel\n(iii) improved ANN with error \ncorrection factor and fuzzy logic pre-processing are \nshown in Table 1 and Figure 3. It is evident that the \nFigure 2: Proposed ANN with fuzzy logic and improved back-propagation \nmodel.\nFigure 3: Daily MAPE for month of April 2017.\nTable 1. Numerical results\nModel\nMAPE\nModel (i)\n46.3%\nModel (ii)\n43.1%\nModel (iii)\n29.6%"
+    },
+    {
+      "source_filename": "1/48.1-s2.0-S0960148122015567-main.pdf",
+      "chunk_id": "fa4c26901738dbee_chunk_0049",
+      "score": 1.0,
+      "retrieval_method": "quantitative_confirmed_chunk",
+      "text": "Renewable Energy 200 (2022) 1490–1505\n1497\nposition of the sun, it is necessary to know the latitude, longitude, hour, \nand day information of the area and time of the experimental setup. In \naddition, it is necessary to correct the distortions in the image caused by \nthe fisheye lens and determine the sun’s position on the corrected image. \nDue to these requirements, the work and computational load increase. \nHowever, the requirement of location and time information of the place \nwhere the system is intended to be used limits the system’s portability. \nFor these reasons, the proposed study aims to develop an algorithm that \ndoes not require location and time information and can work wherever \nthe system is placed. \nAkseker [40] examined many different methods used in the literature \nto determine the sun’s location in the image and observed that the \nmethod used by Yamashita, Yoshimura [41] gave the most successful \nresults. In the study carried out, the sun’s position in the image is \ndetermined using the related method. In this method, indices called sky \nindex (SI) and brightness index (BI) are defined, and related indices are"
+    }
+  ],
+  "allowed_citations": [
+    "[1/48.1-s2.0-S0960148122015567-main.pdf | fa4c26901738dbee_chunk_0056]",
+    "[1/49.bae2016.pdf | f8b0f0723b47dd54_chunk_0045]",
+    "[1/48.1-s2.0-S0960148122015567-main.pdf | fa4c26901738dbee_chunk_0008]",
+    "[1/37.Solar_Forecasting_using_ANN_with_Fuzzy_Logic_Pre-p.pdf | d3d05d271be6db98_chunk_0009]",
+    "[1/48.1-s2.0-S0960148122015567-main.pdf | fa4c26901738dbee_chunk_0014]",
+    "[1/49.bae2016.pdf | f8b0f0723b47dd54_chunk_0001]",
+    "[1/37.Solar_Forecasting_using_ANN_with_Fuzzy_Logic_Pre-p.pdf | d3d05d271be6db98_chunk_0024]",
+    "[1/48.1-s2.0-S0960148122015567-main.pdf | fa4c26901738dbee_chunk_0049]"
+  ],
+  "llm_citations": [
+    [
+      "1/37.Solar_Forecasting_using_ANN_with_Fuzzy_Logic_Pre-p.pdf",
+      "d3d05d271be6db98_chunk_0024"
+    ],
+    [
+      "1/49.bae2016.pdf",
+      "f8b0f0723b47dd54_chunk_0045"
+    ],
+    [
+      "1/48.1-s2.0-S0960148122015567-main.pdf",
+      "fa4c26901738dbee_chunk_0049"
+    ],
+    [
+      "1/48.1-s2.0-S0960148122015567-main.pdf",
+      "fa4c26901738dbee_chunk_0056"
+    ]
+  ],
+  "normalized_citations": [
+    [
+      "1/37.Solar_Forecasting_using_ANN_with_Fuzzy_Logic_Pre-p.pdf",
+      "d3d05d271be6db98_chunk_0024"
+    ],
+    [
+      "1/49.bae2016.pdf",
+      "f8b0f0723b47dd54_chunk_0045"
+    ],
+    [
+      "1/48.1-s2.0-S0960148122015567-main.pdf",
+      "fa4c26901738dbee_chunk_0049"
+    ],
+    [
+      "1/48.1-s2.0-S0960148122015567-main.pdf",
+      "fa4c26901738dbee_chunk_0056"
+    ]
+  ]
+}
