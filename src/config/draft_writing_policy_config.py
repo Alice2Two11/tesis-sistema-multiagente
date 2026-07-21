@@ -202,3 +202,29 @@ def get_draft_writing_policy(overrides: Mapping[str, Any] | None = None) -> dict
 
     policy.update(override_values)
     return validate_draft_writing_policy(policy)
+
+# Perfil V17 promovido para el Agente 06.
+# Se mantiene fuera del notebook para evitar una segunda fuente de verdad.
+V17_HYBRID_DRAFT_POLICY_OVERRIDES: dict[str, Any] = {
+    "retrieval_strategy": PLANNED_HYBRID_RETRIEVAL_STRATEGY,
+    "candidate_multiplier": 3,
+    "top_k_evidence_per_section": 8,
+    "chroma_quota": 3,
+    "csv_quota": 3,
+    "rrf_quota": 2,
+    "rrf_k": 60,
+    "max_evidence_chars": 18000,
+    "max_candidates_per_source": 24,
+    "quantitative_evidence_quota": 2,
+    "organizational_target_words": 40,
+    "organizational_minimum_words": 25,
+    "organizational_maximum_words": 70,
+    "substantive_minimum_ratio": 0.65,
+    "substantive_maximum_ratio": 1.40,
+}
+
+
+def get_v17_hybrid_draft_policy_overrides() -> dict[str, Any]:
+    """Devuelve una copia del perfil V17 para evitar mutaciones globales."""
+    return dict(V17_HYBRID_DRAFT_POLICY_OVERRIDES)
+
