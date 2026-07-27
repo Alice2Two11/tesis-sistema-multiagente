@@ -1,0 +1,588 @@
+diff -ruN '--exclude=reports' '--exclude=__pycache__' '--exclude=.pytest_cache' /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/adapters/agent07c_handoff.py /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/adapters/agent07c_handoff.py
+--- /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/adapters/agent07c_handoff.py	2026-07-27 19:19:34.000000000 +0000
++++ /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/adapters/agent07c_handoff.py	2026-07-27 19:54:11.536252225 +0000
+@@ -140,6 +140,22 @@
+     for key,expected in REQUIRED_SAFETY_POLICY.items():
+         if policy.get(key) is not expected:raise ValueError(f"AGENT07C_SAFETY_POLICY_MISMATCH:{key}")
+ 
++
++def _authorized_terminal_evidence(*, handoff: Mapping[str, Any], rag_records: Sequence[Mapping[str, Any]]) -> dict[str, set[tuple[str,str,str,bool,str]]]:
++    def inherited_identity(e: Mapping[str, Any]) -> tuple[str,str,str,bool,str]:
++        text=str(e.get("canonical_text",e.get("text",""))).strip()
++        return (str(e.get("evidence_id","")),str(e.get("source_filename","")),str(e.get("chunk_id","")),bool(e.get("authorized_for_section") is True),hashlib.sha256(text.encode("utf-8")).hexdigest())
++    result={str(c["claim_id"]):set() for c in handoff["claim_verification_contexts"]}
++    for c in handoff["claim_verification_contexts"]:
++        result[str(c["claim_id"])].update(inherited_identity(e) for e in c.get("eligible_evidence",()))
++    for record in rag_records:
++        cid=str(record["claim_id"])
++        if cid not in result: raise ValueError("AGENT07C_SAFETY_EVIDENCE_PROVENANCE_UNPROVEN")
++        for candidate in record["retrieved_candidate_records"]:
++            if cid not in tuple(str(q) for q in candidate["query_ids"]): raise ValueError("AGENT07C_SAFETY_EVIDENCE_PROVENANCE_UNPROVEN")
++            result[cid].add((str(candidate["evidence_id"]),str(candidate["source_filename"]),str(candidate["chunk_id"]),True,str(candidate["text_fingerprint"])))
++    return result
++
+ def _derive_and_validate_safety(*, attestation:Mapping[str,Any], runtime_result:Mapping[str,Any], retriever_binding:Agent07RetrieverBinding|Mapping[str,Any], agent06_handoff:Mapping[str,Any], claim_rows:Sequence[Mapping[str,Any]], claim_evidence:Sequence[Mapping[str,Any]], expected_claim_ids:set[str], provisional_bundle:Mapping[str,Any], resolution_result:Mapping[str,Any])->dict[str,bool]:
+     _validate_safety(attestation)
+     runtime=validate_agent07_runtime_result_contract(runtime_result)
+@@ -180,10 +196,11 @@
+     actual_claim_ids={str(r["claim_id"]) for r in claim_rows}
+     if actual_claim_ids!=expected_claim_ids or set(handoff["expected_claim_ids"])!=expected_claim_ids:
+         raise ValueError("AGENT07C_SAFETY_CLAIM_COVERAGE_UNPROVEN")
+-    handoff_evidence={str(c["claim_id"]):{str(e["evidence_id"]) for e in c.get("eligible_evidence",())} for c in handoff["claim_verification_contexts"]}
++    authorized_terminal_evidence=_authorized_terminal_evidence(handoff=handoff,rag_records=rag_records)
+     for e in claim_evidence:
+         if e.get("authorized_for_section") is not True: raise ValueError("AGENT07C_SAFETY_OUTLINE_AUTHORIZATION_UNPROVEN")
+-        if str(e["evidence_id"]) not in handoff_evidence.get(str(e["claim_id"]),set()): raise ValueError("AGENT07C_SAFETY_EVIDENCE_PROVENANCE_UNPROVEN")
++        identity=(str(e["evidence_id"]),str(e["source_filename"]),str(e["chunk_id"]),True,str(e["text_fingerprint"]))
++        if identity not in authorized_terminal_evidence.get(str(e["claim_id"]),set()): raise ValueError("AGENT07C_SAFETY_EVIDENCE_PROVENANCE_UNPROVEN")
+     if not handoff.get("outline_mapping_fingerprint"): raise ValueError("AGENT07C_SAFETY_OUTLINE_MAPPING_UNPROVEN")
+     return dict(REQUIRED_SAFETY_POLICY)
+ 
+@@ -350,13 +367,13 @@
+     # the structural notebook gate; it is not the complete scientific validation of 07C.
+     eligible_ids={str(p["claim_id"]) for p in eligible_plans}
+     context_by_claim={str(c["claim_id"]):c for c in contexts}
+-    evidence_by_claim={str(c["claim_id"]):{str(e["evidence_id"]) for e in c.get("eligible_evidence",())} for c in contexts}
++    authorized_terminal_evidence=_authorized_terminal_evidence(handoff=agent06_handoff,rag_records=tuple(runtime_result["execution_metrics"]["independent_rag_claim_records"]))
+     matrix_ids={str(r["claim_id"]) for r in matrix}
+     log_ids={str(r["claim_id"]) for r in logs}
+     checks={
+       "claim_coverage_ok": bundle_claim_ids==expected_claim_ids==set(agent06_handoff["expected_claim_ids"]),
+       "section_identity_ok": all(str(context_by_claim.get(str(r["claim_id"]),{}).get("section_id"))==str(r["section_id"]) for r in claim_rows),
+-      "authorized_evidence_ok": all(e.get("authorized_for_section") is True and str(e["evidence_id"]) in evidence_by_claim.get(str(e["claim_id"]),set()) for e in claim_evidence),
++      "authorized_evidence_ok": all(e.get("authorized_for_section") is True and (str(e["evidence_id"]),str(e["source_filename"]),str(e["chunk_id"]),True,str(e["text_fingerprint"])) in authorized_terminal_evidence.get(str(e["claim_id"]),set()) for e in claim_evidence),
+       "eligible_manual_disjoint_ok": not bool(set(manual)&eligible_ids),
+       "source_draft_fingerprint_ok": canonical_source_fp==committed_source_draft_fingerprint and all(c.get("source_draft_fingerprint")==committed_source_draft_fingerprint for c in contexts),
+       "patch_application_ok": log_ids==eligible_ids and all(r["status"]=="applied" and r["application_scope"]=="COPY_ONLY" and r["original_draft_modified"]=="false" for r in logs),
+@@ -378,7 +395,7 @@
+         raise
+     hashes={name:_sha(raw) for name,raw in payloads.items()}
+     hallucination=[{"claim_id":r["claim_id"],"section_id":r["section_id"],"hallucination_risk":r["hallucination_risk"]} for r in verification]
+-    citations=[{"claim_id":e["claim_id"],"section_id":e["section_id"],"evidence_id":e["evidence_id"],"source_filename":e["source_filename"],"chunk_id":e["chunk_id"],"authorized_for_section":str(bool(e["authorized_for_section"])).lower(),"used_in_original_verification":str(bool(e["used_in_original_verification"])).lower()} for e in claim_evidence]
++    citations=[{"claim_id":e["claim_id"],"section_id":e["section_id"],"evidence_id":e["evidence_id"],"source_filename":e["source_filename"],"chunk_id":e["chunk_id"],"text_fingerprint":e["text_fingerprint"],"authorized_for_section":str(bool(e["authorized_for_section"])).lower(),"used_in_original_verification":str(bool(e["used_in_original_verification"])).lower()} for e in claim_evidence]
+     atoms=[{"claim_id":r["claim_id"],"section_id":r["section_id"],"claim":r["original_claim_text"],"claim_type":r["claim_type"]} for r in claim_rows]
+     optional={
+       "hallucination_report.csv":_csv_bytes(hallucination,("claim_id","section_id","hallucination_risk")),
+diff -ruN '--exclude=reports' '--exclude=__pycache__' '--exclude=.pytest_cache' /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/adapters/verification_runtime.py /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/adapters/verification_runtime.py
+--- /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/adapters/verification_runtime.py	2026-07-27 19:19:23.000000000 +0000
++++ /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/adapters/verification_runtime.py	2026-07-27 19:52:03.444257140 +0000
+@@ -33,7 +33,7 @@
+     validate_additional_retrieval_delta,
+ )
+ 
+-AGENT07_RUNTIME_METRICS_VERSION = "AGENT07_RUNTIME_METRICS_V4"
++AGENT07_RUNTIME_METRICS_VERSION = "AGENT07_RUNTIME_METRICS_V5"
+ 
+ RUNTIME_STATUSES = ("COMPLETED", "PARTIAL", "BLOCKED")
+ RUNTIME_ERROR_CLASSIFICATIONS = ("CONTRACTUAL", "TECHNICAL", "DEPENDENCY", "GLOBAL")
+@@ -408,7 +408,7 @@
+     records = metrics["independent_rag_claim_records"]
+     if type(records) not in (tuple, list): raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_RECORDS_INVALID")
+     normalized_records=[]; identities=set(); with_results=0; without_results=0
+-    required_record_fields={"claim_id","section_id","retrieval_requested","retrieval_rounds","retrieval_status","retriever_binding_fingerprint","retrieved_candidate_ids","retrieved_candidate_records"}
++    required_record_fields={"claim_id","section_id","retrieval_requested","retrieval_rounds","retrieval_status","retriever_binding_fingerprint","retrieved_candidate_ids","retrieved_candidate_records","verification_context_snapshot"}
+     for row in records:
+         if not isinstance(row, Mapping) or set(row)!=required_record_fields: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_RECORD_INVALID")
+         row=dict(row); ident=(row["section_id"],row["claim_id"])
+@@ -423,12 +423,40 @@
+         if type(candidate_records) not in (tuple,list): raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATES_INVALID")
+         normalized_candidates=[]
+         for candidate in candidate_records:
+-            required={"evidence_id","source_filename","chunk_id","query_ids"}
++            required={"evidence_id","source_filename","chunk_id","query_ids","text_fingerprint"}
+             if not isinstance(candidate,Mapping) or set(candidate)!=required: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATE_INVALID")
+             candidate=dict(candidate)
+             if any(not isinstance(candidate[k],str) or not candidate[k] for k in ("evidence_id","source_filename","chunk_id")): raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATE_INVALID")
++            validate_sha256_hex(candidate["text_fingerprint"], field="text_fingerprint")
+             if type(candidate["query_ids"]) not in (tuple,list) or row["claim_id"] not in tuple(str(x) for x in candidate["query_ids"]): raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_CLAIM_MISMATCH")
+             candidate["query_ids"]=tuple(str(x) for x in candidate["query_ids"]); normalized_candidates.append(candidate)
++        by_id={}; by_pair={}
++        for candidate in normalized_candidates:
++            canonical=json.dumps(candidate,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False)
++            eid=candidate["evidence_id"]; pair=(candidate["source_filename"],candidate["chunk_id"])
++            if eid in by_id and by_id[eid] != canonical: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATE_CONFLICT")
++            if pair in by_pair and by_pair[pair] != canonical: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATE_CONFLICT")
++            by_id[eid]=canonical; by_pair[pair]=canonical
++        normalized_candidates=[json.loads(by_id[k]) for k in sorted(by_id)]
++        for candidate in normalized_candidates: candidate["query_ids"]=tuple(candidate["query_ids"])
++        snapshot=row["verification_context_snapshot"]
++        if not isinstance(snapshot,Mapping) or set(snapshot)!={"claim_id","section_id","eligible_evidence"}: raise ValueError("AGENT07_RUNTIME_VERIFICATION_CONTEXT_SNAPSHOT_INVALID")
++        if (str(snapshot["claim_id"]),str(snapshot["section_id"])) != (row["claim_id"],row["section_id"]): raise ValueError("AGENT07_RUNTIME_VERIFICATION_CONTEXT_SNAPSHOT_IDENTITY_MISMATCH")
++        if type(snapshot["eligible_evidence"]) not in (tuple,list): raise ValueError("AGENT07_RUNTIME_VERIFICATION_CONTEXT_SNAPSHOT_INVALID")
++        normalized_snapshot=[]; snapshot_ids=set(); snapshot_pairs=set()
++        snapshot_required={"evidence_id","source_filename","chunk_id","authorized_for_section","text_fingerprint"}
++        for evidence in snapshot["eligible_evidence"]:
++            if not isinstance(evidence,Mapping) or set(evidence)!=snapshot_required: raise ValueError("AGENT07_RUNTIME_VERIFICATION_CONTEXT_EVIDENCE_INVALID")
++            evidence=dict(evidence)
++            if any(not isinstance(evidence[k],str) or not evidence[k] for k in ("evidence_id","source_filename","chunk_id")) or type(evidence["authorized_for_section"]) is not bool: raise ValueError("AGENT07_RUNTIME_VERIFICATION_CONTEXT_EVIDENCE_INVALID")
++            validate_sha256_hex(evidence["text_fingerprint"], field="text_fingerprint")
++            if evidence["evidence_id"] in snapshot_ids or (evidence["source_filename"],evidence["chunk_id"]) in snapshot_pairs: raise ValueError("AGENT07_RUNTIME_VERIFICATION_CONTEXT_EVIDENCE_DUPLICATE")
++            snapshot_ids.add(evidence["evidence_id"]); snapshot_pairs.add((evidence["source_filename"],evidence["chunk_id"])); normalized_snapshot.append(evidence)
++        snapshot={"claim_id":row["claim_id"],"section_id":row["section_id"],"eligible_evidence":tuple(sorted(normalized_snapshot,key=lambda x:(x["evidence_id"],x["source_filename"],x["chunk_id"])))}
++        snapshot_set={(e["evidence_id"],e["source_filename"],e["chunk_id"],e["authorized_for_section"],e["text_fingerprint"]) for e in snapshot["eligible_evidence"]}
++        for candidate in normalized_candidates:
++            identity=(candidate["evidence_id"],candidate["source_filename"],candidate["chunk_id"],True,candidate["text_fingerprint"])
++            if identity not in snapshot_set: raise ValueError("AGENT07_RUNTIME_RETRIEVED_EVIDENCE_SNAPSHOT_MISMATCH")
+         ids=tuple(row["retrieved_candidate_ids"])
+         if tuple(sorted(ids)) != tuple(sorted(c["evidence_id"] for c in normalized_candidates)): raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATE_ID_MISMATCH")
+         if row["retrieval_status"]=="COMPLETED_WITH_RESULTS":
+@@ -437,7 +465,7 @@
+         else:
+             if ids or normalized_candidates: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_STATUS_CONTRADICTION")
+             without_results += 1
+-        row["retrieved_candidate_ids"]=ids; row["retrieved_candidate_records"]=tuple(normalized_candidates); normalized_records.append(row)
++        row["retrieved_candidate_ids"]=ids; row["retrieved_candidate_records"]=tuple(normalized_candidates); row["verification_context_snapshot"]=snapshot; normalized_records.append(row)
+     if metrics["independent_rag_claims"] != len(normalized_records): raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_UNPROVEN:COUNT_MISMATCH")
+     if metrics["independent_rag_claims_with_results"] != with_results or metrics["independent_rag_claims_without_results"] != without_results or with_results + without_results != metrics["independent_rag_claims"]: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_RESULT_COUNTS_MISMATCH")
+     metrics=dict(metrics); metrics["independent_rag_claim_records"]=tuple(normalized_records); payload["execution_metrics"]=metrics
+@@ -452,6 +480,12 @@
+         if not isinstance(bundle, Mapping) or not isinstance(resolution, Mapping): raise ValueError("AGENT07_RUNTIME_RESULT_PAYLOAD_INVALID")
+         validated_bundle = validate_provisional_verification_traceability_bundle_contract(bundle)
+         validated_resolution = validate_provisional_multi_proposal_resolution_result(resolution)
++        snapshot_by_claim={(r["section_id"],r["claim_id"]):{(e["evidence_id"],e["source_filename"],e["chunk_id"],e["authorized_for_section"],e["text_fingerprint"]) for e in r["verification_context_snapshot"]["eligible_evidence"]} for r in normalized_records}
++        for evidence in validated_bundle.get("claim_evidence_traceability_rows",()):
++            key=(str(evidence["section_id"]),str(evidence["claim_id"]))
++            if key in snapshot_by_claim:
++                identity=(str(evidence["evidence_id"]),str(evidence["source_filename"]),str(evidence["chunk_id"]),bool(evidence["authorized_for_section"]),str(evidence["text_fingerprint"]))
++                if identity not in snapshot_by_claim[key]: raise ValueError("AGENT07_RUNTIME_TERMINAL_EVIDENCE_CONTEXT_MISMATCH")
+         if validated_resolution["source_bundle_audit_fingerprint"] != validated_bundle["aggregation_audit_fingerprint"]: raise ValueError("AGENT07_RUNTIME_SOURCE_BUNDLE_AUDIT_MISMATCH")
+         expected = _resolution_to_runtime_status(validated_resolution["resolution_status"])
+         if payload["runtime_status"] != expected: raise ValueError("AGENT07_RUNTIME_STATUS_MISMATCH")
+@@ -510,7 +544,7 @@
+     rounds=int(delta.get("rounds_executed",0) or 0)
+     if rounds < 1: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_ROUND_MISSING")
+     selected=tuple(delta.get("selected_candidates",()) or ())
+-    recovered=[]; audit_candidates=[]
++    recovered_by_id={}; recovered_by_pair={}
+     for row in selected:
+         query_ids=tuple(str(x) for x in row.get("query_ids",()))
+         if claim_id not in query_ids: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_CLAIM_MISMATCH")
+@@ -519,14 +553,35 @@
+         if source not in authorized_source_set: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_OUTLINE_VIOLATION")
+         text=str(row.get("text","")).strip()
+         if not text: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_TEXT_MISSING")
+-        eid=f"{source}::{chunk}"
+-        recovered.append({"evidence_id":eid,"source_filename":source,"chunk_id":chunk,"text":text,"canonical_text":text,"authorized_for_section":True,"retrieval_origin":"AGENT07_INDEPENDENT_RAG","usage_role":"SUPPORT"})
+-        audit_candidates.append({"evidence_id":eid,"source_filename":source,"chunk_id":chunk,"query_ids":query_ids})
++        eid=str(row.get("evidence_id") or f"{source}::{chunk}").strip()
++        if not eid: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_IDENTITY_MISSING")
++        text_fp=fingerprint_text(text)
++        normalized={"evidence_id":eid,"source_filename":source,"chunk_id":chunk,"text":text,"canonical_text":text,"authorized_for_section":True,"retrieval_origin":"AGENT07_INDEPENDENT_RAG","usage_role":"SUPPORT"}
++        audit={"evidence_id":eid,"source_filename":source,"chunk_id":chunk,"query_ids":query_ids,"text_fingerprint":text_fp}
++        canonical=json.dumps(audit,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False)
++        pair=(source,chunk)
++        if eid in recovered_by_id and recovered_by_id[eid][0] != canonical: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATE_CONFLICT")
++        if pair in recovered_by_pair and recovered_by_pair[pair][0] != canonical: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATE_CONFLICT")
++        recovered_by_id[eid]=(canonical,normalized,audit); recovered_by_pair[pair]=(canonical,normalized,audit)
++    recovered=[recovered_by_id[k][1] for k in sorted(recovered_by_id)]
++    audit_candidates=[recovered_by_id[k][2] for k in sorted(recovered_by_id)]
+     merged={str(e["evidence_id"]):deepcopy(e) for e in inherited}
+-    for e in recovered: merged[e["evidence_id"]]=e
++    for e in recovered:
++        if e["evidence_id"] in merged:
++            existing=merged[e["evidence_id"]]
++            existing_text=str(existing.get("canonical_text",existing.get("text",""))).strip()
++            if (str(existing.get("source_filename","")),str(existing.get("chunk_id","")),fingerprint_text(existing_text)) != (e["source_filename"],e["chunk_id"],fingerprint_text(e["canonical_text"])):
++                raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATE_CONFLICT")
++        merged[e["evidence_id"]]=e
+     updated=deepcopy(dict(context)); updated["eligible_evidence"]=tuple(merged[k] for k in sorted(merged))
++    snapshot_evidence=[]
++    for e in updated["eligible_evidence"]:
++        text=str(e.get("canonical_text",e.get("text",""))).strip()
++        if not text: raise ValueError("AGENT07_RUNTIME_VERIFICATION_CONTEXT_EVIDENCE_TEXT_MISSING")
++        snapshot_evidence.append({"evidence_id":str(e["evidence_id"]),"source_filename":str(e["source_filename"]),"chunk_id":str(e["chunk_id"]),"authorized_for_section":bool(e.get("authorized_for_section") is True),"text_fingerprint":fingerprint_text(text)})
++    snapshot={"claim_id":claim_id,"section_id":section_id,"eligible_evidence":tuple(sorted(snapshot_evidence,key=lambda x:(x["evidence_id"],x["source_filename"],x["chunk_id"])))}
+     candidate_ids=tuple(sorted(e["evidence_id"] for e in recovered))
+-    record={"claim_id":claim_id,"section_id":section_id,"retrieval_requested":1,"retrieval_rounds":rounds,"retrieval_status":"COMPLETED_WITH_RESULTS" if candidate_ids else "COMPLETED_NO_RESULTS","retriever_binding_fingerprint":binding_fp,"retrieved_candidate_ids":candidate_ids,"retrieved_candidate_records":tuple(sorted(audit_candidates,key=lambda x:x["evidence_id"]))}
++    record={"claim_id":claim_id,"section_id":section_id,"retrieval_requested":1,"retrieval_rounds":rounds,"retrieval_status":"COMPLETED_WITH_RESULTS" if candidate_ids else "COMPLETED_NO_RESULTS","retriever_binding_fingerprint":binding_fp,"retrieved_candidate_ids":candidate_ids,"retrieved_candidate_records":tuple(audit_candidates),"verification_context_snapshot":snapshot}
+     return updated, record
+ 
+ 
+@@ -541,7 +596,7 @@
+     validated = validate_agent07_runtime_input_contract(runtime_input)
+     if dependencies.correction_context_factory is None or dependencies.reverification_input_factory is None: raise ValueError("AGENT07_RUNTIME_CONTEXT_FACTORY_REQUIRED")
+     contexts = deepcopy(validated["committed_agent06_output"]["claim_verification_contexts"]); config = deepcopy(validated["agent07_config"])
+-    vr=[]; proposals=[]; ri=[]; pre=[]; rev=[]; comp=[]; independent_rag_records=[]; stage="AGENT_INITIALIZATION"; claim_id=section_id=None
++    vr=[]; proposals=[]; ri=[]; pre=[]; rev=[]; comp=[]; independent_rag_records=[]; verification_context_snapshots={}; stage="AGENT_INITIALIZATION"; claim_id=section_id=None
+     try:
+         agent = dependencies.verification_agent_factory(llm=dependencies.verification_llm, retrieval_tool=dependencies.retrieval_tool)
+         for source in sorted(contexts, key=lambda x:(str(x["section_id"]),str(x["claim_id"]))):
+@@ -549,6 +604,10 @@
+             if dependencies.retrieval_tool is not None and dependencies.retriever_binding is not None:
+                 ctx, rag_record = _independent_retrieve_claim(ctx, dependencies); independent_rag_records.append(rag_record)
+             stage="VERIFICATION"
++            snapshot = next((deepcopy(r["verification_context_snapshot"]) for r in independent_rag_records if r["claim_id"]==claim_id and r["section_id"]==section_id), None)
++            # A strict snapshot is mandatory for productive independent RAG records.
++            # Legacy/in-memory fixtures without retrieval retain ID-only validation.
++            verification_context_snapshots[(section_id,claim_id)] = snapshot
+             verification=_plain(agent.verify_claim(deepcopy(ctx))); vr.append({"section_id":section_id,"claim_verification_result":deepcopy(verification)})
+             stage="CORRECTION_PROPOSAL"; cctx=dependencies.correction_context_factory(deepcopy(ctx),deepcopy(verification),deepcopy(config)); proposal=_plain(dependencies.proposal_runner(deepcopy(cctx),llm=dependencies.correction_llm)); proposals.append(deepcopy(proposal))
+             if proposal.get("accepted_for_reverification") is not True: continue
+@@ -563,17 +622,27 @@
+         independent_rag_claims_with_results = sum(1 for x in independent_rag_records if x["retrieval_status"]=="COMPLETED_WITH_RESULTS")
+         independent_rag_claims_without_results = sum(1 for x in independent_rag_records if x["retrieval_status"]=="COMPLETED_NO_RESULTS")
+         evidence_candidate_validation_claims = 0
+-        context_by_id = {(str(x["section_id"]), str(x["claim_id"])): x for x in contexts}
++        def evidence_identity(e):
++            text=str(e.get("canonical_text",e.get("text",""))).strip()
++            return (str(e.get("evidence_id","")),str(e.get("source_filename","")),str(e.get("chunk_id","")),bool(e.get("authorized_for_section") is True),fingerprint_text(text))
+         for wrapper in vr:
+             verification = wrapper["claim_verification_result"]
+             key = (str(wrapper["section_id"]), str(verification["claim_id"]))
+-            source = context_by_id[key]
+-            candidate_ids = {str(e["evidence_id"]) for e in source.get("eligible_evidence", ())}
+-            eligible_ids = {str(e["evidence_id"]) for e in verification.get("eligible_evidence", ())}
+-            used_ids = {str(e["evidence_id"]) for e in verification.get("evidence_used", ())}
+-            rejected_ids = {str(e["evidence_id"]) for e in verification.get("evidence_rejected", ())}
+-            # Independent RAG is certified only by the explicit per-claim retrieval records above.
+-            if used_ids.union(rejected_ids).issubset(eligible_ids) and verification.get("result_contract_valid") is True:
++            snapshot = verification_context_snapshots[key]
++            if snapshot is not None:
++                snapshot_set={(e["evidence_id"],e["source_filename"],e["chunk_id"],e["authorized_for_section"],e["text_fingerprint"]) for e in snapshot["eligible_evidence"]}
++                terminal_eligible={evidence_identity(e) for e in verification.get("eligible_evidence", ())}
++                terminal_used={evidence_identity(e) for e in verification.get("evidence_used", ())}
++                terminal_rejected={evidence_identity(e) for e in verification.get("evidence_rejected", ())}
++                valid_evidence = terminal_eligible.issubset(snapshot_set) and terminal_used.union(terminal_rejected).issubset(snapshot_set)
++            else:
++                source = next(x for x in contexts if str(x["section_id"])==key[0] and str(x["claim_id"])==key[1])
++                source_ids={str(e.get("evidence_id","")) for e in source.get("eligible_evidence",())}
++                eligible_ids={str(e.get("evidence_id","")) for e in verification.get("eligible_evidence",())}
++                used_ids={str(e.get("evidence_id","")) for e in verification.get("evidence_used",())}
++                rejected_ids={str(e.get("evidence_id","")) for e in verification.get("evidence_rejected",())}
++                valid_evidence = eligible_ids.issubset(source_ids) and used_ids.union(rejected_ids).issubset(source_ids)
++            if valid_evidence and verification.get("result_contract_valid") is True:
+                 evidence_candidate_validation_claims += 1
+         return create_agent07_runtime_result(provisional_bundle=bundle,multi_proposal_resolution_result=resolution,candidate_artifact_inventory=_candidate_inventory(bundle,resolution,validated["schema_versions"]),execution_metrics=_base_metrics(claims_processed=len(vr),independent_rag_claims=independent_rag_claims,independent_rag_claims_with_results=independent_rag_claims_with_results,independent_rag_claims_without_results=independent_rag_claims_without_results,independent_rag_claim_records=tuple(independent_rag_records),evidence_candidate_validation_claims=evidence_candidate_validation_claims,correction_proposals=len(proposals),reverification_inputs=len(ri),prechecks=len(pre),reverifications=len(rev),comparisons=len(comp)),runtime_warnings=(),runtime_issue_codes=(),runtime_error_records=(),blocked_runtime_audit_record=None,runtime_status=_resolution_to_runtime_status(resolution["resolution_status"]),correction_applied=False,official_artifacts_created=False,evaluation_ready_emitted=False)
+     except Exception as exc:
+diff -ruN '--exclude=reports' '--exclude=__pycache__' '--exclude=.pytest_cache' /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/config/verification_policy_config.py /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/config/verification_policy_config.py
+--- /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/config/verification_policy_config.py	2026-07-27 16:38:04.000000000 +0000
++++ /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/config/verification_policy_config.py	2026-07-27 19:48:06.864266219 +0000
+@@ -1305,7 +1305,8 @@
+ PROVISIONAL_BUNDLE_FINGERPRINT_ALGORITHM = "SHA-256"
+ PROVISIONAL_BUNDLE_FINGERPRINT_VERSION_V1 = "AGENT07_PROVISIONAL_BUNDLE_V1"
+ PROVISIONAL_BUNDLE_FINGERPRINT_VERSION_V2 = "AGENT07_PROVISIONAL_BUNDLE_V2"
+-PROVISIONAL_BUNDLE_FINGERPRINT_VERSION = "AGENT07_PROVISIONAL_BUNDLE_V3"
++PROVISIONAL_BUNDLE_FINGERPRINT_VERSION_V3 = "AGENT07_PROVISIONAL_BUNDLE_V3"
++PROVISIONAL_BUNDLE_FINGERPRINT_VERSION = "AGENT07_PROVISIONAL_BUNDLE_V4"
+ PROVISIONAL_AUDIT_FINGERPRINT_VERSION = "AGENT07_PROVISIONAL_AUDIT_V1"
+ PROVISIONAL_COLLECTION_FINGERPRINT_VERSION = "AGENT07_PROVISIONAL_COLLECTION_V1"
+ PROVISIONAL_COLLECTION_FINGERPRINT_FIELDS = (
+diff -ruN '--exclude=reports' '--exclude=__pycache__' '--exclude=.pytest_cache' /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/tools/verification/traceability.py /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/tools/verification/traceability.py
+--- /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/tools/verification/traceability.py	2026-07-27 16:36:16.000000000 +0000
++++ /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/tools/verification/traceability.py	2026-07-27 19:48:06.864266219 +0000
+@@ -328,6 +328,7 @@
+     evidence_id: str
+     source_filename: str
+     chunk_id: str
++    text_fingerprint: str
+     usage_role: str
+     authorized_for_section: bool
+     used_in_original_verification: bool
+diff -ruN '--exclude=reports' '--exclude=__pycache__' '--exclude=.pytest_cache' /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/tools/verification/validation.py /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/tools/verification/validation.py
+--- /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/tools/verification/validation.py	2026-07-27 16:36:16.000000000 +0000
++++ /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/src/tools/verification/validation.py	2026-07-27 19:48:06.868266219 +0000
+@@ -3551,6 +3551,7 @@
+     code = "CLAIM_EVIDENCE_TRACEABILITY_ROW_INVALID"
+     result = _phase651a_exact_dataclass_mapping(value, ClaimEvidenceTraceabilityRow, code)
+     _validate_evidence_row_common(result, code, "supports_original_claim")
++    validate_sha256_hex(result["text_fingerprint"], field="text_fingerprint")
+     result["used_in_original_verification"] = _phase651a_bool(result["used_in_original_verification"], "used_in_original_verification", code)
+     return result
+ 
+@@ -4746,7 +4747,7 @@
+         used={e["evidence_id"] for e in vr.get("evidence_used",())};rejected={e["evidence_id"] for e in vr.get("evidence_rejected",())}
+         for eid in sorted(used|rejected):
+             src=eligible.get(eid) or next((e for e in vr.get("evidence_used",())+vr.get("evidence_rejected",()) if e["evidence_id"]==eid),{})
+-            er=ClaimEvidenceTraceabilityRow(vr["claim_id"],rec["section_id"],eid,str(src.get("source_filename","")),str(src.get("chunk_id","")),str(src.get("usage_role","NOT_EVALUATED")),bool(src.get("authorized_for_section",False)),eid in used,"NOT_EVALUATED")
++            er=ClaimEvidenceTraceabilityRow(vr["claim_id"],rec["section_id"],eid,str(src.get("source_filename","")),str(src.get("chunk_id","")),sha256(str(src.get("canonical_text",src.get("text",""))).encode("utf-8")).hexdigest(),str(src.get("usage_role","NOT_EVALUATED")),bool(src.get("authorized_for_section",False)),eid in used,"NOT_EVALUATED")
+             claim_ev.append(validate_claim_evidence_traceability_row_contract(er.to_dict()))
+     for x in corrections.values():
+         p,ri,pc,rv,cp=x["proposal"],x.get("reverification_input"),x.get("precheck"),x.get("reverification"),x.get("comparison")
+@@ -4872,7 +4873,7 @@
+         for eid in sorted(used|rejected):
+             e=eligible.get(eid) or next((z for z in tuple(vr.get("evidence_used",()))+tuple(vr.get("evidence_rejected",())) if z["evidence_id"]==eid),None)
+             if not e or not e.get("source_filename") or not e.get("chunk_id"): warnings.append("AGGREGATION_ROW_EVIDENCE_IDENTITY_UNAVAILABLE"); continue
+-            claim_ev.append(validate_claim_evidence_traceability_row_contract(ClaimEvidenceTraceabilityRow(vr["claim_id"],rec["section_id"],eid,e["source_filename"],e["chunk_id"],str(e.get("usage_role","NOT_EVALUATED")),bool(e.get("authorized_for_section",False)),eid in used,"NOT_EVALUATED").to_dict()))
++            claim_ev.append(validate_claim_evidence_traceability_row_contract(ClaimEvidenceTraceabilityRow(vr["claim_id"],rec["section_id"],eid,e["source_filename"],e["chunk_id"],sha256(str(e.get("canonical_text",e.get("text",""))).encode("utf-8")).hexdigest(),str(e.get("usage_role","NOT_EVALUATED")),bool(e.get("authorized_for_section",False)),eid in used,"NOT_EVALUATED").to_dict()))
+     for x in sorted(corrections.values(),key=lambda z:(z["section_id"],z["claim_id"],z["correction_id"])):
+         if x["claim_id"] in invalid_claim_ids: continue
+         p,ri,pc,rv,cp=x["proposal"],x.get("reverification_input"),x.get("precheck"),x.get("reverification"),x.get("comparison")
+diff -ruN '--exclude=reports' '--exclude=__pycache__' '--exclude=.pytest_cache' /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/agent07c_test_support.py /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/agent07c_test_support.py
+--- /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/agent07c_test_support.py	2026-07-27 19:20:08.000000000 +0000
++++ /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/agent07c_test_support.py	2026-07-27 19:49:04.460264009 +0000
+@@ -24,7 +24,8 @@
+         for e in c.get("eligible_evidence",()):
+             source=str(e.get("source_filename") or "p.pdf"); chunk=str(e.get("chunk_id") or e.get("evidence_id") or "ch1")
+             eid=str(e.get("evidence_id") or f"{source}::{chunk}")
+-            candidates.append({"evidence_id":eid,"source_filename":source,"chunk_id":chunk,"query_ids":(str(c["claim_id"]),)})
++            text=str(e.get("canonical_text",e.get("text","")))
++            candidates.append({"evidence_id":eid,"source_filename":source,"chunk_id":chunk,"query_ids":(str(c["claim_id"]),),"text_fingerprint":hashlib.sha256(text.encode()).hexdigest()})
+         ids_for_claim=tuple(sorted(x["evidence_id"] for x in candidates))
+         rag_records.append({
+             "claim_id":str(c["claim_id"]),"section_id":str(c["section_id"]),
+@@ -32,6 +33,16 @@
+             "retrieval_status":"COMPLETED_WITH_RESULTS" if ids_for_claim else "COMPLETED_NO_RESULTS",
+             "retriever_binding_fingerprint":binding_fp,"retrieved_candidate_ids":ids_for_claim,
+             "retrieved_candidate_records":tuple(candidates),
++            "verification_context_snapshot":{
++                "claim_id":str(c["claim_id"]),"section_id":str(c["section_id"]),
++                "eligible_evidence":tuple(sorted(({
++                    "evidence_id":str(e.get("evidence_id") or f"{str(e.get('source_filename') or 'p.pdf')}::{str(e.get('chunk_id') or 'ch1')}"),
++                    "source_filename":str(e.get("source_filename") or "p.pdf"),
++                    "chunk_id":str(e.get("chunk_id") or "ch1"),
++                    "authorized_for_section":bool(e.get("authorized_for_section") is True),
++                    "text_fingerprint":hashlib.sha256(str(e.get("canonical_text",e.get("text",""))).encode()).hexdigest(),
++                } for e in c.get("eligible_evidence",())),key=lambda x:(x["evidence_id"],x["source_filename"],x["chunk_id"])))
++            },
+         })
+     with_results=sum(1 for x in rag_records if x["retrieval_status"]=="COMPLETED_WITH_RESULTS")
+     without_results=len(rag_records)-with_results
+diff -ruN '--exclude=reports' '--exclude=__pycache__' '--exclude=.pytest_cache' /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_agent07_authorized_source_rag_universe.py /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_agent07_authorized_source_rag_universe.py
+--- /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_agent07_authorized_source_rag_universe.py	2026-07-27 19:21:54.000000000 +0000
++++ /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_agent07_authorized_source_rag_universe.py	2026-07-27 19:54:51.612250687 +0000
+@@ -1,4 +1,5 @@
+ from copy import deepcopy
++import hashlib
+ import pytest
+ 
+ from src.adapters.verification_runtime import (
+@@ -92,7 +93,8 @@
+     row = runtime["execution_metrics"]["independent_rag_claim_records"][0]
+     row["retrieval_status"] = "COMPLETED_NO_RESULTS"
+     row["retrieved_candidate_ids"] = ("paper.pdf::x",)
+-    row["retrieved_candidate_records"] = ({"evidence_id":"paper.pdf::x","source_filename":"paper.pdf","chunk_id":"x","query_ids":("c1",)},)
++    row["retrieved_candidate_records"] = ({"evidence_id":"paper.pdf::x","source_filename":"paper.pdf","chunk_id":"x","query_ids":("c1",),"text_fingerprint":hashlib.sha256(b"x").hexdigest()},)
++    row["verification_context_snapshot"] = {"claim_id":"c1","section_id":"s1","eligible_evidence":({"evidence_id":"paper.pdf::x","source_filename":"paper.pdf","chunk_id":"x","authorized_for_section":True,"text_fingerprint":hashlib.sha256(b"x").hexdigest()},)}
+     with pytest.raises(ValueError, match="STATUS_CONTRADICTION"):
+         create_agent07_runtime_result(
+             provisional_bundle=runtime["provisional_bundle"],
+diff -ruN '--exclude=reports' '--exclude=__pycache__' '--exclude=.pytest_cache' /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_agent07_independent_rag_semantics.py /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_agent07_independent_rag_semantics.py
+--- /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_agent07_independent_rag_semantics.py	2026-07-27 19:21:05.000000000 +0000
++++ /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_agent07_independent_rag_semantics.py	2026-07-27 19:49:04.460264009 +0000
+@@ -29,7 +29,7 @@
+     def retrieve_more(self, request):
+         return {
+             "rounds_executed":self.rounds,
+-            "selected_candidates":({"source_filename":"p.pdf","chunk_id":"ch1","text":"evidence","query_ids":(self.claim_id,)},),
++            "selected_candidates":({"source_filename":"p.pdf","chunk_id":"ch1","text":"e","query_ids":(self.claim_id,)},),
+         }
+ 
+ 
+diff -ruN '--exclude=reports' '--exclude=__pycache__' '--exclude=.pytest_cache' /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_agent07_retrieved_evidence_provenance_closure.py /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_agent07_retrieved_evidence_provenance_closure.py
+--- /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_agent07_retrieved_evidence_provenance_closure.py	1970-01-01 00:00:00.000000000 +0000
++++ /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_agent07_retrieved_evidence_provenance_closure.py	2026-07-27 19:54:22.008251823 +0000
+@@ -0,0 +1,193 @@
++from copy import deepcopy
++import hashlib
++import pytest
++
++from src.adapters.verification_runtime import (
++    VerificationRuntimeDependencies,
++    _independent_retrieve_claim,
++    create_agent07_runtime_result,
++    _candidate_inventory,
++    _base_metrics,
++    _resolution_to_runtime_status,
++)
++from src.adapters.agent06_verification_handoff import Agent07RetrieverBinding
++from src.adapters.agent07c_handoff import prepare_agent07c_input_from_agent07, REQUIRED_SAFETY_POLICY
++from src.tools.verification.traceability import ClaimEvidenceTraceabilityRow
++from src.tools.verification.validation import create_provisional_verification_traceability_bundle
++from src.tools.verification.resolution import resolve_multiple_correction_proposals
++from src.tools.verification.corrections import fingerprint_text
++from tests.verification.agent07c_test_support import terminal_handoff_args
++from tests.verification.test_agent07c_terminal_safety_closure import _source_context, _fp
++from tests.verification.test_multi_proposal_resolution_phase66 import claim, metrics
++
++
++def binding():
++    return Agent07RetrieverBinding("exp", "c", "m", "a" * 64, "b" * 64)
++
++
++def deps(retriever):
++    b = binding()
++    return VerificationRuntimeDependencies(
++        retrieval_tool=retriever,
++        retriever_binding={
++            "experiment_id": b.experiment_id,
++            "collection_name": b.collection_name,
++            "embedding_model": b.embedding_model,
++            "chroma_manifest_fingerprint": b.chroma_manifest_fingerprint,
++            "chunks_manifest_fingerprint": b.chunks_manifest_fingerprint,
++        },
++    )
++
++
++class Retriever:
++    def __init__(self, candidates):
++        self.candidates = tuple(candidates)
++    def retrieve_more(self, request):
++        return {"rounds_executed": 1, "selected_candidates": self.candidates}
++
++
++def candidate(*, source="p.pdf", chunk="new", text="new evidence", claim_id="c1"):
++    return {"source_filename": source, "chunk_id": chunk, "text": text, "query_ids": (claim_id,)}
++
++
++def context(evidence=()):
++    return {"claim_id": "c1", "section_id": "s1", "eligible_evidence": tuple(evidence), "authorized_source_filenames": ("p.pdf",)}
++
++
++def bundle_with_evidence(*, evidence_id="p.pdf::new", text="new evidence", text_fp=None):
++    row = ClaimEvidenceTraceabilityRow(
++        "c1", "s1", evidence_id, "p.pdf", "new",
++        text_fp or fingerprint_text(text), "SUPPORT", True, True, "NOT_EVALUATED",
++    ).to_dict()
++    return create_provisional_verification_traceability_bundle(
++        claim_traceability_rows=(claim(corrections=()),), correction_traceability_rows=(),
++        claim_evidence_traceability_rows=(row,), correction_evidence_traceability_rows=(),
++        reverification_traceability_rows=(), metrics=metrics(True), aggregation_status="VALID",
++        metrics_status="COMPUTED", partial_reason_codes=(), aggregation_issue_codes=(),
++        aggregation_warnings=(), normalized_bundle_status="COMPUTED",
++        normalized_bundle_fingerprint="1" * 64, aggregation_audit_fingerprint="2" * 64,
++        input_collection_fingerprints={}, policy_versions={"verification": "v1"},
++        schema_versions={"bundle": "v4"}, correction_applied=False,
++        official_artifacts_created=False, additional_llm_calls=0, additional_retrieval_rounds=0,
++    )
++
++
++def runtime_for_new_evidence(bundle, resolution, source_contexts, *, include_retrieved=True, snapshot_fp=None):
++    seed = {"evidence_id":"p.pdf::new","source_filename":"p.pdf","chunk_id":"new","text":"new evidence","authorized_for_section":True}
++    seeded_contexts=tuple(dict(c, eligible_evidence=(seed,)) for c in source_contexts)
++    base = terminal_handoff_args(bundle, resolution, seeded_contexts)
++    # The scientific source handoff remains the caller-provided Agent 06 context;
++    # the runtime snapshot is independently retained below.
++    base["agent06_handoff"]["claim_verification_contexts"] = tuple(source_contexts)
++    runtime = deepcopy(base["runtime_result"])
++    rec = runtime["execution_metrics"]["independent_rag_claim_records"][0]
++    fp = snapshot_fp or fingerprint_text("new evidence")
++    if include_retrieved:
++        rec.update({
++            "retrieval_status": "COMPLETED_WITH_RESULTS",
++            "retrieved_candidate_ids": ("p.pdf::new",),
++            "retrieved_candidate_records": ({
++                "evidence_id": "p.pdf::new", "source_filename": "p.pdf", "chunk_id": "new",
++                "query_ids": ("c1",), "text_fingerprint": fp,
++            },),
++            "verification_context_snapshot": {
++                "claim_id": "c1", "section_id": "s1", "eligible_evidence": ({
++                    "evidence_id": "p.pdf::new", "source_filename": "p.pdf", "chunk_id": "new",
++                    "authorized_for_section": True, "text_fingerprint": fp,
++                },),
++            },
++        })
++        runtime["execution_metrics"]["independent_rag_claims_with_results"] = 1
++        runtime["execution_metrics"]["independent_rag_claims_without_results"] = 0
++    else:
++        rec["retrieval_status"]="COMPLETED_NO_RESULTS"
++        rec["retrieved_candidate_ids"]=()
++        rec["retrieved_candidate_records"]=()
++        rec["verification_context_snapshot"]={"claim_id":"c1","section_id":"s1","eligible_evidence":()}
++        runtime["execution_metrics"]["independent_rag_claims_with_results"] = 0
++        runtime["execution_metrics"]["independent_rag_claims_without_results"] = 1
++    return create_agent07_runtime_result(
++        provisional_bundle=bundle.to_dict(), multi_proposal_resolution_result=resolution.to_dict(),
++        candidate_artifact_inventory=_candidate_inventory(bundle.to_dict(), resolution.to_dict(), {"provisional_bundle":"v4","multi_proposal_resolution":"v1"}),
++        execution_metrics=runtime["execution_metrics"], runtime_warnings=(), runtime_issue_codes=(),
++        runtime_error_records=(), blocked_runtime_audit_record=None,
++        runtime_status=_resolution_to_runtime_status(resolution.resolution_status), correction_applied=False,
++        official_artifacts_created=False, evaluation_ready_emitted=False,
++    ).to_dict(), base
++
++
++def test_original_context_without_evidence_snapshot_contains_retrieved_candidate():
++    updated, record = _independent_retrieve_claim(context(()), deps(Retriever((candidate(),))))
++    assert updated["eligible_evidence"][0]["evidence_id"] == "p.pdf::new"
++    snap = record["verification_context_snapshot"]["eligible_evidence"][0]
++    assert snap["evidence_id"] == "p.pdf::new"
++    assert snap["text_fingerprint"] == fingerprint_text("new evidence")
++
++
++def test_new_retrieved_and_used_evidence_is_authorized_for_agent07c():
++    draft, contexts = _source_context()
++    contexts = (dict(contexts[0], authorized_source_filenames=("p.pdf",)),)
++    b = bundle_with_evidence(); r = resolve_multiple_correction_proposals(b)
++    runtime, args = runtime_for_new_evidence(b, r, contexts)
++    prepared = prepare_agent07c_input_from_agent07(
++        provisional_bundle=b.to_dict(), resolution_result=r.to_dict(), source_draft=draft,
++        source_draft_markdown=draft["sections"][0]["text"], experiment_id="exp",
++        committed_source_draft_fingerprint=_fp(draft), claim_source_contexts=contexts,
++        safety_policy=REQUIRED_SAFETY_POLICY, runtime_result=runtime,
++        retriever_binding=args["retriever_binding"], agent06_handoff=args["agent06_handoff"],
++    )
++    assert prepared.result_contract_valid is True
++
++
++def test_inherited_evidence_remains_authorized():
++    draft, contexts = _source_context()
++    inherited = {"evidence_id":"p.pdf::new","source_filename":"p.pdf","chunk_id":"new","text":"new evidence","authorized_for_section":True}
++    contexts = (dict(contexts[0], eligible_evidence=(inherited,), authorized_source_filenames=("p.pdf",)),)
++    b = bundle_with_evidence(); r = resolve_multiple_correction_proposals(b)
++    args = terminal_handoff_args(b, r, contexts)
++    prepared = prepare_agent07c_input_from_agent07(
++        provisional_bundle=b.to_dict(), resolution_result=r.to_dict(), source_draft=draft,
++        source_draft_markdown=draft["sections"][0]["text"], experiment_id="exp",
++        committed_source_draft_fingerprint=_fp(draft), claim_source_contexts=contexts,
++        safety_policy=REQUIRED_SAFETY_POLICY, **args,
++    )
++    assert prepared.result_contract_valid is True
++
++
++def test_evidence_outside_agent06_and_agent07_retrieval_is_rejected():
++    draft, contexts = _source_context(); contexts=(dict(contexts[0],authorized_source_filenames=("p.pdf",)),)
++    b=bundle_with_evidence(); r=resolve_multiple_correction_proposals(b)
++    with pytest.raises(ValueError, match="TERMINAL_EVIDENCE_CONTEXT_MISMATCH"):
++        runtime_for_new_evidence(b,r,contexts,include_retrieved=False)
++
++
++def test_verifier_terminal_evidence_not_in_snapshot_is_rejected():
++    draft, contexts = _source_context(); contexts=(dict(contexts[0],authorized_source_filenames=("p.pdf",)),)
++    b=bundle_with_evidence(); r=resolve_multiple_correction_proposals(b)
++    with pytest.raises(ValueError, match="TERMINAL_EVIDENCE_CONTEXT_MISMATCH"):
++        runtime_for_new_evidence(b, r, contexts, include_retrieved=False)
++
++
++def test_same_evidence_id_with_altered_text_is_rejected():
++    inherited=({"evidence_id":"p.pdf::new","source_filename":"p.pdf","chunk_id":"new","text":"old","authorized_for_section":True},)
++    with pytest.raises(ValueError, match="CANDIDATE_CONFLICT"):
++        _independent_retrieve_claim(context(inherited), deps(Retriever((candidate(text="changed"),))))
++
++
++def test_incorrect_text_fingerprint_is_rejected():
++    draft, contexts = _source_context(); contexts=(dict(contexts[0],authorized_source_filenames=("p.pdf",)),)
++    b=bundle_with_evidence(); r=resolve_multiple_correction_proposals(b)
++    with pytest.raises(ValueError, match="TERMINAL_EVIDENCE_CONTEXT_MISMATCH|SNAPSHOT_MISMATCH"):
++        runtime_for_new_evidence(b, r, contexts, snapshot_fp="0"*64)
++
++
++def test_identical_candidate_duplicate_is_deduplicated():
++    c=candidate()
++    updated, record = _independent_retrieve_claim(context(()), deps(Retriever((c, deepcopy(c)))))
++    assert len(record["retrieved_candidate_records"]) == 1
++    assert len(updated["eligible_evidence"]) == 1
++
++
++def test_conflicting_candidate_duplicate_is_blocked():
++    with pytest.raises(ValueError, match="CANDIDATE_CONFLICT"):
++        _independent_retrieve_claim(context(()), deps(Retriever((candidate(text="a"), candidate(text="b")))))
+diff -ruN '--exclude=reports' '--exclude=__pycache__' '--exclude=.pytest_cache' /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_multi_proposal_resolution_phase66.py /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_multi_proposal_resolution_phase66.py
+--- /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_multi_proposal_resolution_phase66.py	2026-07-27 16:39:51.000000000 +0000
++++ /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_multi_proposal_resolution_phase66.py	2026-07-27 19:50:13.864261346 +0000
+@@ -307,4 +307,4 @@
+ 
+ def test_phase67_bundle_contract_is_explicitly_v2():
+     assert PROVISIONAL_BUNDLE_FINGERPRINT_VERSION_V1=="AGENT07_PROVISIONAL_BUNDLE_V1"
+-    assert PROVISIONAL_BUNDLE_FINGERPRINT_VERSION=="AGENT07_PROVISIONAL_BUNDLE_V3"
++    assert PROVISIONAL_BUNDLE_FINGERPRINT_VERSION=="AGENT07_PROVISIONAL_BUNDLE_V4"
+diff -ruN '--exclude=reports' '--exclude=__pycache__' '--exclude=.pytest_cache' /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_structural_bundle_phase651a.py /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_structural_bundle_phase651a.py
+--- /mnt/data/work_rag_evidence/base_original/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_structural_bundle_phase651a.py	2026-07-27 14:17:50.000000000 +0000
++++ /mnt/data/work_rag_evidence/agent07_phase7_4r_authorized_source_rag_closure_candidate/tests/verification/test_structural_bundle_phase651a.py	2026-07-27 19:50:13.864261346 +0000
+@@ -129,7 +129,7 @@
+ 
+ 
+ def test_claim_evidence_has_no_correction_id_and_not_evaluated_allowed():
+-    row = ClaimEvidenceTraceabilityRow("c1", "s1", "e1", "p.pdf", "ch1", "SUPPORT", True, True, "NOT_EVALUATED")
++    row = ClaimEvidenceTraceabilityRow("c1", "s1", "e1", "p.pdf", "ch1", "0"*64, "SUPPORT", True, True, "NOT_EVALUATED")
+     value = row.to_dict()
+     assert "correction_id" not in value
+     assert validate_claim_evidence_traceability_row_contract(value)["supports_original_claim"] == "NOT_EVALUATED"
