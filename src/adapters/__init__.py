@@ -34,3 +34,8 @@ from .agent07c_handoff import (
     validate_agent07c_prepared_input_contract,
     validate_original_agent07c_input_artifacts,
 )
+
+from .claim_verification_context import (
+    build_claim_verification_context_from_agent06_handoff,
+    classify_claim_from_versioned_policy,
+)

@@ -14,6 +14,7 @@ from typing import Any, Callable, Mapping, Protocol, Sequence
 
 from src.agents.verification_agent import VerificationAgent
 from src.adapters.agent06_verification_handoff import (Agent07RetrieverBinding, validate_agent07_experiment_compatibility, validate_productive_retriever_binding)
+from src.adapters.claim_verification_context import build_claim_verification_context_from_agent06_handoff
 from src.tools.verification.corrections import propose_correction, fingerprint_text
 from src.tools.verification.resolution import (
     resolve_multiple_correction_proposals,
@@ -573,7 +574,7 @@ def _independent_retrieve_claim(context: Mapping[str, Any], dependencies: Verifi
             if (str(existing.get("source_filename","")),str(existing.get("chunk_id","")),fingerprint_text(existing_text)) != (e["source_filename"],e["chunk_id"],fingerprint_text(e["canonical_text"])):
                 raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATE_CONFLICT")
         merged[e["evidence_id"]]=e
-    updated=deepcopy(dict(context)); updated["eligible_evidence"]=tuple(merged[k] for k in sorted(merged))
+    updated=deepcopy(dict(context)); updated["eligible_evidence"]=tuple(merged[k] for k in sorted(merged)); updated["agent07_independent_retrieval_executed"]=True; updated["agent07_independent_retrieval_rounds"]=rounds; updated["agent07_independent_retrieval_status"]="COMPLETED_WITH_RESULTS" if recovered else "COMPLETED_NO_RESULTS"
     snapshot_evidence=[]
     for e in updated["eligible_evidence"]:
         text=str(e.get("canonical_text",e.get("text",""))).strip()
@@ -584,6 +585,16 @@ def _independent_retrieve_claim(context: Mapping[str, Any], dependencies: Verifi
     record={"claim_id":claim_id,"section_id":section_id,"retrieval_requested":1,"retrieval_rounds":rounds,"retrieval_status":"COMPLETED_WITH_RESULTS" if candidate_ids else "COMPLETED_NO_RESULTS","retriever_binding_fingerprint":binding_fp,"retrieved_candidate_ids":candidate_ids,"retrieved_candidate_records":tuple(audit_candidates),"verification_context_snapshot":snapshot}
     return updated, record
 
+
+
+def _sanitized_stage_error_code(exc: Exception) -> str:
+    """Preserve a safe contractual code, not only the Python exception class."""
+    import re
+    raw=str(exc).strip()
+    match=re.match(r"^([A-Z][A-Z0-9_]*(?::[A-Z0-9_,.-]+)*)", raw)
+    candidate=match.group(1) if match else ""
+    token=candidate if "_" in candidate else type(exc).__name__
+    return f"AGENT07_RUNTIME_STAGE_FAILURE:{token}"
 
 def _blocked_runtime_result(*, stage: str, claim_id: str | None, section_id: str | None, error_code: str, classification: str, schema_versions: Mapping[str, str], metrics: Mapping[str, int] | None = None) -> Agent07RuntimeResult:
     core = {"stage":stage,"claim_id":claim_id,"section_id":section_id,"error_code":error_code,"error_classification":classification}
@@ -608,7 +619,12 @@ def run_agent07_in_memory(runtime_input: Agent07RuntimeInput, *, dependencies: V
             # A strict snapshot is mandatory for productive independent RAG records.
             # Legacy/in-memory fixtures without retrieval retain ID-only validation.
             verification_context_snapshots[(section_id,claim_id)] = snapshot
-            verification=_plain(agent.verify_claim(deepcopy(ctx))); vr.append({"section_id":section_id,"claim_verification_result":deepcopy(verification)})
+            if isinstance(agent, VerificationAgent):
+                policy_overrides=config.get("verification_policy", config.get("policy", {}))
+                core_ctx=build_claim_verification_context_from_agent06_handoff(ctx, verification_policy=policy_overrides, attempt_number=int(config.get("attempt_number",1)))
+            else:
+                core_ctx=deepcopy(ctx)
+            verification=_plain(agent.verify_claim(deepcopy(core_ctx))); vr.append({"section_id":section_id,"claim_verification_result":deepcopy(verification)})
             stage="CORRECTION_PROPOSAL"; cctx=dependencies.correction_context_factory(deepcopy(ctx),deepcopy(verification),deepcopy(config)); proposal=_plain(dependencies.proposal_runner(deepcopy(cctx),llm=dependencies.correction_llm)); proposals.append(deepcopy(proposal))
             if proposal.get("accepted_for_reverification") is not True: continue
             stage="REVERIFICATION_INPUT"; inp=_plain(dependencies.reverification_input_factory(deepcopy(ctx),deepcopy(verification),deepcopy(proposal),deepcopy(config))); ri.append(deepcopy(inp))
@@ -646,4 +662,4 @@ def run_agent07_in_memory(runtime_input: Agent07RuntimeInput, *, dependencies: V
                 evidence_candidate_validation_claims += 1
         return create_agent07_runtime_result(provisional_bundle=bundle,multi_proposal_resolution_result=resolution,candidate_artifact_inventory=_candidate_inventory(bundle,resolution,validated["schema_versions"]),execution_metrics=_base_metrics(claims_processed=len(vr),independent_rag_claims=independent_rag_claims,independent_rag_claims_with_results=independent_rag_claims_with_results,independent_rag_claims_without_results=independent_rag_claims_without_results,independent_rag_claim_records=tuple(independent_rag_records),evidence_candidate_validation_claims=evidence_candidate_validation_claims,correction_proposals=len(proposals),reverification_inputs=len(ri),prechecks=len(pre),reverifications=len(rev),comparisons=len(comp)),runtime_warnings=(),runtime_issue_codes=(),runtime_error_records=(),blocked_runtime_audit_record=None,runtime_status=_resolution_to_runtime_status(resolution["resolution_status"]),correction_applied=False,official_artifacts_created=False,evaluation_ready_emitted=False)
     except Exception as exc:
-        return _blocked_runtime_result(stage=stage,claim_id=claim_id,section_id=section_id,error_code=f"AGENT07_RUNTIME_STAGE_FAILURE:{type(exc).__name__}",classification="DEPENDENCY" if stage in {"AGENT_INITIALIZATION","BUNDLE_BUILD","MULTI_PROPOSAL_RESOLUTION"} else "TECHNICAL",schema_versions=validated["schema_versions"],metrics=_base_metrics(claims_processed=len(vr),correction_proposals=len(proposals),reverification_inputs=len(ri),prechecks=len(pre),reverifications=len(rev),comparisons=len(comp)))
+        return _blocked_runtime_result(stage=stage,claim_id=claim_id,section_id=section_id,error_code=_sanitized_stage_error_code(exc),classification="DEPENDENCY" if stage in {"AGENT_INITIALIZATION","BUNDLE_BUILD","MULTI_PROPOSAL_RESOLUTION"} else "TECHNICAL",schema_versions=validated["schema_versions"],metrics=_base_metrics(claims_processed=len(vr),correction_proposals=len(proposals),reverification_inputs=len(ri),prechecks=len(pre),reverifications=len(rev),comparisons=len(comp)))
