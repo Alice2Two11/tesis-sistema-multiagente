@@ -1,0 +1,8 @@
+src/agents/verification_agent.py
+src/tools/verification/prompting.py
+tests/verification/test_verification_llm_message_normalization.py
+reports/agent07_ai_message_normalization.patch
+reports/REPORT.md
+reports/directed_tests.txt
+reports/verification_suite.txt
+reports/INCLUDED_FILES.txt

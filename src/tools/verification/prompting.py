@@ -108,10 +108,32 @@ def build_verification_messages(
     }
 
 
-def parse_verification_response(raw_text: str) -> dict[str, Any]:
-    if not isinstance(raw_text, str) or not raw_text.strip():
+def normalize_verification_llm_response(raw_response: Any) -> str | dict[str, Any]:
+    """Normalize the adapter boundary before strict JSON/schema validation.
+
+    LangChain chat models return ``BaseMessage``/``AIMessage`` instances whose
+    JSON payload lives in ``.content``.  The scientific contract still receives
+    exactly the same string or mapping; this function only unwraps the transport
+    object and does not alter the payload, rubric, or validation rules.
+    """
+    value = raw_response
+    if not isinstance(value, (str, Mapping)) and hasattr(value, "content"):
+        value = getattr(value, "content")
+
+    if isinstance(value, Mapping):
+        return dict(value)
+    if isinstance(value, str):
+        return value
+    return ""
+
+
+def parse_verification_response(raw_response: Any) -> dict[str, Any]:
+    normalized = normalize_verification_llm_response(raw_response)
+    if isinstance(normalized, Mapping):
+        return dict(normalized)
+    if not normalized.strip():
         raise ValueError("LLM_RESPONSE_EMPTY")
-    text = raw_text.strip()
+    text = normalized.strip()
     if not (text.startswith("{") and text.endswith("}")):
         raise ValueError("LLM_RESPONSE_NOT_PURE_JSON_OBJECT")
     try:

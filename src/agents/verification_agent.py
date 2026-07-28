@@ -10,7 +10,11 @@ import hashlib
 import json
 from typing import Any, Mapping, Protocol, Sequence
 
-from src.tools.verification.prompting import build_verification_messages, parse_verification_response
+from src.tools.verification.prompting import (
+    build_verification_messages,
+    normalize_verification_llm_response,
+    parse_verification_response,
+)
 from src.tools.verification.validation import (
     ClaimRetrievalTool,
     allowed_verdicts_for_claim,
@@ -26,7 +30,7 @@ from src.tools.verification.validation import (
 
 
 class VerificationLLM(Protocol):
-    def invoke(self, messages: Sequence[Mapping[str, str]]) -> str: ...
+    def invoke(self, messages: Sequence[Mapping[str, str]]) -> Any: ...
 
 
 @dataclass(frozen=True, slots=True)
@@ -286,11 +290,12 @@ class VerificationAgent:
                                       llm_calls, format_attempts, schema_attempts, scientific_attempts,
                                       retrieval_requests, format_retries, schema_retries)
 
-            attempt = {"attempt_number": llm_calls, "raw_text": raw, "parse_status": "PENDING",
+            normalized_raw = normalize_verification_llm_response(raw)
+            attempt = {"attempt_number": llm_calls, "raw_text": normalized_raw, "parse_status": "PENDING",
                        "schema_errors": (), "validation_errors": (), "normalized_response": None}
             format_attempts += 1
             try:
-                parsed = parse_verification_response(raw)
+                parsed = parse_verification_response(normalized_raw)
                 attempt["parse_status"] = "PARSED"
             except ValueError as exc:
                 attempt["parse_status"] = "INVALID_FORMAT"
