@@ -3158,7 +3158,8 @@ def validate_claim_verification_result_contract(result: Mapping[str, Any]) -> di
     from src.agents.verification_agent import ClaimVerificationResult
     from src.config.verification_policy_config import (
         SCIENTIFIC_VERDICTS, SUPPORT_LEVEL_BY_VERDICT, SCIENTIFIC_JUDGMENT_STATUSES,
-        CLAIM_EXECUTION_STATUSES, CLAIM_TECHNICAL_STATUSES, HALLUCINATION_RISKS,
+        CLAIM_EXECUTION_STATUSES, CLAIM_TECHNICAL_STATUSES,
+        CLAIM_COMPLETED_UNRESOLVED_TECHNICAL_STATUSES, HALLUCINATION_RISKS,
         DETERMINISTIC_ISSUE_CODES, SEMANTIC_ISSUE_CODES, SEMANTIC_REASON_CODES,
         ADDITIONAL_RETRIEVAL_REASON_CODES, RETRIEVAL_REASON_CODES, TECHNICAL_ISSUE_CODES,
         CORRECTION_ELIGIBILITIES, NUMERIC_ASSESSMENTS, ATTRIBUTION_ASSESSMENTS,
@@ -3216,7 +3217,18 @@ def validate_claim_verification_result_contract(result: Mapping[str, Any]) -> di
     if not v["scientific_judgment_required"] and v["scientific_judgment_status"] not in {"NOT_REQUIRED","COMPLETED"}:
         raise ValueError("CLAIM_VERIFICATION_JUDGMENT_REQUIRED_INCOHERENT")
     if v["technical_status"] != "OK" and v["scientific_judgment_status"] == "COMPLETED" and v["scientific_verdict"] not in {"NOT_APPLICABLE"}:
-        raise ValueError("CLAIM_VERIFICATION_TECHNICAL_JUDGMENT_INCOHERENT")
+        # A terminal technical exhaustion may legitimately finish execution without a
+        # scientific verdict.  It remains usable only as an unresolved/manual row.
+        technically_unresolved = (
+            v["technical_status"] in CLAIM_COMPLETED_UNRESOLVED_TECHNICAL_STATUSES
+            and v["technical_status"] in v["technical_issue_codes"]
+            and v["scientific_verdict"] == "NOT_EVALUATED"
+            and v["support_level"] == "NONE"
+            and v["manual_review_required"] is True
+            and v["final_correction_eligibility"] == "MANUAL_REVIEW_REQUIRED"
+        )
+        if not technically_unresolved:
+            raise ValueError("CLAIM_VERIFICATION_TECHNICAL_JUDGMENT_INCOHERENT")
     if v["llm_correction_recommendation"] and v["final_correction_eligibility"] in {"NO_CORRECTION_NEEDED","NOT_CORRECTABLE_WITH_AVAILABLE_EVIDENCE"}:
         raise ValueError("CLAIM_VERIFICATION_RECOMMENDATION_ELIGIBILITY_INCOHERENT")
     if v["final_correction_eligibility"] == "MANUAL_REVIEW_REQUIRED" and not v["manual_review_required"]:
@@ -4867,7 +4879,10 @@ def build_provisional_traceability_rows(referential_result:Any):
         acc=tuple(x["correction_id"] for x in linked if x.get("comparison") and x["comparison"]["acceptance_decision"]=="ACCEPT_FOR_07C")
         rej=tuple(x["correction_id"] for x in linked if x.get("comparison") and x["comparison"]["acceptance_decision"]=="REJECT_PROPOSAL")
         deferred=tuple(x["correction_id"] for x in linked if x.get("comparison") and x["comparison"]["acceptance_decision"]=="DEFER_TO_MANUAL_REVIEW")
-        row=ClaimTraceabilityRow(vr["claim_id"],rec["section_id"],vr["claim_type"],original,vr["scientific_verdict"],source,vr["hallucination_risk"],bool(vr["llm_correction_recommendation"]),bool(cids),cids,decisions,acc,rej,deferred,tuple(sorted(remaining)),bool(vr["manual_review_required"] or deferred),False,source_verification_confidence=vr.get("confidence"),source_confidence_status="AVAILABLE" if vr.get("confidence") is not None else "NOT_AVAILABLE_IN_SOURCE_CONTRACT")
+        manual_review = bool(vr["manual_review_required"] or deferred)
+        if manual_review or vr["scientific_verdict"] == "NOT_EVALUATED":
+            warnings.append("AGGREGATION_ROW_MANUAL_REVIEW_REQUIRED")
+        row=ClaimTraceabilityRow(vr["claim_id"],rec["section_id"],vr["claim_type"],original,vr["scientific_verdict"],source,vr["hallucination_risk"],bool(vr["llm_correction_recommendation"]),bool(cids),cids,decisions,acc,rej,deferred,tuple(sorted(remaining)),manual_review,False,source_verification_confidence=vr.get("confidence"),source_confidence_status="AVAILABLE" if vr.get("confidence") is not None else "NOT_AVAILABLE_IN_SOURCE_CONTRACT")
         claim_rows.append(validate_claim_traceability_row_contract(row.to_dict()))
         eligible={e["evidence_id"]:e for e in vr.get("eligible_evidence",())};used={e["evidence_id"] for e in vr.get("evidence_used",())};rejected={e["evidence_id"] for e in vr.get("evidence_rejected",())}
         for eid in sorted(used|rejected):
@@ -5184,10 +5199,13 @@ def _phase656_partial_reasons(rows: Mapping[str, Any], referential: Mapping[str,
         reasons.add("PARTIAL_STAGE_FAILED")
     if "NOT_PRODUCED" in values:
         reasons.add("PARTIAL_STAGE_NOT_PRODUCED")
+    if any(row.get("manual_review_required") for row in rows.get("claim_traceability_rows", ())):
+        reasons.add("PARTIAL_MANUAL_REVIEW_REQUIRED")
     if "NOT_APPLICABLE" in values or any("WITHOUT_PROPOSAL" in warning for warning in referential.get("referential_warnings", ())):
         reasons.add("PARTIAL_EXPECTED")
     return tuple(code for code in (
-        "PARTIAL_EXPECTED", "PARTIAL_UPSTREAM_BLOCKED", "PARTIAL_STAGE_FAILED", "PARTIAL_STAGE_NOT_PRODUCED"
+        "PARTIAL_EXPECTED", "PARTIAL_UPSTREAM_BLOCKED", "PARTIAL_STAGE_FAILED", "PARTIAL_STAGE_NOT_PRODUCED",
+        "PARTIAL_MANUAL_REVIEW_REQUIRED"
     ) if code in reasons)
 
 
@@ -5794,6 +5812,11 @@ def _phase657_observable_partial_reasons(bundle: Mapping[str, Any]) -> set[str]:
         reasons.add("PARTIAL_STAGE_FAILED")
     if "NOT_PRODUCED" in values:
         reasons.add("PARTIAL_STAGE_NOT_PRODUCED")
+    if any(
+        isinstance(row, Mapping) and row.get("manual_review_required") is True
+        for row in tuple(bundle.get("claim_traceability_rows") or ())
+    ):
+        reasons.add("PARTIAL_MANUAL_REVIEW_REQUIRED")
     warnings = set(bundle.get("aggregation_warnings") or ())
     if "AGGREGATION_CLAIM_WITHOUT_PROPOSAL" in warnings:
         reasons.add("PARTIAL_EXPECTED")
