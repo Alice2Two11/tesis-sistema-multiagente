@@ -457,9 +457,12 @@ def validate_agent07_runtime_result_contract(value: Agent07RuntimeResult | Mappi
             if evidence["evidence_id"] in snapshot_ids or (evidence["source_filename"],evidence["chunk_id"]) in snapshot_pairs: raise ValueError("AGENT07_RUNTIME_VERIFICATION_CONTEXT_EVIDENCE_DUPLICATE")
             snapshot_ids.add(evidence["evidence_id"]); snapshot_pairs.add((evidence["source_filename"],evidence["chunk_id"])); normalized_snapshot.append(evidence)
         snapshot={"claim_id":row["claim_id"],"section_id":row["section_id"],"eligible_evidence":tuple(sorted(normalized_snapshot,key=lambda x:(x["evidence_id"],x["source_filename"],x["chunk_id"])))}
-        snapshot_set={(e["evidence_id"],e["source_filename"],e["chunk_id"],e["authorized_for_section"],e["text_fingerprint"]) for e in snapshot["eligible_evidence"]}
+        # evidence_id is a claim-local alias and may change during canonicalization.
+        # Provenance closure uses the stable physical passage identity plus
+        # authorization and content fingerprint.
+        snapshot_set={(e["source_filename"],e["chunk_id"],e["authorized_for_section"],e["text_fingerprint"]) for e in snapshot["eligible_evidence"]}
         for candidate in normalized_candidates:
-            identity=(candidate["evidence_id"],candidate["source_filename"],candidate["chunk_id"],True,candidate["text_fingerprint"])
+            identity=(candidate["source_filename"],candidate["chunk_id"],True,candidate["text_fingerprint"])
             if identity not in snapshot_set: raise ValueError("AGENT07_RUNTIME_RETRIEVED_EVIDENCE_SNAPSHOT_MISMATCH")
         ids=tuple(row["retrieved_candidate_ids"])
         if tuple(sorted(ids)) != tuple(sorted(c["evidence_id"] for c in normalized_candidates)): raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATE_ID_MISMATCH")
@@ -484,11 +487,11 @@ def validate_agent07_runtime_result_contract(value: Agent07RuntimeResult | Mappi
         if not isinstance(bundle, Mapping) or not isinstance(resolution, Mapping): raise ValueError("AGENT07_RUNTIME_RESULT_PAYLOAD_INVALID")
         validated_bundle = validate_provisional_verification_traceability_bundle_contract(bundle)
         validated_resolution = validate_provisional_multi_proposal_resolution_result(resolution)
-        snapshot_by_claim={(r["section_id"],r["claim_id"]):{(e["evidence_id"],e["source_filename"],e["chunk_id"],e["authorized_for_section"],e["text_fingerprint"]) for e in r["verification_context_snapshot"]["eligible_evidence"]} for r in normalized_records}
+        snapshot_by_claim={(r["section_id"],r["claim_id"]):{(e["source_filename"],e["chunk_id"],e["authorized_for_section"],e["text_fingerprint"]) for e in r["verification_context_snapshot"]["eligible_evidence"]} for r in normalized_records}
         for evidence in validated_bundle.get("claim_evidence_traceability_rows",()):
             key=(str(evidence["section_id"]),str(evidence["claim_id"]))
             if key in snapshot_by_claim:
-                identity=(str(evidence["evidence_id"]),str(evidence["source_filename"]),str(evidence["chunk_id"]),bool(evidence["authorized_for_section"]),str(evidence["text_fingerprint"]))
+                identity=(str(evidence["source_filename"]),str(evidence["chunk_id"]),bool(evidence["authorized_for_section"]),str(evidence["text_fingerprint"]))
                 if identity not in snapshot_by_claim[key]: raise ValueError("AGENT07_RUNTIME_TERMINAL_EVIDENCE_CONTEXT_MISMATCH")
         if validated_resolution["source_bundle_audit_fingerprint"] != validated_bundle["aggregation_audit_fingerprint"]: raise ValueError("AGENT07_RUNTIME_SOURCE_BUNDLE_AUDIT_MISMATCH")
         expected = _resolution_to_runtime_status(validated_resolution["resolution_status"])
@@ -725,13 +728,13 @@ def run_agent07_in_memory(runtime_input: Agent07RuntimeInput, *, dependencies: V
         evidence_candidate_validation_claims = 0
         def evidence_identity(e):
             text=str(e.get("canonical_text",e.get("text",""))).strip()
-            return (str(e.get("evidence_id","")),str(e.get("source_filename","")),str(e.get("chunk_id","")),bool(e.get("authorized_for_section") is True),fingerprint_text(text))
+            return (str(e.get("source_filename","")),str(e.get("chunk_id","")),bool(e.get("authorized_for_section") is True),fingerprint_text(text))
         for wrapper in vr:
             verification = wrapper["claim_verification_result"]
             key = (str(wrapper["section_id"]), str(verification["claim_id"]))
             snapshot = verification_context_snapshots[key]
             if snapshot is not None:
-                snapshot_set={(e["evidence_id"],e["source_filename"],e["chunk_id"],e["authorized_for_section"],e["text_fingerprint"]) for e in snapshot["eligible_evidence"]}
+                snapshot_set={(e["source_filename"],e["chunk_id"],e["authorized_for_section"],e["text_fingerprint"]) for e in snapshot["eligible_evidence"]}
                 terminal_eligible={evidence_identity(e) for e in verification.get("eligible_evidence", ())}
                 terminal_used={evidence_identity(e) for e in verification.get("evidence_used", ())}
                 terminal_rejected={evidence_identity(e) for e in verification.get("evidence_rejected", ())}

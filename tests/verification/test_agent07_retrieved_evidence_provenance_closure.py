@@ -154,6 +154,16 @@ def test_inherited_evidence_remains_authorized():
     assert prepared.result_contract_valid is True
 
 
+
+def test_terminal_evidence_alias_change_preserves_physical_provenance():
+    draft, contexts = _source_context()
+    contexts = (dict(contexts[0], authorized_source_filenames=("p.pdf",)),)
+    b = bundle_with_evidence(evidence_id="E01")
+    r = resolve_multiple_correction_proposals(b)
+    runtime, _ = runtime_for_new_evidence(b, r, contexts)
+    assert runtime["result_contract_valid"] is True
+
+
 def test_evidence_outside_agent06_and_agent07_retrieval_is_rejected():
     draft, contexts = _source_context(); contexts=(dict(contexts[0],authorized_source_filenames=("p.pdf",)),)
     b=bundle_with_evidence(); r=resolve_multiple_correction_proposals(b)
