@@ -1,8 +1,0 @@
-{
-  "notebook": "06_agente_redactor_migrado_v16.ipynb",
-  "status": "PASSED",
-  "kernel_mode": "clean_static_preflight",
-  "src_import_after_bootstrap": true,
-  "openai_called": false,
-  "chroma_real_called": false
-}
