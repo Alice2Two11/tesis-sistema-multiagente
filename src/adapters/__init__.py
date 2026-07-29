@@ -39,3 +39,10 @@ from .claim_verification_context import (
     build_claim_verification_context_from_agent06_handoff,
     classify_claim_from_versioned_policy,
 )
+
+from .evaluation_upstream import (
+    Agent08UpstreamInput,
+    build_agent08_input_from_agent07c,
+    build_agent08_input_from_committed_agent07,
+    resolve_agent08_upstream_input,
+)
