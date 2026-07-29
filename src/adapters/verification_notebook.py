@@ -292,13 +292,32 @@ def execute_prepared_agent07(*, store: StateStore, prepared: PreparedAgent07Exec
     return validate_executed_agent07_execution_contract(executed)
 
 
+def _expected_candidate_payload_names(runtime_result: Agent07RuntimeResult) -> set[str]:
+    """Derive the staging payload contract from the terminal result shape.
+
+    A BLOCKED result can be either an early operational block (audit-only) or
+    a terminal scientific block that already produced a bundle and resolution.
+    The latter remains a complete *candidate* set in staging, although it is
+    not eligible for official COMMIT.
+    """
+    has_bundle = runtime_result.provisional_bundle is not None
+    has_resolution = runtime_result.multi_proposal_resolution_result is not None
+    if runtime_result.runtime_status in {"COMPLETED", "PARTIAL"}:
+        return set(AGENT07_ARTIFACT_NAMES)
+    if runtime_result.runtime_status == "BLOCKED" and not has_bundle and not has_resolution:
+        return {"agent07_runtime_report.json", OPERATIONAL_AUDIT_NAME}
+    if runtime_result.runtime_status == "BLOCKED" and has_bundle and has_resolution:
+        return set(AGENT07_ARTIFACT_NAMES)
+    raise ValueError("AGENT07_EXECUTED_RUNTIME_PAYLOAD_SHAPE_INVALID")
+
+
 def validate_executed_agent07_execution_contract(value: ExecutedAgent07Execution) -> ExecutedAgent07Execution:
     if not isinstance(value,ExecutedAgent07Execution): raise ValueError("AGENT07_EXECUTED_SCHEMA_INVALID")
     if value.agent_result.attempt_number!=value.attempt_number or value.decision_id=="": raise ValueError("AGENT07_EXECUTED_IDENTITY_INVALID")
     validate_prepared_agent07_execution_contract(PreparedAgent07Execution(value.decision_id,value.runtime_input,{"source_draft_fingerprint":value.runtime_input.committed_agent06_output["source_draft_fingerprint"]},value.stage_fingerprints,value.attempt_number,value.execution_fingerprint))
     validate_agent07_runtime_result_contract(value.runtime_result)
     if not Path(value.staging_manifest_path).is_file() or not Path(value.persisted_result_path).is_file(): raise ValueError("AGENT07_EXECUTED_STAGING_INVALID")
-    expected=set(AGENT07_ARTIFACT_NAMES) if value.runtime_result.runtime_status in {"COMPLETED","PARTIAL"} else {"agent07_runtime_report.json",OPERATIONAL_AUDIT_NAME}
+    expected = _expected_candidate_payload_names(value.runtime_result)
     if set(value.candidate_payloads)!=expected: raise ValueError("AGENT07_EXECUTED_PAYLOAD_SET_INVALID")
     for name,data in value.candidate_payloads.items():
         if value.agent_result.output_artifacts[name].hash!=sha256_bytes(data): raise ValueError("AGENT07_EXECUTED_PAYLOAD_HASH_MISMATCH")
@@ -308,9 +327,11 @@ def validate_executed_agent07_execution_contract(value: ExecutedAgent07Execution
 
 
 def _validate_execution_for_commit(executed: ExecutedAgent07Execution) -> None:
-    if executed.runtime_result.runtime_status=="BLOCKED" and executed.runtime_result.provisional_bundle is None:
+    if executed.runtime_result.runtime_status == "BLOCKED":
         validate_executed_agent07_execution_contract(executed)
-        raise RuntimeError("AGENT07_OPERATIONAL_BLOCK_NOT_SCIENTIFIC_COMMITTABLE")
+        if executed.runtime_result.provisional_bundle is None:
+            raise RuntimeError("AGENT07_OPERATIONAL_BLOCK_NOT_SCIENTIFIC_COMMITTABLE")
+        raise RuntimeError("AGENT07_SCIENTIFIC_BLOCK_NOT_OFFICIAL_COMMITTABLE")
     if set(executed.candidate_payloads) != set(AGENT07_ARTIFACT_NAMES):
         raise RuntimeError("AGENT07_COMMIT_MANIFEST_INCOMPLETE")
     validate_executed_agent07_execution_contract(executed)
