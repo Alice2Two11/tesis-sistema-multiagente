@@ -39,31 +39,156 @@ def classify_claim_from_versioned_policy(claim_text: str, *, source_free_organiz
     return "SUBSTANTIVE_FACTUAL"
 
 
+def _normalize_text_representation(value: str) -> str:
+    """Normalize representation-only whitespace without changing scientific content."""
+    return _SPACE_RE.sub(" ", str(value or "").strip())
+
+
 def _evidence_text(row: Mapping[str, Any]) -> str:
     for key in ("canonical_text", "contractual_text", "text"):
         value = row.get(key)
         if isinstance(value, str) and value.strip():
-            return value.strip()
+            return _normalize_text_representation(value)
     raise ValueError("AGENT07_CONTEXT_ADAPTER_EVIDENCE_TEXT_MISSING")
 
 
-def _normalize_evidence(rows: Sequence[Mapping[str, Any]]) -> tuple[dict[str, Any], ...]:
-    normalized=[]; seen_ids={}; seen_pairs={}
-    for raw in rows:
-        if not isinstance(raw, Mapping): raise ValueError("AGENT07_CONTEXT_ADAPTER_EVIDENCE_ROW_INVALID")
-        row=deepcopy(dict(raw))
-        eid=str(row.get("evidence_id") or "").strip(); source=str(row.get("source_filename") or "").strip(); chunk=str(row.get("chunk_id") or "").strip()
-        if not eid or not source or not chunk: raise ValueError("AGENT07_CONTEXT_ADAPTER_EVIDENCE_IDENTITY_MISSING")
-        text=_evidence_text(row)
-        row.update({"evidence_id":eid,"source_filename":source,"chunk_id":chunk,"text":text,"canonical_text":text,"authorized_for_section":bool(row.get("authorized_for_section") is True)})
-        canonical=(source,chunk,row["authorized_for_section"],fingerprint_text(text))
-        if eid in seen_ids and seen_ids[eid] != canonical: raise ValueError("AGENT07_CONTEXT_ADAPTER_EVIDENCE_CONFLICT")
-        pair=(source,chunk)
-        if pair in seen_pairs and seen_pairs[pair] != (eid,canonical): raise ValueError("AGENT07_CONTEXT_ADAPTER_EVIDENCE_CONFLICT")
-        seen_ids[eid]=canonical; seen_pairs[pair]=(eid,canonical); normalized.append(row)
-    unique={str(r["evidence_id"]):r for r in normalized}
-    return tuple(unique[k] for k in sorted(unique))
+def _normalized_string_sequence(value: Any) -> tuple[str, ...]:
+    """Normalize list/tuple representation while preserving its set of values."""
+    if value is None:
+        return ()
+    if isinstance(value, str):
+        items = (value,)
+    elif isinstance(value, (list, tuple)):
+        items = tuple(value)
+    else:
+        return ()
+    return tuple(sorted({str(item).strip() for item in items if str(item).strip()}))
 
+
+def _origin_values(row: Mapping[str, Any]) -> tuple[str, ...]:
+    origins = set(_normalized_string_sequence(row.get("retrieval_origins")))
+    direct = str(row.get("retrieval_origin") or "").strip()
+    if direct:
+        origins.add(direct)
+    else:
+        # A row entering through eligible_evidence without Agent07 provenance is
+        # inherited from the committed Agent06 handoff.
+        origins.add("AGENT06_INHERITED")
+    return tuple(sorted(origins))
+
+
+def _usage_role_values(row: Mapping[str, Any]) -> tuple[str, ...]:
+    roles = set(_normalized_string_sequence(row.get("usage_roles")))
+    direct = str(row.get("usage_role") or "").strip().upper()
+    if direct:
+        roles.add(direct)
+    else:
+        roles.add("ELIGIBLE")
+    return tuple(sorted(roles))
+
+
+def _resolve_usage_role(roles: Sequence[str]) -> str:
+    normalized = {str(role).strip().upper() for role in roles if str(role).strip()}
+    concrete = normalized - {"ELIGIBLE"}
+    if len(concrete) > 1:
+        raise ValueError("AGENT07_CONTEXT_ADAPTER_EVIDENCE_USAGE_ROLE_CONFLICT")
+    if concrete:
+        return next(iter(concrete))
+    return "ELIGIBLE"
+
+
+def _canonical_evidence_id(rows: Sequence[Mapping[str, Any]], chunk_id: str) -> str:
+    ids = sorted({str(row.get("evidence_id") or "").strip() for row in rows if str(row.get("evidence_id") or "").strip()})
+    if not ids:
+        raise ValueError("AGENT07_CONTEXT_ADAPTER_EVIDENCE_IDENTITY_MISSING")
+    # Contractual, order-independent rule: preserve the chunk-native ID when
+    # available; otherwise use the lexicographically first alias.
+    return chunk_id if chunk_id in ids else ids[0]
+
+
+def _merge_equivalent_evidence(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    if not rows:
+        raise ValueError("AGENT07_CONTEXT_ADAPTER_EVIDENCE_ROW_INVALID")
+    source = str(rows[0]["source_filename"])
+    chunk = str(rows[0]["chunk_id"])
+    texts = {_evidence_text(row) for row in rows}
+    if len(texts) != 1:
+        raise ValueError("AGENT07_CONTEXT_ADAPTER_EVIDENCE_TEXT_CONFLICT")
+    authorizations = {bool(row.get("authorized_for_section") is True) for row in rows}
+    if len(authorizations) != 1:
+        raise ValueError("AGENT07_CONTEXT_ADAPTER_EVIDENCE_AUTHORIZATION_CONFLICT")
+
+    evidence_id = _canonical_evidence_id(rows, chunk)
+    aliases = tuple(sorted({str(row["evidence_id"]) for row in rows}))
+    origins = tuple(sorted({origin for row in rows for origin in _origin_values(row)}))
+    roles = tuple(sorted({role for row in rows for role in _usage_role_values(row)}))
+    usage_role = _resolve_usage_role(roles)
+    text = next(iter(texts))
+
+    # Deterministic base selection is representation-only: native chunk ID,
+    # inherited provenance, then canonical serialization. No scientific value
+    # is selected between conflicting rows because those are rejected above.
+    def rank(row: Mapping[str, Any]) -> tuple[Any, ...]:
+        return (
+            0 if str(row.get("evidence_id")) == chunk else 1,
+            0 if "AGENT06_INHERITED" in _origin_values(row) else 1,
+            str(row.get("evidence_id")),
+        )
+
+    merged = deepcopy(dict(sorted(rows, key=rank)[0]))
+    merged.update({
+        "evidence_id": evidence_id,
+        "evidence_id_aliases": aliases,
+        "source_filename": source,
+        "chunk_id": chunk,
+        "text": text,
+        "canonical_text": text,
+        "authorized_for_section": next(iter(authorizations)),
+        "usage_role": usage_role,
+        "usage_roles": roles,
+        "retrieval_origin": "AGENT07_INDEPENDENT_RAG" if origins == ("AGENT07_INDEPENDENT_RAG",) else "AGENT06_INHERITED",
+        "retrieval_origins": origins,
+    })
+    for field in ("query_ids", "retrieval_sources", "all_native_ranks"):
+        values = tuple(sorted({value for row in rows for value in _normalized_string_sequence(row.get(field))}))
+        if values:
+            merged[field] = values
+    return merged
+
+
+def _normalize_evidence(rows: Sequence[Mapping[str, Any]]) -> tuple[dict[str, Any], ...]:
+    prepared: list[dict[str, Any]] = []
+    seen_id_identity: dict[str, tuple[str, str]] = {}
+    for raw in rows:
+        if not isinstance(raw, Mapping):
+            raise ValueError("AGENT07_CONTEXT_ADAPTER_EVIDENCE_ROW_INVALID")
+        row = deepcopy(dict(raw))
+        eid = str(row.get("evidence_id") or "").strip()
+        source = str(row.get("source_filename") or "").strip()
+        chunk = str(row.get("chunk_id") or "").strip()
+        if not eid or not source or not chunk:
+            raise ValueError("AGENT07_CONTEXT_ADAPTER_EVIDENCE_IDENTITY_MISSING")
+        identity = (source, chunk)
+        if eid in seen_id_identity and seen_id_identity[eid] != identity:
+            raise ValueError("AGENT07_CONTEXT_ADAPTER_EVIDENCE_IDENTITY_CONFLICT")
+        seen_id_identity[eid] = identity
+        text = _evidence_text(row)
+        row.update({
+            "evidence_id": eid,
+            "source_filename": source,
+            "chunk_id": chunk,
+            "text": text,
+            "canonical_text": text,
+            "authorized_for_section": bool(row.get("authorized_for_section") is True),
+        })
+        prepared.append(row)
+
+    by_pair: dict[tuple[str, str], list[dict[str, Any]]] = {}
+    for row in prepared:
+        by_pair.setdefault((row["source_filename"], row["chunk_id"]), []).append(row)
+
+    merged = [_merge_equivalent_evidence(by_pair[pair]) for pair in sorted(by_pair)]
+    return tuple(sorted(merged, key=lambda row: (str(row["evidence_id"]), str(row["source_filename"]), str(row["chunk_id"]))))
 
 def _supporting_citations(handoff: Mapping[str, Any], evidence: Sequence[Mapping[str, Any]]) -> tuple[dict[str, Any], ...]:
     raw=handoff.get("supporting_citations", ())
@@ -103,8 +228,8 @@ def build_claim_verification_context_from_agent06_handoff(
     elif claim_type != classified: raise ValueError("AGENT07_CONTEXT_ADAPTER_CLAIM_TYPE_CONFLICT")
     intensity=policy["claim_verification_intensity"][claim_type]
     evidence=_normalize_evidence(tuple(source.get("eligible_evidence",()) or ()))
-    inherited=tuple(e for e in evidence if str(e.get("retrieval_origin") or "") != "AGENT07_INDEPENDENT_RAG")
-    retrieved=tuple(e for e in evidence if str(e.get("retrieval_origin") or "") == "AGENT07_INDEPENDENT_RAG")
+    inherited=tuple(e for e in evidence if "AGENT06_INHERITED" in tuple(e.get("retrieval_origins", ())))
+    retrieved=tuple(e for e in evidence if "AGENT07_INDEPENDENT_RAG" in tuple(e.get("retrieval_origins", ())))
     authorized_sources=tuple(source.get("authorized_source_filenames",()) or ())
     if not authorized_sources or len(set(authorized_sources))!=len(authorized_sources): raise ValueError("AGENT07_CONTEXT_ADAPTER_AUTHORIZED_SOURCES_INVALID")
     if any(e["authorized_for_section"] and e["source_filename"] not in set(authorized_sources) for e in evidence): raise ValueError("AGENT07_CONTEXT_ADAPTER_OUTLINE_AUTHORIZATION_MISMATCH")
