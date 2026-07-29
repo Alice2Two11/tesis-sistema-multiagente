@@ -138,3 +138,27 @@ def test_real_s2_c1_with_simulated_chatopenai_ai_message_reaches_scientific_judg
     assert result.raw_attempts[0]["parse_status"] == "PARSED"
     assert isinstance(result.raw_attempts[0]["raw_text"], str)
     assert "LLM_RESPONSE_EMPTY" not in result.raw_attempts[0]["validation_errors"]
+
+
+def test_partial_support_fallback_marks_manual_review_consistently() -> None:
+    response = _valid_s2_c1_response()
+    response.update({
+        "verdict": "PARTIALLY_SUPPORTED",
+        "support_level": "PARTIAL",
+        "reason_codes": ["PARTIAL_EVIDENCE"],
+        "manual_review_required": False,
+        "llm_correction_recommendation": False,
+    })
+    llm = SimulatedChatOpenAI(json.dumps(response, ensure_ascii=False))
+
+    result = VerificationAgent(llm=llm).verify_claim(_s2_c1_context())
+
+    assert result.scientific_verdict == "PARTIALLY_SUPPORTED"
+    assert result.final_correction_eligibility == "MANUAL_REVIEW_REQUIRED"
+    assert result.manual_review_required is True
+
+    # The exact terminal contract that failed for S3_C2 must now accept this row.
+    from src.tools.verification.validation import validate_claim_verification_result_contract
+    from dataclasses import asdict
+    validated = validate_claim_verification_result_contract(asdict(result))
+    assert validated["manual_review_required"] is True

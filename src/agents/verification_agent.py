@@ -440,6 +440,13 @@ class VerificationAgent:
             llm_recommendation=validated["llm_correction_recommendation"],
             manual_review_required=validated["manual_review_required"], eligible_evidence=selection.eligible_evidence,
             evidence_ids_used=validated["evidence_ids_used"], correction_localized=localized)
+        # Keep the terminal result internally coherent: when policy concludes that
+        # manual review is required, the explicit boolean must reflect that decision
+        # even if the LLM response did not request manual review itself.
+        manual_review_required = (
+            bool(validated["manual_review_required"])
+            or correction == "MANUAL_REVIEW_REQUIRED"
+        )
         scientific_ok = validated["verdict"] == "SUPPORTED" and risk == "LOW"
         trace.append(f"VERDICT_{validated['verdict']}")
         return ClaimVerificationResult(
@@ -450,7 +457,7 @@ class VerificationAgent:
             {"type": validated["contradiction_type"], "evidence_ids": validated["contradiction_evidence_ids"]},
             validated["numeric_assessment"], validated["attribution_assessment"],
             validated["extrapolation_assessment"], risk, validated["llm_correction_recommendation"], correction,
-            validated["manual_review_required"], tuple(validated["reason_codes"]),
+            manual_review_required, tuple(validated["reason_codes"]),
             self._tool_usage(considered=considered, selected=selected_tools, retrieval_requests=retrieval_requests,
                 retrieval_rounds=int(current.get("retrieval_result", {}).get("rounds_executed", 0)),
                 evidence_selected=len(selection.eligible_evidence), llm_calls=llm_calls,
