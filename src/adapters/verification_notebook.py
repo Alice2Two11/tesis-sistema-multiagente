@@ -7,7 +7,7 @@ emitting EVALUATION_READY.
 from __future__ import annotations
 
 from copy import deepcopy
-from dataclasses import asdict, dataclass, fields
+from dataclasses import asdict, dataclass, fields, replace
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -389,6 +389,26 @@ def resume_agent07_execution(*, store: StateStore, runtime_input: Agent07Runtime
                     return _resume("COMMITTED", committed=executed.agent_result)
                 else: shutil.rmtree(output_dir)
             except Exception: shutil.rmtree(output_dir,ignore_errors=True)
+        if executed.runtime_result.runtime_status == "BLOCKED":
+            # A blocked runtime result is terminal for this attempt but is not a
+            # reusable scientific execution. Record the failed attempt without
+            # publishing its staging-only artifacts, clear pending_execution via
+            # the existing StateStore COMMIT transition, and request a fresh
+            # PREPARE with a new decision_id and incremented attempt number.
+            failed_result = replace(executed.agent_result, output_artifacts={})
+            store.commit_execution(
+                decision_id=executed.decision_id,
+                result=failed_result,
+                stage_name=AGENT07_STAGE_NAME,
+                fingerprints=executed.stage_fingerprints,
+                observations={
+                    "resume_disposition": "BLOCKED_ATTEMPT_REEXECUTE",
+                    "scientific_result_reused": False,
+                    "correction_applied": False,
+                    "evaluation_ready_emitted": False,
+                },
+            )
+            return _resume("REEXECUTE")
         return _resume("EXECUTED_NOT_COMMITTED",executed=executed)
     stage=state.stages.get(AGENT07_STAGE_NAME)
     if stage is None or stage.execution_status != ExecutionStatus.COMPLETED: return _resume("NO_COMMIT")
