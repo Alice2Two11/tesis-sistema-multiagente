@@ -1,0 +1,30 @@
+{
+  "runtime_status": "PARTIAL",
+  "aggregation_status": "PARTIAL",
+  "resolution_status": "PARTIAL",
+  "partial_reason_codes": [
+    "PARTIAL_UPSTREAM_BLOCKED",
+    "PARTIAL_STAGE_NOT_PRODUCED",
+    "PARTIAL_MANUAL_REVIEW_REQUIRED"
+  ],
+  "claims_verified": 25,
+  "claim_level_manual_review_count": 12,
+  "claim_level_manual_review_ids": [
+    "S2_C1",
+    "S2_C2",
+    "S2_C3",
+    "S2_C5",
+    "S2_C6",
+    "S3_C2",
+    "S3_C5",
+    "S4_C6",
+    "S5_C1",
+    "S5_C4",
+    "S5_C6",
+    "S5_C7"
+  ],
+  "resolution_level_manual_review_count": 0,
+  "claims_eligible_for_07c": 0,
+  "corrections_proposed": 0,
+  "agent08_official_gate": "BLOCKED_PENDING_MANUAL_REVIEW"
+}

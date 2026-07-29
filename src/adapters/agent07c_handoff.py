@@ -262,7 +262,7 @@ def _validate_prepared_payload(value:Mapping[str,Any],*,allow_unvalidated:bool=F
     for name,raw in payloads.items():
         if hashes[name]!=_sha(raw):raise ValueError("AGENT07C_ARTIFACT_HASH_MISMATCH")
     optional=value["optional_artifact_payloads"]; optional_hashes=value["optional_artifact_hashes"]
-    allowed_optional={"hallucination_report.csv","citation_check.csv","claim_atomization_log.csv"}
+    allowed_optional={"hallucination_report.csv","citation_check.csv","claim_atomization_log.csv","manual_review_queue.csv"}
     if not isinstance(optional,Mapping) or set(optional)-allowed_optional or any(not isinstance(v,bytes) for v in optional.values()): raise ValueError("AGENT07C_OPTIONAL_ARTIFACT_PAYLOADS_INVALID")
     if not isinstance(optional_hashes,Mapping) or set(optional_hashes)!=set(optional): raise ValueError("AGENT07C_OPTIONAL_ARTIFACT_HASHES_INVALID")
     for name,raw in optional.items():
@@ -272,6 +272,12 @@ def _validate_prepared_payload(value:Mapping[str,Any],*,allow_unvalidated:bool=F
         seq=value[name]
         if type(seq) not in (tuple,list) or any(not isinstance(x,str) or not x for x in seq) or len(seq)!=len(set(seq)):raise ValueError(f"AGENT07C_{name.upper()}_INVALID")
     if set(value["eligible_claim_ids"])!=set(value["post_correction_reverification_claim_ids"]):raise ValueError("AGENT07C_REVERIFICATION_CLAIM_SET_MISMATCH")
+    manifest=json.loads(payloads["verification_traceability_manifest.json"])
+    workflow=manifest.get("workflow_state",{})
+    expected_manual=tuple(sorted(value["manual_review_claim_ids"]))
+    manifest_manual=tuple(sorted(str(x) for x in workflow.get("manual_review_claim_ids",())))
+    if manifest_manual!=expected_manual:raise ValueError("AGENT07C_MANUAL_REVIEW_MANIFEST_MISMATCH")
+    if bool(expected_manual) is not bool(workflow.get("pending_manual_review",False)):raise ValueError("AGENT07C_MANUAL_REVIEW_FLAG_MISMATCH")
     for name in ("source_draft_fingerprint","prepared_draft_fingerprint"):
         fp=value[name]
         if not isinstance(fp,str) or len(fp)!=64 or any(c not in "0123456789abcdef" for c in fp):raise ValueError(f"AGENT07C_{name.upper()}_INVALID")
@@ -308,7 +314,17 @@ def prepare_agent07c_input_from_agent07(*, provisional_bundle:Mapping[str,Any], 
     source_sections=_sections_by_id(original);target_sections=_sections_by_id(copy_draft)
     plans=list(resolution["claim_resolution_plans"])
     eligible_plans=[p for p in plans if p.get("eligible_for_07c")]
-    manual=sorted({str(p["claim_id"]) for p in plans if p.get("manual_review_required") or p.get("blocks_07c")})
+    claim_level_manual={
+        str(row["claim_id"])
+        for row in bundle["claim_traceability_rows"]
+        if row.get("manual_review_required")
+    }
+    resolution_level_manual={
+        str(plan["claim_id"])
+        for plan in plans
+        if plan.get("manual_review_required") or plan.get("blocks_07c")
+    }
+    manual=sorted(claim_level_manual | resolution_level_manual)
     plans_by_section:dict[str,list[Mapping[str,Any]]]={}
     for p in eligible_plans:plans_by_section.setdefault(str(p["section_id"]),[]).append(p)
     original_section_texts={};corrected_section_texts={}
@@ -350,7 +366,14 @@ def prepare_agent07c_input_from_agent07(*, provisional_bundle:Mapping[str,Any], 
       "stage":"07_agente_verificador_trazabilidad_adapter","experiment_id":experiment_id,
       "fingerprint":resolution["multi_proposal_resolution_fingerprint"] or resolution["multi_proposal_audit_fingerprint"],
       "validation_report":validation_report,
-      "workflow_state":{"verification_completed":True,"post_correction_recheck_required":bool(logs)},
+      "workflow_state":{
+        "verification_completed":True,
+        "post_correction_recheck_required":bool(logs),
+        "pending_manual_review":bool(manual),
+        "manual_review_claim_ids":manual,
+        "claim_level_manual_review_count":len(claim_level_manual),
+        "resolution_level_manual_review_count":len(resolution_level_manual),
+      },
       "safety_policy":derived_safety,
       "source_contracts":{"bundle_fingerprint":bundle["normalized_bundle_fingerprint"],"bundle_audit_fingerprint":bundle["aggregation_audit_fingerprint"],"resolution_fingerprint":resolution["multi_proposal_resolution_fingerprint"]},
       "correction_application":{"application_scope":"COPY_ONLY","original_draft_modified":False,"evaluation_ready_emitted":False},
@@ -397,11 +420,25 @@ def prepare_agent07c_input_from_agent07(*, provisional_bundle:Mapping[str,Any], 
     hallucination=[{"claim_id":r["claim_id"],"section_id":r["section_id"],"hallucination_risk":r["hallucination_risk"]} for r in verification]
     citations=[{"claim_id":e["claim_id"],"section_id":e["section_id"],"evidence_id":e["evidence_id"],"source_filename":e["source_filename"],"chunk_id":e["chunk_id"],"text_fingerprint":e["text_fingerprint"],"authorized_for_section":str(bool(e["authorized_for_section"])).lower(),"used_in_original_verification":str(bool(e["used_in_original_verification"])).lower()} for e in claim_evidence]
     atoms=[{"claim_id":r["claim_id"],"section_id":r["section_id"],"claim":r["original_claim_text"],"claim_type":r["claim_type"]} for r in claim_rows]
+    manual_queue=[{
+      "claim_id":row["claim_id"],
+      "section_id":row["section_id"],
+      "claim":row["original_claim_text"],
+      "verdict":_normalize_verdict(row["source_verdict"]),
+      "hallucination_risk":_normalize_risk(row["source_hallucination_risk"]),
+      "source_issue_codes":"; ".join(row["source_issue_codes"]),
+      "remaining_issue_codes":"; ".join(row["provisional_remaining_issue_codes"]),
+    } for row in claim_rows if row.get("manual_review_required")]
     optional={
       "hallucination_report.csv":_csv_bytes(hallucination,("claim_id","section_id","hallucination_risk")),
       "citation_check.csv":_csv_bytes(citations,("claim_id","section_id","evidence_id","source_filename","chunk_id","authorized_for_section","used_in_original_verification")),
       "claim_atomization_log.csv":_csv_bytes(atoms,("claim_id","section_id","claim","claim_type")),
     }
+    if manual_queue:
+        optional["manual_review_queue.csv"]=_csv_bytes(
+            manual_queue,
+            ("claim_id","section_id","claim","verdict","hallucination_risk","source_issue_codes","remaining_issue_codes"),
+        )
     return create_agent07c_prepared_input(
       experiment_id=experiment_id,verified_state_of_art=copy_draft,
       eligible_claim_ids=tuple(sorted(str(p["claim_id"]) for p in eligible_plans)),manual_review_claim_ids=tuple(manual),
