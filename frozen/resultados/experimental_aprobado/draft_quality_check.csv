@@ -1,6 +1,0 @@
-section_id,section_title,word_count,source_free_organizational_section,citation_count,valid_citation_count,invalid_citation_count,claim_count,substantive_sentence_count,uncited_substantive_sentence_count,section_validation_ok
-S1,Introducción,33,True,0,0,0,0,2,2,True
-S2,Modelos basados en Redes Neuronales Artificiales (ANN) para pronóstico de irradiancia solar,212,False,5,5,0,4,4,0,True
-S3,Deep Learning Temporal y Modelos Híbridos para pronóstico de irradiancia solar y potencia fotovoltaica,211,False,7,7,0,5,5,0,True
-S4,Modelos estadísticos y técnicas de descomposición de señales para estimación y pronóstico de irradiancia solar,291,False,7,7,0,6,6,0,True
-S5,Técnicas de preprocesamiento y clasificación para mejorar el pronóstico de irradiancia solar,256,False,4,4,0,4,4,0,True
