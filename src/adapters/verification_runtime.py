@@ -14,7 +14,10 @@ from typing import Any, Callable, Mapping, Protocol, Sequence
 
 from src.agents.verification_agent import VerificationAgent
 from src.adapters.agent06_verification_handoff import (Agent07RetrieverBinding, validate_agent07_experiment_compatibility, validate_productive_retriever_binding)
-from src.adapters.claim_verification_context import build_claim_verification_context_from_agent06_handoff
+from src.adapters.claim_verification_context import (
+    build_claim_verification_context_from_agent06_handoff,
+    _normalize_evidence as _canonicalize_claim_evidence,
+)
 from src.tools.verification.corrections import propose_correction, fingerprint_text
 from src.tools.verification.resolution import (
     resolve_multiple_correction_proposals,
@@ -524,65 +527,147 @@ def _canonical_hash(value: Mapping[str, Any]) -> str:
 def _independent_retrieve_claim(context: Mapping[str, Any], dependencies: VerificationRuntimeDependencies) -> tuple[dict[str, Any], dict[str, Any]]:
     if dependencies.retrieval_tool is None or dependencies.retriever_binding is None:
         raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVER_REQUIRED")
-    binding=dict(dependencies.retriever_binding)
-    required={"experiment_id","collection_name","embedding_model","chroma_manifest_fingerprint","chunks_manifest_fingerprint"}
-    if set(binding)!=required: raise ValueError("AGENT07_RUNTIME_RETRIEVER_BINDING_INVALID")
-    binding_fp=_canonical_hash(binding)
-    claim_id=str(context["claim_id"]); section_id=str(context["section_id"])
-    inherited=tuple(deepcopy(context.get("eligible_evidence", ())))
-    authorized_sources=tuple(context.get("authorized_source_filenames",()))
-    if not authorized_sources or any(not isinstance(x,str) or not x for x in authorized_sources) or len(set(authorized_sources))!=len(authorized_sources):
+    binding = dict(dependencies.retriever_binding)
+    required = {"experiment_id", "collection_name", "embedding_model", "chroma_manifest_fingerprint", "chunks_manifest_fingerprint"}
+    if set(binding) != required:
+        raise ValueError("AGENT07_RUNTIME_RETRIEVER_BINDING_INVALID")
+    binding_fp = _canonical_hash(binding)
+    claim_id = str(context["claim_id"])
+    section_id = str(context["section_id"])
+    inherited = tuple(deepcopy(context.get("eligible_evidence", ())))
+    authorized_sources = tuple(context.get("authorized_source_filenames", ()))
+    if not authorized_sources or any(not isinstance(x, str) or not x for x in authorized_sources) or len(set(authorized_sources)) != len(authorized_sources):
         raise ValueError("AGENT07_RUNTIME_AUTHORIZED_SOURCE_UNIVERSE_INVALID")
-    authorized_source_set=set(authorized_sources)
-    request={
-        "claim_id":claim_id,"section_id":section_id,"claim_context":deepcopy(context),
-        "retrieval_reason_codes":("INDEPENDENT_CLAIM_RETRIEVAL",),"remaining_budget":1,
-        "eligible_evidence":inherited,"allowed_source_filenames":tuple(sorted(authorized_source_set)),
-        "retriever_binding":deepcopy(binding),
+    authorized_source_set = set(authorized_sources)
+    request = {
+        "claim_id": claim_id,
+        "section_id": section_id,
+        "claim_context": deepcopy(context),
+        "retrieval_reason_codes": ("INDEPENDENT_CLAIM_RETRIEVAL",),
+        "remaining_budget": 1,
+        "eligible_evidence": inherited,
+        "allowed_source_filenames": tuple(sorted(authorized_source_set)),
+        "retriever_binding": deepcopy(binding),
     }
-    raw=dependencies.retrieval_tool.retrieve_more(deepcopy(request))
-    delta=validate_additional_retrieval_delta(raw, strict=True)
-    rounds=int(delta.get("rounds_executed",0) or 0)
-    if rounds < 1: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_ROUND_MISSING")
-    selected=tuple(delta.get("selected_candidates",()) or ())
-    recovered_by_id={}; recovered_by_pair={}
+    raw = dependencies.retrieval_tool.retrieve_more(deepcopy(request))
+    delta = validate_additional_retrieval_delta(raw, strict=True)
+    rounds = int(delta.get("rounds_executed", 0) or 0)
+    if rounds < 1:
+        raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_ROUND_MISSING")
+
+    selected = tuple(delta.get("selected_candidates", ()) or ())
+    recovered_rows: list[dict[str, Any]] = []
+    recovered_queries_by_pair: dict[tuple[str, str], set[str]] = {}
     for row in selected:
-        query_ids=tuple(str(x) for x in row.get("query_ids",()))
-        if claim_id not in query_ids: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_CLAIM_MISMATCH")
-        source=str(row.get("source_filename") or "").strip(); chunk=str(row.get("chunk_id") or "").strip()
-        if not source or not chunk: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_IDENTITY_MISSING")
-        if source not in authorized_source_set: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_OUTLINE_VIOLATION")
-        text=str(row.get("text","")).strip()
-        if not text: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_TEXT_MISSING")
-        eid=str(row.get("evidence_id") or f"{source}::{chunk}").strip()
-        if not eid: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_IDENTITY_MISSING")
-        text_fp=fingerprint_text(text)
-        normalized={"evidence_id":eid,"source_filename":source,"chunk_id":chunk,"text":text,"canonical_text":text,"authorized_for_section":True,"retrieval_origin":"AGENT07_INDEPENDENT_RAG","usage_role":"SUPPORT"}
-        audit={"evidence_id":eid,"source_filename":source,"chunk_id":chunk,"query_ids":query_ids,"text_fingerprint":text_fp}
-        canonical=json.dumps(audit,ensure_ascii=False,sort_keys=True,separators=(",",":"),allow_nan=False)
-        pair=(source,chunk)
-        if eid in recovered_by_id and recovered_by_id[eid][0] != canonical: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATE_CONFLICT")
-        if pair in recovered_by_pair and recovered_by_pair[pair][0] != canonical: raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATE_CONFLICT")
-        recovered_by_id[eid]=(canonical,normalized,audit); recovered_by_pair[pair]=(canonical,normalized,audit)
-    recovered=[recovered_by_id[k][1] for k in sorted(recovered_by_id)]
-    audit_candidates=[recovered_by_id[k][2] for k in sorted(recovered_by_id)]
-    merged={str(e["evidence_id"]):deepcopy(e) for e in inherited}
-    for e in recovered:
-        if e["evidence_id"] in merged:
-            existing=merged[e["evidence_id"]]
-            existing_text=str(existing.get("canonical_text",existing.get("text",""))).strip()
-            if (str(existing.get("source_filename","")),str(existing.get("chunk_id","")),fingerprint_text(existing_text)) != (e["source_filename"],e["chunk_id"],fingerprint_text(e["canonical_text"])):
-                raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATE_CONFLICT")
-        merged[e["evidence_id"]]=e
-    updated=deepcopy(dict(context)); updated["eligible_evidence"]=tuple(merged[k] for k in sorted(merged)); updated["agent07_independent_retrieval_executed"]=True; updated["agent07_independent_retrieval_rounds"]=rounds; updated["agent07_independent_retrieval_status"]="COMPLETED_WITH_RESULTS" if recovered else "COMPLETED_NO_RESULTS"
-    snapshot_evidence=[]
-    for e in updated["eligible_evidence"]:
-        text=str(e.get("canonical_text",e.get("text",""))).strip()
-        if not text: raise ValueError("AGENT07_RUNTIME_VERIFICATION_CONTEXT_EVIDENCE_TEXT_MISSING")
-        snapshot_evidence.append({"evidence_id":str(e["evidence_id"]),"source_filename":str(e["source_filename"]),"chunk_id":str(e["chunk_id"]),"authorized_for_section":bool(e.get("authorized_for_section") is True),"text_fingerprint":fingerprint_text(text)})
-    snapshot={"claim_id":claim_id,"section_id":section_id,"eligible_evidence":tuple(sorted(snapshot_evidence,key=lambda x:(x["evidence_id"],x["source_filename"],x["chunk_id"])))}
-    candidate_ids=tuple(sorted(e["evidence_id"] for e in recovered))
-    record={"claim_id":claim_id,"section_id":section_id,"retrieval_requested":1,"retrieval_rounds":rounds,"retrieval_status":"COMPLETED_WITH_RESULTS" if candidate_ids else "COMPLETED_NO_RESULTS","retriever_binding_fingerprint":binding_fp,"retrieved_candidate_ids":candidate_ids,"retrieved_candidate_records":tuple(audit_candidates),"verification_context_snapshot":snapshot}
+        query_ids = tuple(str(x) for x in row.get("query_ids", ()))
+        if claim_id not in query_ids:
+            raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_CLAIM_MISMATCH")
+        source = str(row.get("source_filename") or "").strip()
+        chunk = str(row.get("chunk_id") or "").strip()
+        if not source or not chunk:
+            raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_IDENTITY_MISSING")
+        if source not in authorized_source_set:
+            raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_OUTLINE_VIOLATION")
+        text = str(row.get("text", "")).strip()
+        if not text:
+            raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_TEXT_MISSING")
+        evidence_id = str(row.get("evidence_id") or f"{source}::{chunk}").strip()
+        if not evidence_id:
+            raise ValueError("AGENT07_RUNTIME_INDEPENDENT_RETRIEVAL_IDENTITY_MISSING")
+        pair = (source, chunk)
+        recovered_queries_by_pair.setdefault(pair, set()).update(query_ids)
+        recovered_rows.append({
+            "evidence_id": evidence_id,
+            "source_filename": source,
+            "chunk_id": chunk,
+            "text": text,
+            "canonical_text": text,
+            "authorized_for_section": True,
+            "retrieval_origin": "AGENT07_INDEPENDENT_RAG",
+            "usage_role": "SUPPORT",
+            "query_ids": query_ids,
+        })
+
+    # The producer uses the same physical-evidence canonicalizer as the
+    # handoff-to-core adapter.  Therefore a retrieval alias for an inherited
+    # (source_filename, chunk_id) cannot survive as a second snapshot row.
+    # Representation-only differences are normalized there; semantic text,
+    # authorization, identity, or role conflicts remain blocking errors.
+    try:
+        canonical_all = _canonicalize_claim_evidence((*inherited, *recovered_rows))
+    except ValueError as exc:
+        code = str(exc).strip()
+        if code.startswith("AGENT07_CONTEXT_ADAPTER_EVIDENCE_"):
+            raise ValueError(
+                "AGENT07_RUNTIME_INDEPENDENT_RAG_CANDIDATE_CONFLICT:" + code
+            ) from exc
+        raise
+    recovered_pairs = set(recovered_queries_by_pair)
+    canonical_by_pair = {
+        (str(row["source_filename"]), str(row["chunk_id"])): deepcopy(dict(row))
+        for row in canonical_all
+    }
+
+    # Preserve explicit latest-stage provenance for runtime consumers while
+    # retaining the complete origin/alias sets produced by canonicalization.
+    for pair in recovered_pairs:
+        canonical_by_pair[pair]["retrieval_origin"] = "AGENT07_INDEPENDENT_RAG"
+        canonical_by_pair[pair]["query_ids"] = tuple(sorted(recovered_queries_by_pair[pair]))
+
+    canonical_evidence = tuple(
+        canonical_by_pair[pair]
+        for pair in sorted(canonical_by_pair, key=lambda p: (str(canonical_by_pair[p]["evidence_id"]), p[0], p[1]))
+    )
+
+    audit_candidates = []
+    for pair in sorted(recovered_pairs, key=lambda p: (str(canonical_by_pair[p]["evidence_id"]), p[0], p[1])):
+        evidence = canonical_by_pair[pair]
+        canonical_text = str(evidence.get("canonical_text", evidence.get("text", ""))).strip()
+        if not canonical_text:
+            raise ValueError("AGENT07_RUNTIME_VERIFICATION_CONTEXT_EVIDENCE_TEXT_MISSING")
+        audit_candidates.append({
+            "evidence_id": str(evidence["evidence_id"]),
+            "source_filename": pair[0],
+            "chunk_id": pair[1],
+            "query_ids": tuple(sorted(recovered_queries_by_pair[pair])),
+            "text_fingerprint": fingerprint_text(canonical_text),
+        })
+
+    updated = deepcopy(dict(context))
+    updated["eligible_evidence"] = canonical_evidence
+    updated["agent07_independent_retrieval_executed"] = True
+    updated["agent07_independent_retrieval_rounds"] = rounds
+    updated["agent07_independent_retrieval_status"] = "COMPLETED_WITH_RESULTS" if audit_candidates else "COMPLETED_NO_RESULTS"
+
+    snapshot_evidence = []
+    for evidence in updated["eligible_evidence"]:
+        text = str(evidence.get("canonical_text", evidence.get("text", ""))).strip()
+        if not text:
+            raise ValueError("AGENT07_RUNTIME_VERIFICATION_CONTEXT_EVIDENCE_TEXT_MISSING")
+        snapshot_evidence.append({
+            "evidence_id": str(evidence["evidence_id"]),
+            "source_filename": str(evidence["source_filename"]),
+            "chunk_id": str(evidence["chunk_id"]),
+            "authorized_for_section": bool(evidence.get("authorized_for_section") is True),
+            "text_fingerprint": fingerprint_text(text),
+        })
+    snapshot = {
+        "claim_id": claim_id,
+        "section_id": section_id,
+        "eligible_evidence": tuple(sorted(snapshot_evidence, key=lambda x: (x["evidence_id"], x["source_filename"], x["chunk_id"]))),
+    }
+    candidate_ids = tuple(candidate["evidence_id"] for candidate in audit_candidates)
+    record = {
+        "claim_id": claim_id,
+        "section_id": section_id,
+        "retrieval_requested": 1,
+        "retrieval_rounds": rounds,
+        "retrieval_status": "COMPLETED_WITH_RESULTS" if candidate_ids else "COMPLETED_NO_RESULTS",
+        "retriever_binding_fingerprint": binding_fp,
+        "retrieved_candidate_ids": candidate_ids,
+        "retrieved_candidate_records": tuple(audit_candidates),
+        "verification_context_snapshot": snapshot,
+    }
     return updated, record
 
 
